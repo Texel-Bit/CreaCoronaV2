@@ -1,10 +1,46 @@
+:root{
+  --first-color :#00355A;
+  --middle-color:#0069B4;
+  --second-color : #ABABAB;
+  --third-color:#213C65;
+  --fourth-color:#3ABAEC;
+  --white-color:#FFFFFF;
+  --bs-progress-bg:#FFFFFF;
+  --color-border: #d5d9dd;
+  --color-confirm-alert-bg: #E2FFF2;
+  --color-confirm-alert-border: #0C6F55;
+  --color-confirm-alert-text: #0C6F55;
+
+  --color-info-alert-bg: #CEEEFA;
+  --color-info-alert-border: #0069B4;
+  --color-info-alert-text: #0069B4;
+
+  --color-error-alert-bg: #FFECEC;
+  --color-error-alert-border: #F32F2F;
+  --color-error-alert-text: #F32F2F;
+
+  --color-warning-alert-bg: #FDFADC;
+  --color-warning-alert-border: #F5CC39;
+  --color-warning-alert-text: #F5CC39;
+
+  --color-text-alert :#213C65;
+  --toastify-toast-width: 400px;
+  --toastify-font-family: Roboto;
+}
+
+#root {
+  height: 100%;
+}
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  width: 100vw;
+  height: 100vh !important;
+  background-color: #0C6F55;
 }
 
 code {
