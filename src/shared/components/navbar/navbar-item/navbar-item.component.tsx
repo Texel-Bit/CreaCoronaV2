@@ -11,7 +11,7 @@ export const NavbarItem = () => {
             </div>
             
             <div>
-                <label className="navbar-item-text text-center">
+                <label className="navbar-item-text text-center color-primary">
                     Selecciona la superficie
                 </label>
             </div>

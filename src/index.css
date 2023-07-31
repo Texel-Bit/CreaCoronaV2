@@ -1,10 +1,11 @@
 :root{
-  --first-color :#00355A;
-  --middle-color:#0069B4;
-  --second-color : #ABABAB;
-  --third-color:#213C65;
-  --fourth-color:#3ABAEC;
-  --white-color:#FFFFFF;
+  --color-primary:#00355A;
+  --color-middle:#0069B4;
+  --color-second: #ABABAB;
+  --color-third:#213C65;
+  --color-fourth:#3ABAEC;
+  --color-white:#FFFFFF;
+
   --bs-progress-bg:#FFFFFF;
   --color-border: #d5d9dd;
   --color-confirm-alert-bg: #E2FFF2;
@@ -27,6 +28,17 @@
   --toastify-toast-width: 400px;
   --toastify-font-family: Roboto;
 }
+
+/* COLORS */
+.color-primary { color: var(--color-primary); }
+.color-middle { color: var(--color-middle); }
+.color-second { color: var(--color-second); }
+.color-third { color: var(--color-third); }
+.color-fourth { color: var(--color-fourth); }
+.color-white { color: var(--color-white); }
+/* COLORS */
+
+
 
 #root {
   height: 100%;

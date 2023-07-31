@@ -1,7 +1,6 @@
 .steeps-navbar {
     height: 112px;
     overflow-x: auto;
-    box-sizing: border-box;
 }
 
 
@@ -15,7 +14,7 @@
 
 .CircularProgressbar .CircularProgressbar-path,
 .CircularProgressbar .CircularProgressbar-text {
-    stroke: var(--middle-color);
+    stroke: var(--color-primary);
 }
 
 
@@ -26,6 +25,5 @@
 .navbar-item-text {
     font-size: 15px;
     font-weight: 600;
-    color: var(--first-color);
     line-height: 1;
 }

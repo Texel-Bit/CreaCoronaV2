@@ -1,0 +1,14 @@
+.video-caption-container {
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background: rgba(87,85,85,.49);
+    border-radius: 7px;
+    box-shadow: 0 4px 4px rgba(0,0,0,.25);
+    mix-blend-mode: normal;
+    width: 100%;
+    color: var(--color-white);
+}
+
+.video-button-text {
+    white-space: nowrap;
+}
