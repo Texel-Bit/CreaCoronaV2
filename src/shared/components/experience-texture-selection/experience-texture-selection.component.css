@@ -1,0 +1,7 @@
+.textures-containter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-height: 250px;
+    overflow-y: auto;
+    border-color: var(--color-middle) !important;
+}

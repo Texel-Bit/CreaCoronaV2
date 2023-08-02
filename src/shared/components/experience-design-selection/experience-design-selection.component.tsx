@@ -24,7 +24,7 @@ export const ExperienceDesignSelection = () => {
 
             </div>
 
-            <div className="border border-1 border-primary p-3 gap-2 overflow-y-auto design-types-grid">
+            <div className="border border-1 border-color-middle p-3 gap-2 overflow-y-auto design-types-grid">
 
                 <img src='https://corona.texelbit.com:9445/uploads/Design/758a561e-46fe-4b2b-a983-6ca6b7dd58c8.svg'/>
                 <img src='https://corona.texelbit.com:9445/uploads/Design/758a561e-46fe-4b2b-a983-6ca6b7dd58c8.svg'/>
