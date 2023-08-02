@@ -29,6 +29,7 @@
   --toastify-font-family: Roboto;
 }
 
+
 /* COLORS */
 .color-primary { color: var(--color-primary); }
 .color-middle { color: var(--color-middle); }
@@ -38,6 +39,23 @@
 .color-white { color: var(--color-white); }
 /* COLORS */
 
+/* BG-COLORS */
+.background-color-primary { background-color: var(--color-primary); }
+.background-color-middle { background-color: var(--color-middle); }
+.background-color-second { background-color: var(--color-second); }
+.background-color-third { background-color: var(--color-third); }
+.background-color-fourth { background-color: var(--color-fourth); }
+.background-color-white { background-color: var(--color-white); }
+/* BG-COLORS */
+
+/* B-COLORS */
+.border-color-primary { border-color: var(--color-primary) !important; }
+.border-color-middle { border-color: var(--color-middle) !important; }
+.border-color-second { border-color: var(--color-second) !important; }
+.border-color-third { border-color: var(--color-third) !important; }
+.border-color-fourth { border-color: var(--color-fourth) !important; }
+.border-color-white { border-color: var(--color-white) !important; }
+/* B-COLORS */
 
 
 #root {

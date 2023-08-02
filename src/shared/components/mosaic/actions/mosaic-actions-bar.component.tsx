@@ -1,14 +1,11 @@
-import PreviewButtonImage from '../../../../assets/icons/lupa.png';
+import { MosaicActionBarButton } from './action-button/mosaic-action-bar-button.component';
 
 export const MosaicActionsBar = () => {
     return(
 
-        <div className="d-flex">
+        <div className="d-flex justify-content-around">
             <span className="">
-                <img 
-                    src={PreviewButtonImage} alt=""
-                    className="icon-button-toolbox"/>
-                <span className="name-item-toolbox">Vista previa</span>
+                <MosaicActionBarButton/>
             </span>
         </div>
 

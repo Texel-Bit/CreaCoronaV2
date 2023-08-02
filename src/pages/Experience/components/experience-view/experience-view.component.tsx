@@ -1,7 +1,11 @@
 import { ExperienceDesignSelection } from "../../../../shared/components/experience-design-selection/experience-design-selection.component";
+import { ExperienceGroutSelection } from "../../../../shared/components/experience-grout-selection/experience-grout-selection.component";
 import { ExperienceSteepTitle } from "../../../../shared/components/experience-steep-title/experience-steep-title.component"
+import { ExperienceTextureSelection } from "../../../../shared/components/experience-texture-selection/experience-texture-selection.component";
 import { MosaicActionsBar } from "../../../../shared/components/mosaic/actions/mosaic-actions-bar.component";
+import { MosaicBrick } from "../../../../shared/components/mosaic/brick/mosaic-brick.component";
 import { MosaicComponent } from "../../../../shared/components/mosaic/mosaic.component";
+import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic-square.component";
 import './experience-view.component.css';
 
 export const ExperienceView = () => {
@@ -25,18 +29,30 @@ export const ExperienceView = () => {
                     </div>
                 </div>
 
+                {
+                    // PRIMER CASO DE LA EXPERIENCIA
+                    
+                    /* <div className="d-flex mt-5 justify-content-around">
+                        <ExperienceDesignSelection />
+                        <div className="d-flex flex-column gap-2">
+                            <MosaicComponent mosaic={<MosaicSquare/>}/>
+                            <MosaicActionsBar/>
+                        </div>
+                    </div> */
+                }
+
                 <div className="d-flex mt-5 justify-content-around">
-
-                    <ExperienceDesignSelection />
-
-                    <div>
-                        <MosaicComponent/>
-                        <MosaicActionsBar/>
+                        <div className="d-flex flex-column gap-3">
+                            <ExperienceTextureSelection />
+                            <ExperienceGroutSelection />
+                        </div>
+                        <div className="d-flex flex-column gap-2">
+                            <MosaicComponent mosaic={<MosaicBrick/>}/>
+                            <MosaicActionsBar/>
+                        </div>
                     </div>
 
                 </div>
-
-            </div>
 
             <div className="w-50 position-relative">
                 <div className="design-canvas h-100 w-100"></div>

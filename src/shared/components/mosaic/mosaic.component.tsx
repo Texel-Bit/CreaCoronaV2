@@ -1,10 +1,13 @@
 import './mosaic.component.css'
-import { MosaicoSquare } from './square/mosaic-square.component';
 
-export const MosaicComponent = () => {
+interface MosaicComponenProps {
+    mosaic: React.ReactNode
+}
+
+export const MosaicComponent: React.FC<MosaicComponenProps> = ({ mosaic }) => {
     return(
         <div className='mosaic-component'>
-            <MosaicoSquare/>
+            {mosaic}
         </div>
     );
 }

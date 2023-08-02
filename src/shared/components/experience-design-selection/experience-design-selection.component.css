@@ -22,4 +22,5 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     max-height: 350px;
+    border-color: var(--color-middle) !important;
 }
