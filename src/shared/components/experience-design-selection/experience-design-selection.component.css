@@ -1,0 +1,25 @@
+.design-types-selection-group {
+    gap: 2px;
+}
+
+.design-types-selection-group .btn {
+    color: var(--color-middle);
+    border-color: var(--color-middle);
+    border-bottom: none;
+    padding-top: 2px;
+}
+
+.design-types-selection-group .btn:hover {
+    color: white;
+    background-color: var(--color-middle) !important;
+}
+
+.design-types-selection-group .btn:checked {
+    background-color: var(--color-middle) !important;
+}
+
+.design-types-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-height: 350px;
+}

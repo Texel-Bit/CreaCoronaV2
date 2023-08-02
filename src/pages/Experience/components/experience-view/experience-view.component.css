@@ -1,0 +1,13 @@
+.experience-steeps-button {
+    color: black;
+    border-color: var(--color-middle);
+}
+
+.experience-steeps-button:hover {
+    background-color: var(--color-middle);
+}
+
+.experience-steeps-button:active {
+    border-color: var(--color-fourth) !important;
+    background-color: var(--color-fourth) !important;
+}
