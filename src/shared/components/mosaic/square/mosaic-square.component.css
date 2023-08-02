@@ -1,0 +1,7 @@
+.mosaic-square {
+    display: grid;
+    gap: .4rem;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    padding: .2rem;
+}
