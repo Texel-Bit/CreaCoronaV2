@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { NavbarItem } from "./navbar-item/navbar-item.component";
 import { useEffect, useState } from "react";
-import { ExperienceRoutes } from "../../enums/routes.enum";
+import { ExperienceRoutes, ExperienceViews } from "../../enums/routes.enum";
 import { dataResponse, dataUserREsponse } from "../../../core/models/response/model-responsedata";
 
 // estilos 
@@ -18,6 +18,7 @@ import ambiente from '../../../assets/icons/Ambiente.svg';
 import revestimiento from '../../../assets/icons/Revestimiento.svg';
 import color from '../../../assets/icons/Color.svg';
 import calcula from '../../../assets/icons/Calcular.svg';
+import Singleton from "../../../core/patterns/singleton";
 
 interface propValue {number:number; sendDataParent:(data:number)=>void }
 
@@ -30,7 +31,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
     const [ userdata , setUserData ] = useState(Object);
     const [ value , setValue ] = useState(props.number)
 
-    useEffect(()=>{setValue(props.number)},[props.number])
+    Singleton.getInstance().evaluatePercentageFunc = setValue;
 
     useEffect(() => {
         const d = sessionStorage.getItem('data');
@@ -64,27 +65,27 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
                 <NavbarItem
                 text='selecciona la superficie'
                 imagen={superficie}
-
+                experienceView={ExperienceViews.EnvironmentType}
                 />
                 <NavbarItem
                 text='Selecciona el ambiente'
                 imagen={ambiente}
-
+                experienceView={ExperienceViews.Environment}
                 />
                 <NavbarItem
                 text='Diseña tu revestimiento'
                 imagen={revestimiento}
-
+                experienceView={ExperienceViews.Design}
                 />
                 <NavbarItem
                 text='Agrega color a tu diseño'
                 imagen={color}
-
+                experienceView={ExperienceViews.Color}
                 />
                 <NavbarItem
                 text='Calcula tu espacio'
                 imagen={calcula}
-
+                experienceView={ExperienceViews.Format}
                 />
 
             </div>

@@ -5,10 +5,10 @@ export enum ExperienceRoutes {
 }
 
 export enum ExperienceViews {
-    None,
-    EnvironmentType,
-    Environment,
-    Design,
-    Color,
-    Format
+    None=0,
+    EnvironmentType=1,
+    Environment=2,
+    Design=3,
+    Color=4,
+    Format=5
 }

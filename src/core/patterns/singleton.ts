@@ -15,6 +15,7 @@ import { IGrout } from "../models/grout/grout.model";
 import { IStructure } from "../models/structure/structure.model";
 import { IFormat } from "../models/format/format.model";
 import { ExperienceViews } from "../../shared/enums/routes.enum";
+import { INumberData } from "../models/NumberData/number-data.model";
 
 class Singleton {
   private static instance: Singleton;
@@ -22,8 +23,22 @@ class Singleton {
 
   public currentEnvironmentType: IEnvironmentType | null = null;
   public currentEnvironment: IEnvironment | null = null;
-public currentExperienceView:ExperienceViews| null = ExperienceViews.None;
+  public currentDesignList:IDesign[]| null = null;
+  public currentColorList:IColor[]| null = null;
+  public currentStructure: IStructure | null = null;
+  public currentGrout: IGrout | null = null;
+  public currentFormat: IFormat | null = null;
+  public simulationArea:INumberData| null = null;
+  public simulationWidht:INumberData| null = null
+  public simulationHeight:INumberData| null = null
+
+
+  public chessMode:boolean| null = null;
+
+
+  public currentExperienceView:ExperienceViews| null = ExperienceViews.None;
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
+evaluatePercentageFunc: ((percentage:number) => void) | null = null;
 
 
   private environmentDataManager: EnvironmentDataManager = new EnvironmentDataManager();
@@ -48,20 +63,75 @@ setContentFunc: ((view: ExperienceViews) => void) | null = null;
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
     console.log("SelectEnvironmentType called with environmentType", environmentType);
     this.currentEnvironmentType=environmentType;
+    this.EvaluatePercentage();
   }
 
 
 
     public ChangeExperienceView(view: ExperienceViews) {
         if (this.setContentFunc) {
+            this.currentExperienceView=view;
             this.setContentFunc(view);
         }
     }
 
+    public EvaluatePercentage() {
+        if (this.evaluatePercentageFunc) {
+            
+            const maxPercentageValue=8;
+
+            let currProggressDone=0;
+
+            if(this.currentEnvironment)
+            {
+                currProggressDone+=1;
+            }
+            if(this.currentEnvironmentType)
+            {
+                currProggressDone+=1;
+            }
+            if(this.currentColorList)
+            {
+                currProggressDone+=1;
+            }
+            if(this.currentDesignList)
+            {
+                currProggressDone+=1;
+            }
+            if(this.currentFormat)
+            {
+                currProggressDone+=1;
+            }
+            if(this.currentGrout)
+            {
+                currProggressDone+=1;
+            }
+            if(this.currentStructure)
+            {
+                currProggressDone+=1;
+            }
+            if(this.simulationArea)
+            {
+                currProggressDone+=1;
+            }
+            else if(this.simulationWidht && this.simulationHeight)
+            {
+                currProggressDone+=1;
+            }
+
+            let Percentage=currProggressDone*100/maxPercentageValue;
+            if(Percentage>100)
+            {
+                Percentage=100;
+            }
+            this.evaluatePercentageFunc(Percentage);
+        }
+    }
 
   public SelectEnvironment(environment:IEnvironment)
   {
      this.currentEnvironment=environment;
+     this.EvaluatePercentage();
   }
   // Add getters for each DataManager
   public getEnvironmentDataManager(): EnvironmentDataManager {
