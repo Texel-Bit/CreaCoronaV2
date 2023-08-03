@@ -23,5 +23,5 @@
 .textures-selection-column {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    gap: .6rem;
+    gap: .2rem;
 }

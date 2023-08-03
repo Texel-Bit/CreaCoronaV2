@@ -97,7 +97,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
                             <ExperienceDesignSelection />
                         </div>
@@ -114,7 +114,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
                             <ExperienceColorPaletteSelection />
                             <ExperienceTextureSelection />
@@ -131,7 +131,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
                 {
                      props.currentView==ExperienceViews.Format&&
-                 <div className="d-flex pt-2 pb-2 h-100 justify-content-around overflow-hidden">
+                 <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <MosaicComponent mosaic={<MosaicHexagon/>}/>
