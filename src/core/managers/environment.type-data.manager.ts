@@ -11,7 +11,16 @@ class EnvironmentTypeDataManager
 
     public addEnvironmentType(_environmentType:IEnvironmentType)
     {
-       this.environmentTypeList.push(_environmentType);
+      const index = this.environmentTypeList.findIndex(env => env.id === _environmentType.id);
+  
+      if (index !== -1) {
+          // Environment with the same id exists, replace it
+          this.environmentTypeList[index] = _environmentType;
+      } else {
+          // No such environment exists, add it
+          this.environmentTypeList.push(_environmentType);
+      }
+
     }
 
     public removeEnvironmentType(_environmentType:IEnvironmentType)
