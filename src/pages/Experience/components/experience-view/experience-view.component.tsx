@@ -9,10 +9,60 @@ import { MosaicBrick } from "../../../../shared/components/mosaic/brick/mosaic-b
 import { MosaicHexagon } from "../../../../shared/components/mosaic/hexagon/mosaic-hexagon.component";
 import { MosaicComponent } from "../../../../shared/components/mosaic/mosaic.component";
 import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic-square.component";
+import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 import './experience-view.component.css';
+import { ReactElement } from 'react';
 
-export const ExperienceView = () => {
-    console.log(Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment())
+import CozyIco from '../../../../assets/icons/view_cozy_ico.png'
+import PalletIco from '../../../../assets/icons/palette_ico.png'
+import OpenIco from '../../../../assets/icons/open_with_ico.png'
+
+
+interface currentExperienceView
+{
+    currentView:ExperienceViews | null;
+}
+
+interface contentData
+{
+    title:string;
+    icon:string;
+    description:ReactElement
+}
+
+export const ExperienceView:React.FC<currentExperienceView>=(props) => {
+    
+    let dict = new Map<ExperienceViews, contentData>();
+    dict.set(ExperienceViews.Design, {
+        title: "Diseña tu revestimiento",
+        icon: CozyIco,
+        description: <h6>Selecciona <b className="color-middle">1 opción</b> de mosaico</h6>
+    });
+    
+    dict.set(ExperienceViews.Color, {
+        title: "Agrega color a tu diseño",
+        icon: PalletIco,
+        description: <h6>Selecciona <b className="color-middle">1 opción</b> de color plano pensados para ti.</h6>
+    });
+
+    dict.set(ExperienceViews.Format, {
+        title: "Calcula tu espacio",
+        icon: OpenIco,
+        description: <h6>Agrega las medidas de tu espacio para generar la cotización</h6>
+    });
+
+    function ChangeView(experieceView: ExperienceViews | null, value:number)
+    {
+        
+        if(experieceView) {
+            let numericalValue: number = experieceView;
+            let view: ExperienceViews = numericalValue + value;
+            Singleton.getInstance().ChangeExperienceView(view);
+        }
+       
+    }
+
+
     return(
 
         <div className="d-flex mh-100 overflow-hidden">
@@ -21,23 +71,30 @@ export const ExperienceView = () => {
 
                 <div className="d-flex align-items-start">
                     <div className="col-2">
-                        <button type="button" className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
+                        {props.currentView!==ExperienceViews.Design&& <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>}
                     </div>
                     
                     <div className="col-8">
-                        <ExperienceSteepTitle/>
-                    </div>                    
+                        <ExperienceSteepTitle 
+                            title={dict.get(props.currentView ?? ExperienceViews.Design)?.title ?? ""}
+                            description={dict.get(props.currentView ?? ExperienceViews.Design)?.description ?? <></>}
+                            icon={dict.get(props.currentView ?? ExperienceViews.Design)?.icon ?? ""}
+                        />
+                    </div>
+                  
 
                     <div className="col-2 text-end">
-                        <button type="button" className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">Siguiente →</button>
+                    {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">Siguiente →</button>}
                     </div>
                 </div>
 
+            
                 {
-                    
+                   
+                    props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    /* <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
                             <ExperienceDesignSelection />
                         </div>
@@ -47,13 +104,14 @@ export const ExperienceView = () => {
                                 <MosaicActionsBar/>
                             </div>
                         </div>
-                    </div> */
+                    </div> 
                 }
 
                 {
+                    props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    /* <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
                             <ExperienceColorPaletteSelection />
                             <ExperienceTextureSelection />
@@ -65,34 +123,23 @@ export const ExperienceView = () => {
                                 <MosaicActionsBar/>
                             </div>
                         </div>
-                    </div> */
+                    </div> 
                 }
 
-                {/* <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
+                {
+                     props.currentView==ExperienceViews.Format&&
+                 <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <MosaicComponent mosaic={<MosaicHexagon/>}/>
                             </div>
                         </div>
                         <div className="textures-selection-column col-5 h-100">
-                        <ExperienceColorPaletteSelection />
-                            <ExperienceTextureSelection />
-                            <ExperienceGroutSelection />
+                       
                         </div>
-                    </div> */}
+                    </div> }
 
-                <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
-                    <div className="col-5 d-flex">
-                        <div className="d-flex flex-column gap-3 w-100 position-relative">
-                            <MosaicComponent mosaic={<MosaicHexagon/>}/>
-                        </div>
-                    </div>
-                    <div className="textures-selection-column col-5 h-100">
-                    {/* <ExperienceColorPaletteSelection />
-                        <ExperienceTextureSelection />
-                        <ExperienceGroutSelection /> */}
-                    </div>
-                </div> 
+               
 
 
             </div>

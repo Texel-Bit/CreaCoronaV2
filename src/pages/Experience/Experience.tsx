@@ -16,20 +16,21 @@ export const Experience = () => {
 
     // Passing `setContent` function to singleton
     Singleton.getInstance().setContentFunc = setContent;
+
+
+console.log(Singleton.getInstance().currentExperienceView,"  Singleton experience view ")
     return(
         <div className="experience-content">
             <BrandNavbar
                 number={porcent}
                 sendDataParent={setProcent}
             />
-            {content ==ExperienceViews.EnvironmentType && <SelectSurfaceView
+            {content ==ExperienceViews.EnvironmentType? <SelectSurfaceView
                
-            />}
-            {content ==ExperienceViews.Environment   && <SelectEnvironmentView
+            />:content ==ExperienceViews.Environment? <SelectEnvironmentView
                
-            />}
-            {content ==ExperienceViews.Design     && <ExperienceView/>}
-            
+            />:<ExperienceView currentView={Singleton.getInstance().currentExperienceView} />}
+           
         </div> 
     );
 }
