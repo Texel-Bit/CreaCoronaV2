@@ -66,6 +66,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
                 text='selecciona la superficie'
                 imagen={superficie}
                 experienceView={ExperienceViews.EnvironmentType}
+
                 />
                 <NavbarItem
                 text='Selecciona el ambiente'

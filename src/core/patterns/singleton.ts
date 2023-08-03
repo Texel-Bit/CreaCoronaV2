@@ -67,6 +67,56 @@ evaluatePercentageFunc: ((percentage:number) => void) | null = null;
   }
 
 
+  public ValidateViewCompleteStatus(currentView:ExperienceViews) {
+    let viewComplete =false;
+
+    if(ExperienceViews.EnvironmentType)
+    {
+
+        if(this.currentEnvironmentType)
+        {
+            return true;
+        }
+    }
+
+    if(ExperienceViews.Environment)
+    {
+        if(this.currentEnvironment)
+        {
+            return true;
+        }
+    }
+
+    if(ExperienceViews.Design)
+    {
+        if(this.currentDesignList )
+        {
+            return true;
+        }
+    }
+
+    if(ExperienceViews.Color)
+    {
+        if(this.currentColorList&& this.currentGrout)
+        {
+            return true;
+        }
+    }
+
+    if(ExperienceViews.Format)
+    {
+        if(this.currentFormat && this.currentStructure && (this.simulationArea||(this.simulationWidht && this.simulationHeight)))
+        {
+            return true
+        }
+    }
+   
+ 
+    return viewComplete;
+
+
+  }
+
 
     public ChangeExperienceView(view: ExperienceViews) {
         if (this.setContentFunc) {
