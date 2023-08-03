@@ -1,6 +1,5 @@
 import LoginData from "../models/user/login-data.model";
 import { postRequest } from "./base.service"
 
-export const login = (loginData: LoginData) => {
-    return postRequest("sysUser/login", loginData);
-}
+/* En una función flecha cuando tiene un parámetro tiene un return implícito */
+export const login = (loginData: LoginData) => postRequest("sysUser/login", loginData);

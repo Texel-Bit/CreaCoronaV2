@@ -8,7 +8,6 @@ export const getAbortServiceController = () => {
     return controller;
 }
 
-
 export const postRequest = <T>(route: string, requestData:T) : ServiceResponse => {
     const controller = new AbortController();
     const url = getServerEndpointUrl(route);

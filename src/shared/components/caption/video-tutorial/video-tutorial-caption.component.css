@@ -12,3 +12,50 @@
 .video-button-text {
     white-space: nowrap;
 }
+
+/* --------------------- CSS Jose  */
+
+.modalVideo{
+    width:100%;
+    height:100vh;
+    background:rgba(0, 0, 0, 0.747);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index:10000;
+    position:fixed;
+    top: 0;
+}
+
+.containerVideo{
+    width: 60%;
+    height: 70%;
+    background-color:transparent;
+    display: flex;
+    border-radius: 10px;
+    position: relative;
+}
+
+.closeModalVideo{
+    position: absolute;
+    top: -3%;
+    right: -2%;
+    padding: 5px 15px;
+    border-radius: 50%;
+    background-color:#0069b4 ;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    transition: all;
+    z-index: 1;
+}
+
+.closeModalVideo:hover{
+    transform: scale(1.1);
+}
+
+.modalVideo{
+    width: 100%;
+    height: 100%;
+}
