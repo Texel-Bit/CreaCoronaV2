@@ -1,14 +1,64 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Form, FormLabel, FormControl, Button, Alert } from 'react-bootstrap';
+import { Form, FormLabel, FormControl, Button } from 'react-bootstrap';
 import { ExperienceRoutes } from "../../enums/routes.enum";
+import React, { useEffect, useState } from "react";
 
-export const LoginForm = () => {
 
+export const LoginForm:React.FC = () => {
+
+    // Se inicia la navegación porque iremos a más pestañas 
     const navigate = useNavigate();
 
+    // si el usuario ingresa al login pero ya ingreso sus datos, lo regresamos a la experiencia
+    useEffect(()=>{
+        if(sessionStorage.getItem('data')) navigate(ExperienceRoutes.Experience) 
+    },[])
+    
+
+    //Declaramos variables necesarias 
+    const [email,setEmail]  = useState('');
+    const [pass, setPass]   = useState('');
+    const [error, setError] = useState('');
+    const [btn,setBtn]      = useState('');
+
+    const data = {email:email,password:pass};
+
+    // Error inicio sesión
+    const handleErrorLogin = (mensaje:string) =>{
+        setError(mensaje)
+        setBtn('')
+    };
+
+    // Inicio de sesión
+    const handleLoginIn = (response:string) => {
+        sessionStorage.setItem('data',response);
+        setTimeout(()=>{
+            navigate(ExperienceRoutes.Experience)
+        },2000)
+       
+    };
+
+    // Consultamos HTTPS ||||| Use esta por que el servicio axios no me desencapsulaba la respuesta
+    const handleLogin = async() =>{
+        if (email=='' || pass=='') setError('Proporcione correo electrónico y password')
+        else{
+            setBtn('load')
+            const request = await fetch('https://corona.texelbit.com:9445/sysUser/login',{
+                method:'POST',
+                headers:{'Content-type':'application/json'},
+                body: JSON.stringify(data)
+            });
+            const response = await request.json();
+            !response.status ? handleErrorLogin(response.err.message) : handleLoginIn(JSON.stringify(response))
+        };        
+    };
+
+    // Actualiza el estado con el valor del input (Email - Pass)
+    const handleEmailChange     = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value); 
+    const handlePassword        = (e: React.ChangeEvent<HTMLInputElement>) => setPass(e.target.value); 
+
     return (
-        <Form className='d-flex flex-column gap-2 col-10 col-sm-6 col-md-5 col-lg-3'>
-                    
+        <Form className='d-flex flex-column gap-2 col-10 col-sm-6 col-md-5 col-lg-3'>        
             <div className="mb-3">
                 <FormLabel className="form-label" htmlFor="email">
                     Correo electrónico
@@ -20,7 +70,8 @@ export const LoginForm = () => {
                     placeholder="Escribe tu correo electrónico"
                     type="email"
                     id="email"
-                    required/>
+                    onChange={handleEmailChange}
+                    />
             </div>
 
             <div className="mb-3">
@@ -34,15 +85,11 @@ export const LoginForm = () => {
                     type="password"
                     className="form-control"
                     placeholder="Escribe tu contraseña"
-                    required/>
+                    onChange={handlePassword}
+                    />
             </div>
 
-            {/* <div>
-                {error!=="" && <p className="text-danger">{error}</p>}
-                {success!=="" && (
-                    <Alert variant="success">{success}</Alert>
-                )}
-            </div> */}
+            <div> {error!=="" && <p className="text-danger">{error}</p>} </div>
 
             <div className="row">
                 <div className="col-sm-6">
@@ -64,8 +111,12 @@ export const LoginForm = () => {
             <Button 
                 type="button" 
                 className="button-background"
-                onClick={() => navigate(ExperienceRoutes.Experience)}>
-                Iniciar Sesión
+                onClick={handleLogin}
+                >
+                {btn=='load'? <div className="spinner-border spinner-border-sm" role="status">
+                                <span className="visually-hidden">Cargando...</span>
+                            </div> 
+                        : <span>Iniciar Sesión</span>}
             </Button>
 
         </Form>

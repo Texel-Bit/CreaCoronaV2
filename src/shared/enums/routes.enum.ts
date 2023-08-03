@@ -1,5 +1,5 @@
 
 export enum ExperienceRoutes {
-    Login = '',
+    Login = '/',
     Experience = '/experience'
 }
