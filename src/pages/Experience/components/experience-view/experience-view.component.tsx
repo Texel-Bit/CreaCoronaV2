@@ -11,7 +11,7 @@ import { MosaicComponent } from "../../../../shared/components/mosaic/mosaic.com
 import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic-square.component";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 import './experience-view.component.css';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 
 import CozyIco from '../../../../assets/icons/view_cozy_ico.png'
 import PalletIco from '../../../../assets/icons/palette_ico.png'
@@ -36,6 +36,7 @@ interface contentData
 export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     
     let dict = new Map<ExperienceViews, contentData>();
+
     dict.set(ExperienceViews.Design, {
         title: "Diseña tu revestimiento",
         icon: CozyIco,
@@ -53,6 +54,21 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         icon: OpenIco,
         description: <h6>Agrega las medidas de tu espacio para generar la cotización</h6>
     });
+
+    const [canvasMask, setCanvasMask] = useState("");
+
+
+    useEffect(() => {
+
+        if (!Singleton.getInstance().currentEnvironment?.maskImage)
+            return;
+
+        
+
+        let maskImage = `https://corona.texelbit.com:9445/${Singleton.getInstance().currentEnvironment?.maskImage}`;
+        setCanvasMask(maskImage);
+    }, []);
+
 
     function ChangeView(experieceView: ExperienceViews | null, value:number)
     {
@@ -152,7 +168,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
             <div className="w-50 position-relative">
                 <div className="design-canvas h-100 w-100"></div>
                 <img
-                    src="https://corona.texelbit.com:9445/uploads/Environment/7d3a1f12-b656-4c1c-8576-36c4a4b1c4a3.png"
+                    src={canvasMask}
                     className="position-absolute h-100 w-100 object-fit-cover top-0"
                     alt="Environment Image"/>
             </div>
