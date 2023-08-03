@@ -1,4 +1,4 @@
-import Singleton from "../../../../core/patterns/singleton";
+
 import { ExperienceColorPaletteSelection } from "../../../../shared/components/experience-color-palette-selection/experience-color-palette-selection.component";
 import { ExperienceDesignSelection } from "../../../../shared/components/experience-design-selection/experience-design-selection.component";
 import { ExperienceGroutSelection } from "../../../../shared/components/experience-grout-selection/experience-grout-selection.component";
@@ -19,6 +19,7 @@ import OpenIco from '../../../../assets/icons/open_with_ico.png'
 import { ExperienceFormatSelection } from "../../../../shared/components/experience-format-selection/experience-format-selection.component";
 import { InitQuotationForm } from "../../../../shared/components/init-quotation-form/init-quotation-form.component";
 import { ExperienceStructureSelection } from "../../../../shared/components/experience-structure-selection/experience-structure-selection";
+import Singleton from "../../../../core/patterns/singleton";
 
 
 interface currentExperienceView
@@ -60,6 +61,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
     useEffect(() => {
 
+        
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
@@ -115,7 +117,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
-                            <ExperienceDesignSelection designTypes={[]} designs={[]}/>
+                            <ExperienceDesignSelection designTypes={Singleton.getInstance().currentEnvironmentType?.designTypes??[]} designs={[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">

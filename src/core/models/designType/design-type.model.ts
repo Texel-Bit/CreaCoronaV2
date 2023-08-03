@@ -1,5 +1,5 @@
 export interface IDesignType{
-    id:string
+    id:number
     source:string
     name:string
     mosaicValue:number

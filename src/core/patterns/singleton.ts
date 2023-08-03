@@ -16,6 +16,7 @@ import { IStructure } from "../models/structure/structure.model";
 import { IFormat } from "../models/format/format.model";
 import { ExperienceViews } from "../../shared/enums/routes.enum";
 import { INumberData } from "../models/NumberData/number-data.model";
+import { ElementFlags } from "typescript";
 
 class Singleton {
   private static instance: Singleton;
@@ -227,7 +228,23 @@ public addEnvironmentType(environmentType: IEnvironmentType): void {
 }
 
 public addDesignType(designType: IDesignType): void {
+
     this.designTypeDataManager.addDesignType(designType);
+
+    
+
+    let environmentTypeArray = this.environmentTypeDataManager.getAllEnvironmentTypeArray();
+
+    environmentTypeArray.forEach(element => {
+        if(element.designTypesIDS.some(e => e === designType.id)) {
+            // The designType.id exists in the designTypesIDS array of the current element.
+            // Perform the necessary operations here.
+        }
+        else{
+            element.designTypes?.push(designType);
+        }
+    });
+
 }
 
 public addDesign(design: IDesign): void {

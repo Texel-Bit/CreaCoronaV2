@@ -9,6 +9,7 @@ class DesignDataManager
         return this.designList.find(design => design.id === id);
     }
 
+    
     public addDesign(_design:IDesign)
     {
        this.designList.push(_design);
