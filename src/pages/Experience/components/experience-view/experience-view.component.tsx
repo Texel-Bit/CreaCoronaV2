@@ -63,8 +63,6 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
-        
-
         let maskImage = `https://corona.texelbit.com:9445/${Singleton.getInstance().currentEnvironment?.maskImage}`;
         setCanvasMask(maskImage);
     }, []);
@@ -119,7 +117,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicSquare/>}/>
+                                <MosaicComponent mosaic={<MosaicSquare squares={[]}/>}/>
                                 <MosaicActionsBar/>
                             </div>
                         </div>
@@ -138,7 +136,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicBrick/>}/>
+                                <MosaicComponent mosaic={<MosaicBrick brick={{}} />}/>
                                 <MosaicActionsBar/>
                             </div>
                         </div>
@@ -150,8 +148,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                  <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicHexagon/>}/>
-                                <ExperienceStructureSelection/>
+                                <MosaicComponent mosaic={<MosaicHexagon hexagon={{}}/>}/>
+                                <ExperienceStructureSelection structures={[]}/>
                             </div>
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
