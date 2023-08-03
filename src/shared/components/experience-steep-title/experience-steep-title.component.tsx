@@ -11,10 +11,12 @@ interface stepDataProps
 export const ExperienceSteepTitle: React.FC<stepDataProps> = ({title, icon, description}) => {
     return (
         <div className="text-center">
-            <div className='d-inline-block p-2 shadow rounded-4'>
-                <img src={icon} alt="Design Icon"/>
+            <div className='d-flex gap-2 justify-content-center align-items-center'>
+                <div className='d-inline-block p-1 shadow rounded-4'>
+                    <img src={icon} alt="Design Icon"/>
+                </div>
+                <h3 className="color-primary fw-bold m-0">{title}</h3>
             </div>
-            <h3 className="color-primary fw-bold m-0">{title}</h3>
             {description}
         </div>
     );

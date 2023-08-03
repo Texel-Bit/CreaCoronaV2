@@ -16,6 +16,9 @@ import { ReactElement } from 'react';
 import CozyIco from '../../../../assets/icons/view_cozy_ico.png'
 import PalletIco from '../../../../assets/icons/palette_ico.png'
 import OpenIco from '../../../../assets/icons/open_with_ico.png'
+import { ExperienceFormatSelection } from "../../../../shared/components/experience-format-selection/experience-format-selection.component";
+import { InitQuotationForm } from "../../../../shared/components/init-quotation-form/init-quotation-form.component";
+import { ExperienceStructureSelection } from "../../../../shared/components/experience-structure-selection/experience-structure-selection";
 
 
 interface currentExperienceView
@@ -128,14 +131,16 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
                 {
                      props.currentView==ExperienceViews.Format&&
-                 <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">
+                 <div className="d-flex pt-2 pb-2 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <MosaicComponent mosaic={<MosaicHexagon/>}/>
+                                <ExperienceStructureSelection/>
                             </div>
                         </div>
-                        <div className="textures-selection-column col-5 h-100">
-                       
+                        <div className="textures-selection-column d-flex flex-column col-5 h-100">
+                            <ExperienceFormatSelection/>
+                            <InitQuotationForm/>
                         </div>
                     </div> }
 

@@ -1,6 +1,8 @@
+
 export const MosaicHexagon = () => {
 
     const hexagonUrl = "https://corona.texelbit.com:9445/uploads/Design/c200a7c5-fe53-4b8b-b034-775211e55f8e.svg";
+
 
     return(
         <div className='mosaic-hexagon'>

@@ -1,0 +1,19 @@
+.init-quotation-button {
+    border-color: var(--color-confirm-alert-border);
+    background-color: var(--color-confirm-alert-border);
+}
+
+.init-quotation-button:active {
+    border-color: var(--color-confirm-alert-active) !important;
+    background-color: var(--color-confirm-alert-active) !important;
+}
+
+.init-quotation-button:hover {
+    border-color: var(--color-confirm-alert-hover);
+    background-color: var(--color-confirm-alert-hover);
+}
+
+.init-quotation-button:disabled {
+    border-color: var(--color-confirm-alert-border);
+    background-color: var(--color-confirm-alert-border);
+}
