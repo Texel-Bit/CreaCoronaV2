@@ -1,5 +1,6 @@
 import React from "react";
 import { IDesign } from "../../../../core/models/design/design.model";
+import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 
 
 interface ExperienceMosaicSquareProps
@@ -26,7 +27,7 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
 
             {
                 props.squares.map(square => {
-                    return <img src={square.source}/>
+                    return <img src={getServerImagesUrl(square.source)}/>
                 })
             }
 

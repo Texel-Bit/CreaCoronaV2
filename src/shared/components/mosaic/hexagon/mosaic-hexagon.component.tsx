@@ -1,4 +1,5 @@
 import { IDesign } from "../../../../core/models/design/design.model";
+import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 
 interface ExperienceMosaicHexagonProps
 {
@@ -55,33 +56,33 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
 
             <div className="hexagon-column hexagon-column-1">
                 <div className="hexagon">
-                    <img src={props.hexagon.source}/>
+                    <img src={getServerImagesUrl(props.hexagon.source)}/>
                 </div>
                 <div className="hexagon">
-                    <img src={props.hexagon.source}/>
+                    <img src={getServerImagesUrl(props.hexagon.source)}/>
                 </div>
             </div>
 
             <div className="hexagon-column hexagon-column-2">
                 <div className="hexagon-column-2-wrapper">
                     <div className="hexagon">
-                        <img src={props.hexagon.source}/>
+                        <img src={getServerImagesUrl(props.hexagon.source)}/>
                     </div>
                     <div className="hexagon">
-                        <img src={props.hexagon.source}/>
+                        <img src={getServerImagesUrl(props.hexagon.source)}/>
                     </div>
                     <div className="hexagon">
-                        <img src={props.hexagon.source}/>
+                        <img src={getServerImagesUrl(props.hexagon.source)}/>
                     </div>
                 </div>
             </div>
 
             <div className="hexagon-column hexagon-column-3">
                 <div className="hexagon">
-                    <img src={props.hexagon.source}/>
+                    <img src={getServerImagesUrl(props.hexagon.source)}/>
                 </div>
                 <div className="hexagon">
-                    <img src={props.hexagon.source}/>
+                    <img src={getServerImagesUrl(props.hexagon.source)}/>
                 </div>
             </div>
 

@@ -3,11 +3,11 @@ import { IDesignType } from '../../../core/models/designType/design-type.model';
 import './experience-design-selection.component.css';
 import { IDesign } from '../../../core/models/design/design.model';
 import DesignDataManager from '../../../core/managers/desig-data.manager';
-import Singleton from '../../../core/patterns/singleton';
+import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
 
 interface ExperienceDesingSelectionProps {
-    designTypes: IDesignType[]|null,
-    designs: IDesign[]|null,
+    designTypes: IDesignType[],
+    designs: IDesign[]
 }
 
 export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> = (props) => {
@@ -20,27 +20,16 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
     useEffect(() => {
 
-         Singleton.getInstance().currentEnvironmentType?.designTypesIDS?.forEach(designType => {
+        props.designTypes.forEach(designType => {
 
-            console.log("Design type id ",designType.DesignType_idDesignType)
+            switch (designType.id)
+            {
+                case "1": setShowBricks(true); break;
+                case "2": setShowSquares(true); break;
+                case "3": setShowHexagons(true); break;
+            }
 
-            switch (designType)  
-            {
-                case 1: setShowBricks(true); break;
-                case 2: setShowSquares(true); break;
-                case 3: setShowHexagons(true); break;
-            }
-            console.log(designType);
-            /*
-            switch (parseInt(designType.id))  
-            {
-                case 1: setShowBricks(true); break;
-                case 2: setShowSquares(true); break;
-                case 3: setShowHexagons(true); break;
-            }
-*/
         });
-
 
     }, []);
 
@@ -82,8 +71,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
             <div className='mh-100 overflow-y-hidden'>
                 <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
                     {
-                        props.designs?.map(design => {
-                            return <img src={design.source}/>
+                        props.designs.map(design => {
+                            return <img src={getServerImagesUrl(design.source)}/>
                         })
                     }
                 </div>
