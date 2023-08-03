@@ -8,7 +8,10 @@ class DesignTypeDataManager
     {
         return this.designTypeList.find(type => type.id === id);
     }
-
+    public getAllDesignTypes()
+    {
+        return this.designTypeList;
+    }
     public addDesignType(_designType: IDesignType) {
       // Check if a design type with the same id already exists in the list
       const exists = this.designTypeList.some(designType => designType.id === _designType.id);
