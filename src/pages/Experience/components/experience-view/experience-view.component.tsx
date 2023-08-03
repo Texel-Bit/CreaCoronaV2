@@ -20,6 +20,7 @@ import { ExperienceFormatSelection } from "../../../../shared/components/experie
 import { InitQuotationForm } from "../../../../shared/components/init-quotation-form/init-quotation-form.component";
 import { ExperienceStructureSelection } from "../../../../shared/components/experience-structure-selection/experience-structure-selection";
 import Singleton from "../../../../core/patterns/singleton";
+import { IDesignType } from "../../../../core/models/designType/design-type.model";
 
 
 interface currentExperienceView
@@ -56,12 +57,16 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         description: <h6>Agrega las medidas de tu espacio para generar la cotización</h6>
     });
 
+
+    const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
     const [canvasMask, setCanvasMask] = useState("");
 
 
     useEffect(() => {
 
-        {console.log(Singleton.getInstance().currentEnvironmentType)}
+        let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
+        setDesignTypes(currentDesignTypes);
+
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
@@ -116,7 +121,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
                             
-                            <ExperienceDesignSelection designTypes={Singleton.getInstance().currentEnvironmentType?.designTypes??[]} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
+                            <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
