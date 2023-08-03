@@ -1,3 +1,10 @@
+.experience-behavior-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+}
+
+
 .experience-steeps-button {
     color: black;
     border-color: var(--color-middle);
@@ -10,4 +17,11 @@
 .experience-steeps-button:active {
     border-color: var(--color-fourth) !important;
     background-color: var(--color-fourth) !important;
+}
+
+
+.textures-selection-column {
+    display: grid;
+    grid-template-rows: auto ifr auto;
+    gap: .6rem;
 }

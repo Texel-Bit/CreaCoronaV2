@@ -1,0 +1,18 @@
+.experience-color-palette-selection-container {
+    border: 1px solid var(--color-middle);
+}
+
+.select-color-palette-btn {
+    background-color: var(--color-middle);
+    border-color: var(--color-middle);
+}
+
+.color-palette-item {
+    padding: .8rem;
+    border: 1px solid var(--color-middle);
+}
+
+.color-palette-row {
+    display: flex;
+    gap: .1rem;
+}
