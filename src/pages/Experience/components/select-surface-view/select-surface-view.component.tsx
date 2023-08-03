@@ -6,6 +6,7 @@ import { getServerEndpointUrl } from "../../../../shared/utilities/format-server
 import Singleton from "../../../../core/patterns/singleton";
 import { IEnvironmentType } from "../../../../core/models/EnvironmentType/environment-type.model";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
+import { getAllEnvironmentType } from "../../../../core/services/environment.service";
 
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
@@ -16,28 +17,30 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     const consult       = getServerEndpointUrl('environmentType/getAllEnvironmentType');
     const [res,setRes]  = useState<IEnvironmentType[]>()
 
-    useEffect(()=>{
-        fetch(consult,{method:'GET',headers:{'Content-type':'application/json','Jwt': `${sessionStorage.getItem('infoUser')}` }})
-        .then(d=>d.json())
-        .then(d=>{
-             // Get the Singleton instance
-        const singleton = Singleton.getInstance();
-        
-        // Add each environment to the DataManager
-        d.data.forEach((element: any) => {
-            const currentEnvironment: IEnvironmentType = {
-                id: element.idEnvironmentType,
-                source: element.EnvironmentTypeImage                ,
-                name: element.EnvironmentTypeName                ,
-            };
-            console.log(element)
-            singleton.addEnvironmentType(currentEnvironment);
-        });
+    useEffect(() => {
+        const getEnvironmentTypes = async () => {
+            try {
+                let response = await getAllEnvironmentType();
 
-        handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
+                response.data.forEach((element: any) => {
+                    const currentEnvironment: IEnvironmentType = {
+                        id: element.idEnvironmentType,
+                        source: element.EnvironmentTypeImage                ,
+                        name: element.EnvironmentTypeName                ,
+                    };
+                    console.log(element)
+                    singleton.addEnvironmentType(currentEnvironment);
+                });
 
-           })
-        .catch(e=>console.log(e));
+                handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
+            }
+            catch(error) {
+                console.log(error);
+            }
+        }
+
+        getEnvironmentTypes();
+
     },[]);
 
     function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}

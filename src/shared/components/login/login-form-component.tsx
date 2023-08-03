@@ -3,6 +3,7 @@ import { Form, FormLabel, FormControl, Button } from 'react-bootstrap';
 import { ExperienceRoutes, ExperienceViews } from "../../enums/routes.enum";
 import React, { useEffect, useState } from "react";
 import Singleton from "../../../core/patterns/singleton";
+import { login } from "../../../core/services/user.service";
 
 
 export const LoginForm:React.FC = () => {
@@ -46,13 +47,8 @@ export const LoginForm:React.FC = () => {
         if (email=='' || pass=='') setError('Proporcione correo electrónico y password')
         else{
             setBtn('load')
-            const request = await fetch('https://corona.texelbit.com:9445/sysUser/login',{
-                method:'POST',
-                headers:{'Content-type':'application/json'},
-                body: JSON.stringify(data)
-            });
-            const response = await request.json();
-            !response.status ? handleErrorLogin(response.err.message) : handleLoginIn(JSON.stringify(response))
+            const response = await login(data);
+            !response.status ? handleErrorLogin("Proporciona las credenciales correctas") : handleLoginIn(JSON.stringify(response))
         };        
     };
 
