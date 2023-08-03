@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Form, FormLabel, FormControl, Button } from 'react-bootstrap';
-import { ExperienceRoutes } from "../../enums/routes.enum";
+import { ExperienceRoutes, ExperienceViews } from "../../enums/routes.enum";
 import React, { useEffect, useState } from "react";
+import Singleton from "../../../core/patterns/singleton";
 
 
 export const LoginForm:React.FC = () => {
@@ -11,7 +12,7 @@ export const LoginForm:React.FC = () => {
 
     // si el usuario ingresa al login pero ya ingreso sus datos, lo regresamos a la experiencia
     useEffect(()=>{
-        if(sessionStorage.getItem('data')) navigate(ExperienceRoutes.Experience) 
+        if(sessionStorage.getItem('data')){navigate(ExperienceRoutes.Experience);Singleton.getInstance().ChangeExperienceView(ExperienceViews.EnvironmentType) }
     },[])
     
 
@@ -34,6 +35,8 @@ export const LoginForm:React.FC = () => {
         sessionStorage.setItem('data',response);
         setTimeout(()=>{
             navigate(ExperienceRoutes.Experience)
+
+            Singleton.getInstance().ChangeExperienceView(ExperienceViews.EnvironmentType)
         },2000)
        
     };

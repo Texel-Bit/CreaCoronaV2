@@ -4,30 +4,32 @@ import { ExperienceView } from "./components/experience-view/experience-view.com
 import { SelectEnvironmentView } from "./components/select-environment-view/select-environment-view.component";
 import { SelectSurfaceView } from "./components/select-surface-view/select-surface-view.component";
 import "./Experience.css";
+import { ExperienceViews } from "../../shared/enums/routes.enum";
+import Singleton from "../../core/patterns/singleton";
+
+
 
 export const Experience = () => {
 
     const [ porcent, setProcent ] = useState<number>(0);
-    const [ content, setContent ] = useState<string>('superficie');
+    const [ content, setContent ] = useState<ExperienceViews>(ExperienceViews.EnvironmentType);
 
-    useEffect(()=>{setContent(content)},[content])
-
+    // Passing `setContent` function to singleton
+    Singleton.getInstance().setContentFunc = setContent;
     return(
         <div className="experience-content">
             <BrandNavbar
                 number={porcent}
                 sendDataParent={setProcent}
-                content={content}
             />
-            {content =='superficie' && <SelectSurfaceView
-                toParent={ setContent }
-                toProgress={setProcent}
+            {content ==ExperienceViews.EnvironmentType && <SelectSurfaceView
+               
             />}
-            {content =='ambiente'   && <SelectEnvironmentView
-                toParent={ setContent }
-                toProgress={setProcent}
+            {content ==ExperienceViews.Environment   && <SelectEnvironmentView
+               
             />}
-            {content =='diseña'     && <ExperienceView/>}
+            {content ==ExperienceViews.Design     && <ExperienceView/>}
+            
         </div> 
     );
 }

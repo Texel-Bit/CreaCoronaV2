@@ -3,22 +3,44 @@ import { VideoTutorialCaption } from "../../../../shared/components/caption/vide
 import { EnvironmentThumbnail } from "../../../../shared/components/environment-thumbnail/environment-thumbnail.component";
 import "./select-surface-view.component.css";
 import { getServerEndpointUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
+import Singleton from "../../../../core/patterns/singleton";
+import { IEnvironmentType } from "../../../../core/models/EnvironmentType/environment-type.model";
+import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 
-interface surface{toParent:(data:string)=>void , toProgress:(data:number)=>void}
+interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
 
+    const singleton = Singleton.getInstance();
+    
     // Data URL 
     const consult       = getServerEndpointUrl('environmentType/getAllEnvironmentType');
-    const [res,setRes]  = useState(Object)
+    const [res,setRes]  = useState<IEnvironmentType[]>()
 
     useEffect(()=>{
         fetch(consult,{method:'GET',headers:{'Content-type':'application/json','Jwt': `${sessionStorage.getItem('infoUser')}` }})
         .then(d=>d.json())
-        .then(d=>handlerResponse(d.data))
+        .then(d=>{
+             // Get the Singleton instance
+        const singleton = Singleton.getInstance();
+        
+        // Add each environment to the DataManager
+        d.data.forEach((element: any) => {
+            const currentEnvironment: IEnvironmentType = {
+                id: element.idEnvironmentType,
+                source: element.EnvironmentTypeImage                ,
+                name: element.EnvironmentTypeName                ,
+            };
+            console.log(element)
+            singleton.addEnvironmentType(currentEnvironment);
+        });
+
+        handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
+
+           })
         .catch(e=>console.log(e));
     },[]);
 
-    function handlerResponse(datos:[]){setRes(datos)}
+    function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}
         
     return(
         <div className="h-100 d-flex">
@@ -31,15 +53,19 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 <div>
                     <h4 className="mb-5 pb-5 text-center color-primary fw-bold">Selecciona la superficie en el que deseas simular la instalación de tu creación.</h4>
                     <div className="d-flex gap-4 justify-content-around">
-                        { res.length>0 && res.map((i:any)=>{
-                            return <EnvironmentThumbnail
-                            nombre={i.EnvironmentTypeName}
-                            imagen={i.EnvironmentTypeImage}
-                            ambiente={i.idEnvironmentType}
-                            toParent={props.toParent}
-                            toProgress={props.toProgress}
-                            />
-                        })}
+                        {   singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
+    console.log("Rendering EnvironmentThumbnail with props", i);
+    return <EnvironmentThumbnail
+        name={i.name}
+        image={i.source}
+        id={i.id}
+        onEvents={[
+            (e) => Singleton.getInstance().SelectEnvironmentType(i),
+            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment),
+            // Add as many handlers as you need
+        ]}
+    />
+})}
 
                     </div>  
 
