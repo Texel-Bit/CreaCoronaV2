@@ -7,6 +7,7 @@ import { getServerEndpointUrl } from "../../../../shared/utilities/format-server
 import Singleton from '../../../../core/patterns/singleton'
 import { IEnvironment } from "../../../../core/models/environment/environment.model";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
+import { Console } from "console";
 
 interface enviroment{}
 export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
@@ -15,19 +16,20 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
 
     const consult       = getServerEndpointUrl('environment/getAllEnvironment');
     const [res,setRes]  = useState(Object)
-    const enviroment = sessionStorage.getItem('ambiente')
 
     useEffect(()=>{
+        console.log("consulta ");
         fetch(consult,{method:'GET',headers:{'Content-type':'application/json','Jwt': `${sessionStorage.getItem('infoUser')}` }})
         .then(d=>d.json())
         .then(d=>{handlerResponse(d.data); 
-
+            console.log("Response ",d.data);
             const singleton = Singleton.getInstance();
         
+           
             // Add each environment to the DataManager
             d.data.forEach((element: any) => {
                 const currentEnvironmentType = singleton.getEnvironmentTypeDataManager().getEnvironmentTypeById(element.EnvironmentType_idEnvironmentType);
-                
+   
                 if (currentEnvironmentType) {
                     const currentEnvironment: IEnvironment = {
                         id: element.idEnvironment,
@@ -44,7 +46,6 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
                 }
             });
 
-            
            })
 
         .catch(e=>console.log(e));
@@ -70,22 +71,22 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
                         <Carousel
                             interval={null}
                             wrap={false}>
-                                { Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
-                                    if(i.environmentType==Singleton.getInstance().currentEnvironmentType){
-                                        return<>
-                                        <Carousel.Item>
-                                            <EnvironmentThumbnail
-                                                name={i.name}
-                                                image={i.source}
-                                                id={parseInt(i.id)}
-                                                onEvents={[
-                                                    (e) => Singleton.getInstance().SelectEnvironment(i),
-                                                    (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
-                                                    // Add as many handlers as you need
-                                                ]}
-                                            />
-                                        </Carousel.Item> 
-                                        </>
+                                { 
+                                Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
+                                    if(i.environmentType.id==Singleton.getInstance().currentEnvironmentType?.id){
+                                        return <Carousel.Item>
+                                        <EnvironmentThumbnail
+                                            name={i.name}
+                                            image={i.source}
+                                            id={parseInt(i.id)}
+                                            onEvents={[
+                                                (e) => Singleton.getInstance().SelectEnvironment(i),
+                                                (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
+                                                // Add as many handlers as you need
+                                            ]}
+                                        />
+                                    </Carousel.Item> 
+
                                     }
                                 })}                                                      
                         </Carousel>
