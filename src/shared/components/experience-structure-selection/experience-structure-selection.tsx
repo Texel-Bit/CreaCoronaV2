@@ -1,11 +1,15 @@
 import { StructureThumbnail } from "./structure-thumbnail/structure-thumbnail.component";
 import "./experience-structure-selection.css";
+import { IStructure } from "../../../core/models/structure/structure.model";
+import React from "react";
 
 
+interface ExperienceStructureSelectionProps {
+    structures: IStructure[]
+}
 
 
-
-export const ExperienceStructureSelection = () => {
+export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionProps> = (props) => {
     return(
         <div className='mw-100 overflow-hidden'>
 
@@ -14,8 +18,13 @@ export const ExperienceStructureSelection = () => {
             </div>
 
             <div className="p-2 d-flex justify-content-around structure-selection-content">
-                <StructureThumbnail />
-                <StructureThumbnail />
+                
+                {
+                    props.structures.map(struct => {
+                        return <StructureThumbnail structure={struct}/>
+                    })
+                }
+
             </div>
 
         </div>

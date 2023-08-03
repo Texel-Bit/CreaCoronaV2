@@ -151,7 +151,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <MosaicComponent mosaic={<MosaicHexagon/>}/>
-                                <ExperienceStructureSelection/>
+                                <ExperienceStructureSelection structures={[]}/>
                             </div>
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
