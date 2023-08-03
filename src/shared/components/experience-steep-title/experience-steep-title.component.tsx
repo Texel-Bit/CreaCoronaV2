@@ -10,7 +10,7 @@ interface stepDataProps
 
 export const ExperienceSteepTitle: React.FC<stepDataProps> = ({title, icon, description}) => {
     return (
-        <div className="text-center">
+        <div className="text-center text-nowrap">
             <div className='d-flex gap-2 justify-content-center align-items-center'>
                 <div className='d-inline-block p-1 shadow rounded-4'>
                     <img src={icon} alt="Design Icon"/>
