@@ -1,8 +1,9 @@
 import LogoCreaCorona from '../../assets/logos/crea_corona.png';
 import { LoginForm } from '../../shared/components/login/login-form-component';
 
-export const Login:React.FC = () => {
 
+export const Login:React.FC = () => {
+     
     return (
         <div className="container">
             <div className="vh-100 d-flex gap-5 flex-column align-items-center justify-content-center">

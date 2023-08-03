@@ -4,9 +4,14 @@ import './select-environment-view.component.css';
 import { EnvironmentThumbnail } from "../../../../shared/components/environment-thumbnail/environment-thumbnail.component";
 import { useEffect, useState } from "react";
 import { getServerEndpointUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
+import Singleton from '../../../../core/patterns/singleton'
+import { IEnvironment } from "../../../../core/models/environment/environment.model";
+import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 
-interface enviroment{toParent:(data:string)=>void , toProgress:(data:number)=>void}
+interface enviroment{}
 export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
+
+
 
     const consult       = getServerEndpointUrl('environment/getAllEnvironment');
     const [res,setRes]  = useState(Object)
@@ -15,7 +20,33 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
     useEffect(()=>{
         fetch(consult,{method:'GET',headers:{'Content-type':'application/json','Jwt': `${sessionStorage.getItem('infoUser')}` }})
         .then(d=>d.json())
-        .then(d=>{handlerResponse(d.data) ; console.log(d)})
+        .then(d=>{handlerResponse(d.data); 
+
+            const singleton = Singleton.getInstance();
+        
+            // Add each environment to the DataManager
+            d.data.forEach((element: any) => {
+                const currentEnvironmentType = singleton.getEnvironmentTypeDataManager().getEnvironmentTypeById(element.EnvironmentType_idEnvironmentType);
+                
+                if (currentEnvironmentType) {
+                    const currentEnvironment: IEnvironment = {
+                        id: element.idEnvironment,
+                        source: element.EnvironmentProfileImage,
+                        maskImage: element.EnvironmentMaksImage,
+                        name: element.EnvironmentName,
+                        environmentType: currentEnvironmentType
+                    };
+            
+                    // Adding the environment to Singleton's EnvironmentDataManager
+                    singleton.getEnvironmentDataManager().addEnvironment(currentEnvironment);
+                } else {
+                    console.log(`No EnvironmentType found for id ${element.EnvironmentType_idEnvironmentType}`);
+                }
+            });
+
+            
+           })
+
         .catch(e=>console.log(e));
     },[]);
 
@@ -39,16 +70,19 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
                         <Carousel
                             interval={null}
                             wrap={false}>
-                                { res.length>0 && res.map((i:any)=>{
-                                    if(i.EnvironmentType_idEnvironmentType==enviroment){
+                                { Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
+                                    if(i.environmentType==Singleton.getInstance().currentEnvironmentType){
                                         return<>
                                         <Carousel.Item>
                                             <EnvironmentThumbnail
-                                                nombre={i.EnvironmentTypeName}
-                                                imagen={i.EnvironmentTypeImage}
-                                                ambiente={i.idEnvironmentType}
-                                                toParent={(props.toParent)}
-                                                toProgress={props.toProgress}
+                                                name={i.name}
+                                                image={i.source}
+                                                id={parseInt(i.id)}
+                                                onEvents={[
+                                                    (e) => Singleton.getInstance().SelectEnvironment(i),
+                                                    (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
+                                                    // Add as many handlers as you need
+                                                ]}
                                             />
                                         </Carousel.Item> 
                                         </>

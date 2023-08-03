@@ -1,3 +1,4 @@
+import Singleton from "../../../../core/patterns/singleton";
 import { ExperienceColorPaletteSelection } from "../../../../shared/components/experience-color-palette-selection/experience-color-palette-selection.component";
 import { ExperienceDesignSelection } from "../../../../shared/components/experience-design-selection/experience-design-selection.component";
 import { ExperienceGroutSelection } from "../../../../shared/components/experience-grout-selection/experience-grout-selection.component";
@@ -11,6 +12,7 @@ import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic
 import './experience-view.component.css';
 
 export const ExperienceView = () => {
+    console.log(Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment())
     return(
 
         <div className="d-flex mh-100 overflow-hidden">
@@ -32,6 +34,7 @@ export const ExperienceView = () => {
                 </div>
 
                 {
+                    
                     // PRIMER CASO DE LA EXPERIENCIA
                     
                     /* <div className="d-flex pt-4 pb-2 h-100 justify-content-around overflow-hidden">

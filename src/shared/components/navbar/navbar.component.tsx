@@ -19,7 +19,7 @@ import revestimiento from '../../../assets/icons/Revestimiento.svg';
 import color from '../../../assets/icons/Color.svg';
 import calcula from '../../../assets/icons/Calcular.svg';
 
-interface propValue {number:number; sendDataParent:(data:number)=>void ,content:string}
+interface propValue {number:number; sendDataParent:(data:number)=>void }
 
 export const BrandNavbar:React.FC<propValue> = (props) => {
 
@@ -64,27 +64,27 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
                 <NavbarItem
                 text='selecciona la superficie'
                 imagen={superficie}
-                content={props.content}
+
                 />
                 <NavbarItem
                 text='Selecciona el ambiente'
                 imagen={ambiente}
-                content={props.content}
+
                 />
                 <NavbarItem
                 text='Diseña tu revestimiento'
                 imagen={revestimiento}
-                content={props.content}
+
                 />
                 <NavbarItem
                 text='Agrega color a tu diseño'
                 imagen={color}
-                content={props.content}
+
                 />
                 <NavbarItem
                 text='Calcula tu espacio'
                 imagen={calcula}
-                content={props.content}
+
                 />
 
             </div>
