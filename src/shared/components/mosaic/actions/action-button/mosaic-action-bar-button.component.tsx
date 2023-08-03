@@ -14,7 +14,7 @@ export const MosaicActionBarButton = () => {
             <button type="button" className="btn btn-primary" style={buttonStyle}> 
                 <FaSearchPlus/>
             </button>
-            <p>Vista Previa</p>
+            <p className='m-0'>Vista Previa</p>
         </div>
     );
 }

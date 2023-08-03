@@ -1,7 +1,24 @@
+.textures-selection-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+}
+
+.textures-containter-grid-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100% !important;
+    max-width: 100%;
+    border-color: var(--color-middle) !important;
+}
+
 .textures-containter-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    max-height: 250px;
-    overflow-y: auto;
-    border-color: var(--color-middle) !important;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 100%;
+}
+
+.textures-containter-grid div {
+    padding: 50%;
 }

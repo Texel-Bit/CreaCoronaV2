@@ -18,9 +18,15 @@
     background-color: var(--color-middle) !important;
 }
 
-.design-types-grid {
+.design-selection-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow-y: hidden;
+}
+
+.design-thumbnails-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    max-height: 350px;
     border-color: var(--color-middle) !important;
+    overflow-y: auto;
 }

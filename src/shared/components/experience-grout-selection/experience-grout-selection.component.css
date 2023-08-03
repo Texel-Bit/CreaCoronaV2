@@ -1,10 +1,11 @@
 .grouts-containter {
-    width: 248px;
     border-color: var(--color-middle) !important;
+    overflow-x: auto;
 }
 
 .grout-thumbnail {
-    width: 35px;
-    height: 30px;
-    border-color: var(--color-middle) !important;
+    width: 35px !important;
+    height: 25px;
+    border: 2px solid var(--color-middle) !important;
+    background-size: cover;
 }
