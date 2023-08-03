@@ -9,6 +9,7 @@ import Singleton from "../../core/patterns/singleton";
 
 
 
+
 export const Experience = () => {
 
     const [ porcent, setProcent ] = useState<number>(0);

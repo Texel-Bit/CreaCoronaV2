@@ -1,4 +1,4 @@
-import Singleton from "../../../../core/patterns/singleton";
+
 import { ExperienceColorPaletteSelection } from "../../../../shared/components/experience-color-palette-selection/experience-color-palette-selection.component";
 import { ExperienceDesignSelection } from "../../../../shared/components/experience-design-selection/experience-design-selection.component";
 import { ExperienceGroutSelection } from "../../../../shared/components/experience-grout-selection/experience-grout-selection.component";
@@ -19,7 +19,7 @@ import OpenIco from '../../../../assets/icons/open_with_ico.png'
 import { ExperienceFormatSelection } from "../../../../shared/components/experience-format-selection/experience-format-selection.component";
 import { InitQuotationForm } from "../../../../shared/components/init-quotation-form/init-quotation-form.component";
 import { ExperienceStructureSelection } from "../../../../shared/components/experience-structure-selection/experience-structure-selection";
-import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
+import Singleton from "../../../../core/patterns/singleton";
 
 
 interface currentExperienceView
@@ -61,10 +61,11 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
     useEffect(() => {
 
+        {console.log(Singleton.getInstance().currentEnvironmentType)}
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
-        let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
+        let maskImage = `https://corona.texelbit.com:9445/${Singleton.getInstance().currentEnvironment?.maskImage}`;
         setCanvasMask(maskImage);
     }, []);
 
@@ -114,7 +115,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
-                            <ExperienceDesignSelection designTypes={[]} designs={[]}/>
+                            
+                            <ExperienceDesignSelection designTypes={Singleton.getInstance().currentEnvironmentType?.designTypes??[]} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
@@ -137,7 +139,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicBrick brick={{}} />}/>
+                                {/* <MosaicComponent mosaic={<MosaicBrick brick={{}} />}/> */}
                                 <MosaicActionsBar/>
                             </div>
                         </div>
@@ -149,7 +151,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                  <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicHexagon hexagon={{}}/>}/>
+                                {/* <MosaicComponent mosaic={<MosaicHexagon hexagon={{}}/>}/> */}
                                 <ExperienceStructureSelection structures={[]}/>
                             </div>
                         </div>

@@ -20,9 +20,11 @@ import color from '../../../assets/icons/Color.svg';
 import calcula from '../../../assets/icons/Calcular.svg';
 import Singleton from "../../../core/patterns/singleton";
 
+
 interface propValue {number:number; sendDataParent:(data:number)=>void }
 
 export const BrandNavbar:React.FC<propValue> = (props) => {
+
 
     // Confirmamos que los datos del usuario si se encuentren en la aplicación 
     const navigate = useNavigate();

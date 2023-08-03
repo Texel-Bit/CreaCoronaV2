@@ -4,14 +4,27 @@ class DesignTypeDataManager
 {
     private designTypeList: IDesignType[] = [];
 
-    public getDesignTypeById(id:string)
+    public getDesignTypeById(id:number)
     {
         return this.designTypeList.find(type => type.id === id);
     }
-
-    public addDesignType(_designType:IDesignType)
+    public getAllDesignTypes()
     {
-       this.designTypeList.push(_designType);
+        return this.designTypeList;
+    }
+    public addDesignType(_designType: IDesignType) {
+      // Check if a design type with the same id already exists in the list
+      const exists = this.designTypeList.some(designType => designType.id === _designType.id);
+  
+      // If not, add it to the list
+      if (!exists) {
+          this.designTypeList.push(_designType);
+      } 
+  }
+
+   public getDesignTypesById(ids:number[])
+    {
+        return  this.designTypeList.filter(designType => ids.includes(designType.id));
     }
 
     public removeDesignType(_designType:IDesignType)
