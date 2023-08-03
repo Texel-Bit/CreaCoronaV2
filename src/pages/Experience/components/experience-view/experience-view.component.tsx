@@ -90,7 +90,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
                 <div className="d-flex align-items-start">
                     <div className="col-2">
-                        {props.currentView!==ExperienceViews.Design&& <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>}
+                        <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
                     </div>
                     
                     <div className="col-8">
@@ -115,7 +115,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
-                            <ExperienceDesignSelection />
+                            <ExperienceDesignSelection designTypes={[]} designs={[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
@@ -134,7 +134,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         <div className="textures-selection-column col-5 h-100">
                             <ExperienceColorPaletteSelection />
                             <ExperienceTextureSelection />
-                            <ExperienceGroutSelection />
+                            <ExperienceGroutSelection grouts={[]} />
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">

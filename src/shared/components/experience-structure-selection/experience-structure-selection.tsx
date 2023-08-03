@@ -1,6 +1,10 @@
 import { StructureThumbnail } from "./structure-thumbnail/structure-thumbnail.component";
 import "./experience-structure-selection.css";
 
+
+
+
+
 export const ExperienceStructureSelection = () => {
     return(
         <div className='mw-100 overflow-hidden'>
