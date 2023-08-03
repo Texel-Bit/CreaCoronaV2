@@ -22,7 +22,9 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     useEffect(() => {
         const getEnvironmentTypes = async () => {
             try {
-
+                
+                Singleton.getInstance().getDesignDataManager().ClearDesigns();
+                
                 let response = await getAllEnvironmentType();
 
                 response.data.forEach((element: any) => {

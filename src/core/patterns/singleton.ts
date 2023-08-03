@@ -34,7 +34,7 @@ class Singleton {
   public simulationHeight:INumberData| null = null
   
   public selectedDesignType:IDesignType| null = null
-  
+
 
   public chessMode:boolean| null = null;
 
@@ -252,7 +252,6 @@ public addDesignType(designType: IDesignType): void {
 public addDesign(design: IDesign): void {
     if(this.currentDesignList?.length==0)
     {
-        
         this.currentDesignList.push(design);
     }
     this.designDataManager.addDesign(design);

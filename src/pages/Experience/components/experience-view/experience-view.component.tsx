@@ -61,7 +61,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
     useEffect(() => {
 
-        
+        {console.log(Singleton.getInstance().currentEnvironmentType)}
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
@@ -115,7 +115,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="h-100 col-5">
-                            <ExperienceDesignSelection designTypes={Singleton.getInstance().currentEnvironmentType?.designTypes??[]} designs={[]}/>
+                            
+                            <ExperienceDesignSelection designTypes={Singleton.getInstance().currentEnvironmentType?.designTypes??[]} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
@@ -138,7 +139,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicBrick brick={{}} />}/>
+                                {/* <MosaicComponent mosaic={<MosaicBrick brick={{}} />}/> */}
                                 <MosaicActionsBar/>
                             </div>
                         </div>
@@ -150,7 +151,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                  <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicHexagon hexagon={{}}/>}/>
+                                {/* <MosaicComponent mosaic={<MosaicHexagon hexagon={{}}/>}/> */}
                                 <ExperienceStructureSelection structures={[]}/>
                             </div>
                         </div>
