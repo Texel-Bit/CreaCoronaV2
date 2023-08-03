@@ -1,6 +1,13 @@
+import { IGrout } from '../../../core/models/grout/grout.model';
 import './experience-grout-selection.component.css';
 
-export const ExperienceGroutSelection = () => {
+
+interface ExperienceGroutSelectionProps {
+    grouts: IGrout[]
+}
+
+
+export const ExperienceGroutSelection:React.FC<ExperienceGroutSelectionProps> = (props) => {
 
     const groutImage = "https://corona.texelbit.com:9445/uploads/Brecha/1c4806ac-7bc6-43c2-b4ce-3f74156f7499.png";
 
@@ -12,16 +19,11 @@ export const ExperienceGroutSelection = () => {
             </div>
 
             <div className="border border-1 p-1 d-flex gap-1 grouts-containter">
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
-                <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${groutImage})` }} />
+                {
+                    props.grouts.map(grout => {
+                        return <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${grout.source})` }} />
+                    })
+                }
             </div>
 
         </div>
