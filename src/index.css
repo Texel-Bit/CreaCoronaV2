@@ -11,6 +11,8 @@
   --color-confirm-alert-bg: #E2FFF2;
   --color-confirm-alert-border: #0C6F55;
   --color-confirm-alert-text: #0C6F55;
+  --color-confirm-alert-hover: #1D7F66;
+  --color-confirm-alert-active: #0A4D33;
 
   --color-info-alert-bg: #CEEEFA;
   --color-info-alert-border: #0069B4;

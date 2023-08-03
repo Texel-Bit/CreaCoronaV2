@@ -1,0 +1,6 @@
+
+.structure-thumbnail div {
+    width: 45px !important;
+    height: 30px;
+    border: 2px solid var(--color-middle);
+}
