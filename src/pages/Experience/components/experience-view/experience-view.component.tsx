@@ -19,6 +19,7 @@ import OpenIco from '../../../../assets/icons/open_with_ico.png'
 import { ExperienceFormatSelection } from "../../../../shared/components/experience-format-selection/experience-format-selection.component";
 import { InitQuotationForm } from "../../../../shared/components/init-quotation-form/init-quotation-form.component";
 import { ExperienceStructureSelection } from "../../../../shared/components/experience-structure-selection/experience-structure-selection";
+import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 
 
 interface currentExperienceView
@@ -63,7 +64,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
-        let maskImage = `https://corona.texelbit.com:9445/${Singleton.getInstance().currentEnvironment?.maskImage}`;
+        let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
         setCanvasMask(maskImage);
     }, []);
 
