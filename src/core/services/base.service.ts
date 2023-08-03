@@ -3,20 +3,30 @@ import { getServerEndpointUrl } from "../../shared/utilities/format-server-endpo
 import ServiceResponse from "../models/service/service-response.model";
 
 
-export const getAbortServiceController = () => {
-    const controller = new AbortController();
-    return controller;
+export const postRequest = async <T>(route: string, requestData:T) : Promise<any> => {
+    const url = getServerEndpointUrl(route);
+    const token = `${sessionStorage.getItem('infoUser')}` ?? "";
+
+    const queryOptions = {
+        method:'POST',
+        headers:{'Content-type':'application/json','Jwt': token },
+        body: JSON.stringify(requestData)
+    };
+
+    const response = await fetch(url, queryOptions);
+    return await response.json();
 }
 
-export const postRequest = <T>(route: string, requestData:T) : ServiceResponse => {
-    const controller = new AbortController();
-    const url = getServerEndpointUrl(route);
-    return { call: axios.post(url, requestData, { signal: controller.signal }), controller };
-}
 
-
-export const getRequest = <T>(route: string) : ServiceResponse => {
-    const controller = new AbortController();
+export const getRequest = async (route: string) : Promise<any> => {
     const url = getServerEndpointUrl(route);
-    return { call: axios.get<T>(url, { signal: controller.signal }), controller };
+    const token = `${sessionStorage.getItem('infoUser')}` ?? "";
+
+    const queryOptions = {
+        method:'GET',
+        headers:{'Content-type':'application/json', 'Jwt': token }
+    };
+
+    const response = await fetch(url, queryOptions);
+    return await response.json();
 }
