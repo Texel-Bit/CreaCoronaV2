@@ -1,13 +1,15 @@
-export const MosaicBrick = () => {
+import { IDesign } from "../../../../core/models/design/design.model";
+
+interface ExperienceMosaicBricksProps
+{
+    brick:IDesign;
+}
+
+
+export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
     return(
         <div className="mosaic-brick w-100">
 
-            {/**
-             * EL CSS DEBE IR INCLUIDO EN EL HTML
-             * PARA APLICAR COLOR DE BOQUILLA SE LE MODIFICA EL background-color DE .mosaic-brick 
-             * CUANDO SE APLIQUE LA ROTACIÓN SE DEBE AGREGAR EL SIGUIENTE CSS A .mosaic-brick 
-             * transform: rotate(90deg);
-             */}
             <style>
                 {`
                     .mosaic-brick {
@@ -35,26 +37,26 @@ export const MosaicBrick = () => {
             </style>
 
             <div className="brick-row">
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
             </div>
             <div className="brick-row-offset">
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
             </div>
             <div className="brick-row">
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
             </div>
             <div className="brick-row-offset">
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
             </div>
             <div className="brick-row">
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
-                <img src="https://corona.texelbit.com:9445/uploads/Design/126d33d9-ca1e-4915-be00-53488dda1962.svg" />
+                <img src={props.brick.source} />
+                <img src={props.brick.source} />
             </div>
         </div>
     );
