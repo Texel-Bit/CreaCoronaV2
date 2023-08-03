@@ -1,4 +1,5 @@
 import { IDesign } from "../../../../core/models/design/design.model";
+import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 
 interface ExperienceMosaicBricksProps
 {
@@ -37,26 +38,26 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
             </style>
 
             <div className="brick-row">
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
             </div>
             <div className="brick-row-offset">
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
             </div>
             <div className="brick-row">
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
             </div>
             <div className="brick-row-offset">
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
             </div>
             <div className="brick-row">
-                <img src={props.brick.source} />
-                <img src={props.brick.source} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import { IGrout } from '../../../core/models/grout/grout.model';
+import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
 import './experience-grout-selection.component.css';
 
 
@@ -21,7 +22,7 @@ export const ExperienceGroutSelection:React.FC<ExperienceGroutSelectionProps> = 
             <div className="border border-1 p-1 d-flex gap-1 grouts-containter">
                 {
                     props.grouts.map(grout => {
-                        return <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${grout.source})` }} />
+                        return <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${getServerImagesUrl(grout.source)})` }} />
                     })
                 }
             </div>
