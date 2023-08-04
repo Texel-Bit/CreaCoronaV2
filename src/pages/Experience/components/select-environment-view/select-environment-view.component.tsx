@@ -64,9 +64,9 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
             <div className="col-6 px-5 d-flex align-items-center">
 
                 <div>
-                    <h4 className="mb-5 pb-5 text-center color-primary fw-bold">
-                        Selecciona el ambiente en el que deseas simular la instalación de tu creación.
-                    </h4>
+                <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-primary fw-bold">
+    Selecciona el ambiente en el que aplicarás tu diseño
+</h4>
                     <div>
 
                         <Carousel
