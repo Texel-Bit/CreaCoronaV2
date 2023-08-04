@@ -7,13 +7,13 @@
 }
 
 
-/* .environment-carousel-content {
+.environment-carousel-content {
     width: 100%;
     overflow: hidden;
     display: flex;
     flex-wrap: nowrap;
     white-space: nowrap;
-} */
+}
 
   .environment-item {
     flex: 0 0 50%;

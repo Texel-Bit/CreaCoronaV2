@@ -1,12 +1,25 @@
-import { MosaicActionBarButton } from './action-button/mosaic-action-bar-button.component';
+import { MosaicActionBarButton, MosaicActionBarButtonProps } from "./action-button/mosaic-action-bar-button.component";
 
-export const MosaicActionsBar = () => {
+interface MosaicActionsBarProps {
+    buttons: MosaicActionBarButtonProps[];
+}
+
+
+export const MosaicActionsBar: React.FC<MosaicActionsBarProps> = (props) => {
     return(
 
         <div className="d-flex justify-content-around">
-            <span className="">
-                <MosaicActionBarButton/>
-            </span>
+            <>
+            {
+                props.buttons.map(actionButton => {
+                    return <MosaicActionBarButton
+                                icon={actionButton.icon}
+                                buttonClick={actionButton.buttonClick}
+                                styleColor={actionButton.styleColor}
+                                text={actionButton.text}/>
+                })
+            }
+            </>
         </div>
 
     );

@@ -24,6 +24,7 @@ import { IDesignType } from "../../../../core/models/designType/design-type.mode
 import { IDesign } from "../../../../core/models/design/design.model";
 import { ExperienceCanvas } from "../../../../shared/components/experience-canvas/experience-canvas.component";
 import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/mosaic-actions-mask/mosaic-actions-mask.component";
+import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
 
 
 interface currentExperienceView
@@ -151,7 +152,14 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
-                                    <MosaicComponent mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null}/>} actions={false} />
+                                    <>
+                                        <MosaicComponent mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null}/>} actions={false} />
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
+                                            ]}/>
+                                    </>
                                 }
                                 
                                 {
@@ -163,8 +171,6 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
                                     <MosaicComponent mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null}/>} actions={false}/>
                                 }
-                                
-                                <MosaicActionsBar/>
                             </div>
                         </div>
                     </div> 
@@ -188,7 +194,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {/*  */}
-                                <MosaicActionsBar/>
+                                {/* <MosaicActionsBar/> */}
                             </div>
                         </div>
                     </div> 
