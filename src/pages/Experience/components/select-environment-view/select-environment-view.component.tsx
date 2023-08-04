@@ -69,31 +69,27 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
 </h4>
                     <div>
 
-                        {/* <div className="environment-carousel-content"> */}
+                        <Carousel interval={null} wrap={false} indicators={false} >
+                            { 
+                                Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
+                                    if(i.environmentType.id==Singleton.getInstance().currentEnvironmentType?.id){
+                                        return <Carousel.Item>
+                                                <div className="environment-item">
+                                                    <EnvironmentThumbnail
+                                                        name={i.name}
+                                                        image={i.source}
+                                                        id={parseInt(i.id)}
+                                                        onEvents={[
+                                                            (e) => Singleton.getInstance().SelectEnvironment(i),
+                                                            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
+                                                        ]}/>
+                                                </div>
+                                            </Carousel.Item> 
 
-                            <Carousel interval={null} wrap={false} indicators={false} >
-                                { 
-                                    Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
-                                        if(i.environmentType.id==Singleton.getInstance().currentEnvironmentType?.id){
-                                            // return <Carousel.Item>
-                                                    return <div className="environment-item">
-                                                        <EnvironmentThumbnail
-                                                            name={i.name}
-                                                            image={i.source}
-                                                            id={parseInt(i.id)}
-                                                            onEvents={[
-                                                                (e) => Singleton.getInstance().SelectEnvironment(i),
-                                                                (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
-                                                            ]}/>
-                                                    </div>
-                                            // </Carousel.Item> 
-
-                                        }
-                                    })
-                                }                                                      
-                            </Carousel>
-
-                        {/* </div> */}
+                                    }
+                                })
+                            }                                                      
+                        </Carousel>
                         
                     </div>
                 </div>
