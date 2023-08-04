@@ -40,11 +40,11 @@ class Singleton {
   public chessMode:boolean| null = null;
 
 
-  public currentExperienceView:ExperienceViews| null = ExperienceViews.None;
+  public currentExperienceView:ExperienceViews| null = ExperienceViews.EnvironmentType;
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
 evaluatePercentageFunc: ((percentage:number) => void) | null = null;
 updateMosaicFunc: (() => void) | null = null;
-
+updateViewStatusFunc: Array<() => void> = [];
 
   private environmentDataManager: EnvironmentDataManager = new EnvironmentDataManager();
   private environmentTypeDataManager: EnvironmentTypeDataManager = new EnvironmentTypeDataManager();
@@ -91,7 +91,7 @@ updateMosaicFunc: (() => void) | null = null;
   public ValidateViewCompleteStatus(currentView:ExperienceViews) {
     let viewComplete =false;
 
-    if(ExperienceViews.EnvironmentType)
+    if(currentView==ExperienceViews.EnvironmentType)
     {
         if(this.currentEnvironmentType)
         {
@@ -99,7 +99,7 @@ updateMosaicFunc: (() => void) | null = null;
         }
     }
 
-    if(ExperienceViews.Environment)
+    if(currentView==ExperienceViews.Environment)
     {
         if(this.currentEnvironment)
         {
@@ -107,15 +107,20 @@ updateMosaicFunc: (() => void) | null = null;
         }
     }
 
-    if(ExperienceViews.Design)
+    if(currentView==ExperienceViews.Design)
     {
+
         if(this.currentDesignList )
         {
-            return true;
+            if(this.currentDesignList.length>0 )
+            {
+                return true;
+            }
+           
         }
     }
 
-    if(ExperienceViews.Color)
+    if(currentView==ExperienceViews.Color)
     {
         if(this.currentColorList&& this.currentGrout)
         {
@@ -123,7 +128,7 @@ updateMosaicFunc: (() => void) | null = null;
         }
     }
 
-    if(ExperienceViews.Format)
+    if(currentView==ExperienceViews.Format)
     {
         if(this.currentFormat && this.currentStructure && (this.simulationArea||(this.simulationWidht && this.simulationHeight)))
         {
@@ -148,6 +153,7 @@ updateMosaicFunc: (() => void) | null = null;
 
         if(currentDesigns[0].fullField!==design.fullField)
         {
+            console.log("Add deign to mosaic selected 2");
             this.currentDesignList=[]
             let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
             for (let i = 0; i < maxDesignSelected; i++) {
@@ -161,14 +167,29 @@ updateMosaicFunc: (() => void) | null = null;
             
         }
         else if(this.currentMosaicIndexSelected>= 0 &&this.currentDesignList){
+            console.log("Add deign to mosaic selected 2");
             this.currentDesignList[this.currentMosaicIndexSelected] = design;
             if(this.updateMosaicFunc)
             {
                 this.updateMosaicFunc();
             }
         }
+        else
+        {
+            if(this.selectedDesignType?.mosaicValue==1)
+            {
+                this.currentDesignList=[]
+                this.currentDesignList.push(design);
+                if(this.updateMosaicFunc)
+                {
+                    this.updateMosaicFunc();
+                }
+            }
+            console.log("Add deign to mosaic selected 3");
+        }
        
     } else  {
+        console.log("Add deign to mosaic selected 2");
         this.currentDesignList=[]
         let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
         
@@ -189,6 +210,8 @@ updateMosaicFunc: (() => void) | null = null;
             this.currentExperienceView=view;
             this.setContentFunc(view);
         }
+
+        this.UpdateViewsStatus();
     }
 
     public EvaluatePercentage() {
@@ -251,6 +274,16 @@ updateMosaicFunc: (() => void) | null = null;
   // Add getters for each DataManager
   public getEnvironmentDataManager(): EnvironmentDataManager {
       return this.environmentDataManager;
+  }
+
+  public UpdateViewsStatus()
+  {
+
+    console.log("Updating view status ",this.updateViewStatusFunc)
+    this.updateViewStatusFunc.forEach(element => {
+       
+       element();
+    });
   }
 
   public getEnvironmentTypeDataManager(): EnvironmentTypeDataManager {

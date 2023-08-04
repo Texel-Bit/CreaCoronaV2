@@ -17,7 +17,7 @@ export const Experience = () => {
 
     // Passing `setContent` function to singleton
     Singleton.getInstance().setContentFunc = setContent;
-
+    Singleton.getInstance().UpdateViewsStatus();
 
 console.log(Singleton.getInstance().currentExperienceView,"  Singleton experience view ")
     return(

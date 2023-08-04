@@ -88,9 +88,10 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         console.log(Singleton.getInstance().GetSelectedDesigns());
         setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns() ?? [])
     }
+    
     useEffect(()=>{
         
-        console.log("Change the Selected designs")
+       
 
     },[selectedDesigns])
     
@@ -101,6 +102,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
             let numericalValue: number = experieceView;
             let view: ExperienceViews = numericalValue + value;
             Singleton.getInstance().ChangeExperienceView(view);
+            
+            Singleton.getInstance().UpdateViewsStatus();
         }
        
     }
