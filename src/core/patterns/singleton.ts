@@ -302,6 +302,10 @@ updateViewStatusFunc: Array<() => void> = [];
       return this.colorDataManager;
   }
 
+
+
+
+
   public getgroutDataManager(): groutDataManager {
       return this.groutDataManager;
   }
@@ -397,6 +401,10 @@ public GenerateDefaultDesignsSelected() {
 
 public addColor(color: IColor): void {
     this.colorDataManager.addColor(color);
+}
+
+public removeALlColors(): void {
+    this.colorDataManager.removeALlColors();
 }
 
 public addGrout(grout: IGrout): void {
