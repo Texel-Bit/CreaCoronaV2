@@ -61,6 +61,24 @@
 /* B-COLORS */
 
 
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-middle);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #333333;
+}
+
+
 #root {
   height: 100%;
 }

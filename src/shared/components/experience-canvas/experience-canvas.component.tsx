@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface PerspectiveOrigin {
     X: number,
@@ -18,6 +18,10 @@ interface ExperienceCanvasProps {
 
 
 export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
+
+    useEffect(() => {
+        console.log("DISEÑO SELECCIONADO => ", props.backgroundImage);
+    }, [props]);
 
     return(
         <div className="position-relative h-100">
