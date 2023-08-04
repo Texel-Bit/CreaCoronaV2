@@ -1,6 +1,7 @@
 import React from "react";
 import { IDesign } from "../../../../core/models/design/design.model";
 import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
+import Singleton from "../../../../core/patterns/singleton";
 
 
 interface ExperienceMosaicSquareProps
@@ -11,8 +12,6 @@ interface ExperienceMosaicSquareProps
 
 export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
    
-    console.log("Mosaic squares data ",props.squares);
-
     return(
         <div className='mosaic-square w-100'>
 
@@ -27,10 +26,9 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                     }`
                 }
             </style>
-
             {
-                props.squares.map(square => {
-                    return <img src={getServerImagesUrl(square.source)}/>
+                props.squares.map((square,i) => {
+                    return <img onClick={(e)=>Singleton.getInstance().ChangeMosaicIndex(i)} src={getServerImagesUrl(square.source)}/>
                 })
             }
 
