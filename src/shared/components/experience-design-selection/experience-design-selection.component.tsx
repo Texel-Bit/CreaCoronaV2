@@ -31,6 +31,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
         
+                Singleton.getInstance().getDesignDataManager().ClearDesigns();
+
                 let currenDesignColors = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
@@ -38,17 +40,19 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         id: element.idDesign,
                         source: element.DesignImagePath,
                         name: element.DesignName,
-                        designType: designType ? designType : defaultDesignType
+                        designType: designType ? designType : defaultDesignType,
+                        fullField:element.DesignColorType_idDesignColorType==1?true:false
                     };
-        
+                    
                     Singleton.getInstance().addDesign(currDesign);
                     return currDesign;
                 });
 
+                Singleton.getInstance().GenerateDefaultDesignsSelected()
                 setDesignColors(currenDesignColors);
             }
         }
-
+        
         SelectDesignTypeAsync();
 
     },[selectedDesignType]);
@@ -63,6 +67,10 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
         setSelectedDesignType(designType);
     }
 
+    const SelectNewDesign=(design: IDesign)=>
+    {
+        Singleton.getInstance().AddDesignToMosaic(design);
+    }
 
     return(
 
@@ -94,7 +102,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
                     {
                         designColors.map(design => {
-                            return <img src={getServerImagesUrl(design.source)}/>
+                            return <img onClick={()=>SelectNewDesign(design)} src={getServerImagesUrl(design.source)}/>
                         })
                     }
                 </div>

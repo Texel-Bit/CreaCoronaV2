@@ -34,7 +34,7 @@ class Singleton {
   public simulationHeight:INumberData| null = null
   
   public selectedDesignType:IDesignType| null = null
-
+  public currentMosaicIndexSelected:number = -1
 
   public chessMode:boolean| null = null;
 
@@ -42,6 +42,7 @@ class Singleton {
   public currentExperienceView:ExperienceViews| null = ExperienceViews.None;
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
 evaluatePercentageFunc: ((percentage:number) => void) | null = null;
+updateMosaicFunc: (() => void) | null = null;
 
 
   private environmentDataManager: EnvironmentDataManager = new EnvironmentDataManager();
@@ -119,6 +120,52 @@ evaluatePercentageFunc: ((percentage:number) => void) | null = null;
 
 
   }
+
+
+  public AddDesignToMosaic(design: IDesign) {
+
+    console.log("Add deign to mosaic selected");
+    const currentDesigns = this.GetSelectedDesigns();
+
+    if (currentDesigns && currentDesigns.length > 0) {
+        // Check if the design is already in the list
+
+        if(currentDesigns[0].fullField!==design.fullField)
+        {
+            this.currentDesignList=[]
+            let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
+            for (let i = 0; i < maxDesignSelected; i++) {
+                this.currentDesignList.push(design);
+            }
+
+            if(this.updateMosaicFunc)
+            {
+                this.updateMosaicFunc();
+            }
+            
+        }
+        else if(this.currentMosaicIndexSelected>= 0 &&this.currentDesignList){
+            this.currentDesignList[this.currentMosaicIndexSelected] = design;
+            if(this.updateMosaicFunc)
+            {
+                this.updateMosaicFunc();
+            }
+        }
+       
+    } else  {
+        this.currentDesignList=[]
+        let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
+        
+        for (let i = 0; i < maxDesignSelected; i++) {
+            this.currentDesignList.push(design);
+        }
+
+        if(this.updateMosaicFunc)
+        {
+            this.updateMosaicFunc();
+        }
+    }
+}
 
 
     public ChangeExperienceView(view: ExperienceViews) {
@@ -250,11 +297,54 @@ public addDesignType(designType: IDesignType): void {
 }
 
 public addDesign(design: IDesign): void {
-    if(this.currentDesignList?.length==0)
-    {
-        this.currentDesignList.push(design);
-    }
+   
     this.designDataManager.addDesign(design);
+}
+
+public GetSelectedDesigns()
+{
+   
+    if(this.currentDesignList)
+    {
+        return this.currentDesignList;
+    }
+    
+    return this.GenerateDefaultDesignsSelected();
+}
+
+public GenerateDefaultDesignsSelected() {
+    let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
+    const currentDesigns = this.getDesignDataManager().getAllDesigns();
+
+    this.currentDesignList = []
+   
+
+    if(currentDesigns.length>0)
+    {
+        if(currentDesigns[0].fullField)
+        {
+            for (let i = 0; i < maxDesignSelected; i++) {
+                this.currentDesignList.push(currentDesigns[0]);
+            }
+        }
+        else
+        {
+            for (let i = 0; i < maxDesignSelected; i++) {
+                if (currentDesigns[i]) {
+                    this.currentDesignList.push(currentDesigns[i]);
+                } else {
+                    break; // exit the loop if there are no more designs
+                }
+            }
+        }
+    }
+    
+    if(this.updateMosaicFunc)
+    {
+        this.updateMosaicFunc();
+    }
+
+    
 }
 
 public addColor(color: IColor): void {

@@ -5,6 +5,7 @@ interface MosaicComponenProps {
 }
 
 export const MosaicComponent: React.FC<MosaicComponenProps> = ({ mosaic }) => {
+
     return(
         <div className='mosaic-component'>
             {mosaic}
