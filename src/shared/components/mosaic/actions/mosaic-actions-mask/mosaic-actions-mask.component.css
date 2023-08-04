@@ -1,0 +1,38 @@
+.mosaic-actions-mask {
+    display: grid;
+    gap: .4rem;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    padding: .2rem;
+}
+
+
+.mosaic-actions-mask-item {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+    align-items: end;
+}
+
+.mosaic-actions-mask-item.selected {
+    background-color: rgba(58,186,236,0.1);
+    border: 3px solid var(--color-middle);
+    
+}
+
+.mosaic-actions-mask-item button {
+    display: none;
+    color: white;
+    background-color: var(--color-middle);
+    border: 1px solid var(--color-middle);
+    border-radius: 4px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.mosaic-actions-mask-item.selected button {
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}

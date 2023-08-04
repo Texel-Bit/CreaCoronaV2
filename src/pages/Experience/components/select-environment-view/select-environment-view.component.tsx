@@ -69,29 +69,31 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
                     </h4>
                     <div>
 
-                        <Carousel
-                            interval={null}
-                            wrap={false}>
+                        {/* <div className="environment-carousel-content"> */}
+
+                            <Carousel interval={null} wrap={false} indicators={false} >
                                 { 
-                                Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
-                                    if(i.environmentType.id==Singleton.getInstance().currentEnvironmentType?.id){
-                                        return <Carousel.Item>
-                                        <EnvironmentThumbnail
-                                            name={i.name}
-                                            image={i.source}
-                                            id={parseInt(i.id)}
-                                            onEvents={[
-                                                (e) => Singleton.getInstance().SelectEnvironment(i),
-                                                (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
-                                                // Add as many handlers as you need
-                                            ]}
-                                        />
-                                    </Carousel.Item> 
+                                    Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
+                                        if(i.environmentType.id==Singleton.getInstance().currentEnvironmentType?.id){
+                                            // return <Carousel.Item>
+                                                    return <div className="environment-item">
+                                                        <EnvironmentThumbnail
+                                                            name={i.name}
+                                                            image={i.source}
+                                                            id={parseInt(i.id)}
+                                                            onEvents={[
+                                                                (e) => Singleton.getInstance().SelectEnvironment(i),
+                                                                (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
+                                                            ]}/>
+                                                    </div>
+                                            // </Carousel.Item> 
 
-                                    }
-                                })}                                                      
-                        </Carousel>
+                                        }
+                                    })
+                                }                                                      
+                            </Carousel>
 
+                        {/* </div> */}
                         
                     </div>
                 </div>

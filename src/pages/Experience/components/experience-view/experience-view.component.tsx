@@ -22,6 +22,8 @@ import { ExperienceStructureSelection } from "../../../../shared/components/expe
 import Singleton from "../../../../core/patterns/singleton";
 import { IDesignType } from "../../../../core/models/designType/design-type.model";
 import { IDesign } from "../../../../core/models/design/design.model";
+import { ExperienceCanvas } from "../../../../shared/components/experience-canvas/experience-canvas.component";
+import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/mosaic-actions-mask/mosaic-actions-mask.component";
 
 
 interface currentExperienceView
@@ -144,16 +146,22 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                            {Singleton.getInstance().selectedDesignType?.id === 3 && 
-                            <MosaicComponent mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null}/>} />}
-                            
-                            {Singleton.getInstance().selectedDesignType?.id==2&& 
-                            <MosaicComponent mosaic={<MosaicSquare squares={selectedDesigns}/>}/>}
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    <MosaicComponent mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null}/>} actions={false} />
+                                }
+                                
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    <MosaicComponent mosaic={<MosaicSquare squares={selectedDesigns}/>} actions={true}/>
+                                }
 
-                            {Singleton.getInstance().selectedDesignType?.id==1&& 
-                            <MosaicComponent mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null}/>} />}
-                                                   
-                                                            <MosaicActionsBar/>
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    <MosaicComponent mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null}/>} actions={false}/>
+                                }
+                                
+                                <MosaicActionsBar/>
                             </div>
                         </div>
                     </div> 
@@ -197,12 +205,16 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
             </div>
 
-            <div className="w-50 position-relative">
-                <div className="design-canvas h-100 w-100"></div>
-                <img
-                    src={canvasMask}
-                    className="position-absolute h-100 w-100 object-fit-cover top-0"
-                    alt="Environment Image"/>
+            <div className="w-50 h-100">
+                <ExperienceCanvas 
+                    backgroundImage=""
+                    mask={canvasMask}
+                    perspective={1000}
+                    perspectiveOrigin={{ X: 50, Y: 50 }}
+                    rotationX={0}
+                    rotationY={0}
+                    rotationZ={0}
+                    scale={1}/>
             </div>
 
         </div>
