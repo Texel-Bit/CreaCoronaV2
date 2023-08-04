@@ -31,24 +31,3 @@
     border-color: var(--color-middle) !important;
     overflow-y: auto;
 }
-
-/* Estilos para el track del scrollbar (la barra gris) */
-.design-thumbnails-grid::-webkit-scrollbar {
-    width: 5px; /* Ancho del scrollbar */
-  }
-  
-  /* Estilos para el thumb del scrollbar (la barra de desplazamiento) */
-  .design-thumbnails-grid::-webkit-scrollbar-thumb {
-    background-color: var(--color-middle); /* Color del thumb */
-    border-radius: 10px; /* Radio de la esquina del thumb */
-  }
-  
-  /* Estilos para el thumb del scrollbar cuando está en estado hover */
-  .design-thumbnails-grid::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-primary); /* Color del thumb en hover */
-  }
-  
-  /* Estilos para el thumb del scrollbar cuando está en estado activo (haciendo click sobre él) */
-  .design-thumbnails-grid::-webkit-scrollbar-thumb:active {
-    background-color: #333333; /* Color del thumb en estado activo */
-  }
