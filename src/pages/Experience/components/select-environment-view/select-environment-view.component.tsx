@@ -36,7 +36,8 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
                         source: element.EnvironmentProfileImage,
                         maskImage: element.EnvironmentMaksImage,
                         name: element.EnvironmentName,
-                        environmentType: currentEnvironmentType
+                        environmentType: currentEnvironmentType,
+                        environmentAngle:JSON.parse(element.EnvironmentAngle)
                     };
             
                     // Adding the environment to Singleton's EnvironmentDataManager
