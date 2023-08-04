@@ -6,6 +6,7 @@ import DesignDataManager from '../../../core/managers/desig-data.manager';
 import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
 import { getAllDesignByTypeId } from '../../../core/services/design.service';
 import Singleton from '../../../core/patterns/singleton';
+import { IColor } from '../../../core/models/color/color.model';
 
 interface ExperienceDesingSelectionProps {
     designTypes: IDesignType[],
@@ -21,6 +22,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
     useEffect(()=>{
         
+
         const SelectDesignTypeAsync = async() =>
         {
             if(selectedDesignType)
@@ -32,7 +34,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
         
                 Singleton.getInstance().getDesignDataManager().ClearDesigns();
-
+                Singleton.getInstance().removeALlColors();
+                
                 let currenDesignColors = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
@@ -45,6 +48,23 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     };
                     
                     Singleton.getInstance().addDesign(currDesign);
+                    return currDesign;
+                });
+
+                console.log(CurrColorsSelected.data)
+                let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
+                    let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
+                    
+                    let currDesign: IColor = {
+                       id:element.idDesignColors,
+                       name:element.DesignColorName                       ,
+                       source:element.DesignColorPath,
+                       isFullField:element.DesignColorType_idDesignColorType==1?true:false,
+                       design :designType ? designType : defaultDesignType,
+                    };
+                    
+                    
+                    Singleton.getInstance().addColor(currDesign);
                     return currDesign;
                 });
 

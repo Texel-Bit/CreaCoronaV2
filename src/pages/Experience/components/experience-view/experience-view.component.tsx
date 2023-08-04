@@ -90,9 +90,10 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         console.log(Singleton.getInstance().GetSelectedDesigns());
         setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns() ?? [])
     }
+    
     useEffect(()=>{
         
-        console.log("Change the Selected designs")
+       
 
     },[selectedDesigns])
     
@@ -103,6 +104,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
             let numericalValue: number = experieceView;
             let view: ExperienceViews = numericalValue + value;
             Singleton.getInstance().ChangeExperienceView(view);
+
+            Singleton.getInstance().UpdateViewsStatus();
         }
        
     }
@@ -174,8 +177,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
                             <ExperienceColorPaletteSelection />
-                            <ExperienceTextureSelection />
-                            <ExperienceGroutSelection grouts={[]} />
+                            <ExperienceTextureSelection 
+    colorArray={
+        Singleton.getInstance().getColorDataManager().GetAllColors(
+            Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
+        )
+    } 
+/>                            <ExperienceGroutSelection grouts={[]} />
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">

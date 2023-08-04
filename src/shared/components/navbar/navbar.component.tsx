@@ -10,7 +10,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import './navbar.component.css';
 
 // imágenes 
-import ImageAvatar from '../../../assets/image/Avatars.png';
+import ImageAvatar from '../../../assets/image/Avatars.svg';
 import ImageLogout from '../../../assets/icons/logout.svg'
 import LogoCreaCorona from '../../../assets/logos/crea_corona.png';
 import superficie from '../../../assets/icons/Superficie.svg';
@@ -102,13 +102,14 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
                 <div className="d-flex gap-3 align-items-center">
 
                     <img
+
                         src={ImageAvatar}
-                        className="d-inline-block align-top"
+                        className="d-inline-block align-top h-1"
                         alt="Usuario conectado"/>
 
                         <div>
-                            <h5 className='m-0 h5'>{userdata.userName}</h5>
-                            <p className='m-0'>{userdata.email}</p>
+                            <h5 style={{color:"#213C65",fontFamily: 'Roboto'}} className='m-0 h5'>{userdata.userName}</h5>
+                            <p style={{color:"#213C65",fontFamily: 'Roboto'}} className='m-0'>{userdata.email}</p>
                         </div>
 
                     <img

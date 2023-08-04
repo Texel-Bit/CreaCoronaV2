@@ -1,5 +1,14 @@
+
+:root {
+    --color-progressVar: #0069B4;  /* progress color */
+    --color-textVar: #0069B4;  /* text color */
+    --color-trailVar: #F5F5F5;  /* background color */
+}
+
+
 .steeps-navbar {
-    height: 112px;
+    width: 100%;
+    height: 130px;
     overflow-x: auto;
 }
 
@@ -11,13 +20,17 @@
     display: flex;
 }
 
-
-.CircularProgressbar .CircularProgressbar-path,
-.CircularProgressbar .CircularProgressbar-text {
-    stroke: var(--color-primary);
+.CircularProgressbar .CircularProgressbar-path {
+    stroke: var(--color-progressVar);
 }
 
+.CircularProgressbar .CircularProgressbar-text {
+    stroke: var(--color-textVar);
+}
 
+.CircularProgressbar .CircularProgressbar-trail {
+    stroke: var(--color-trailVar);
+}
 .navbar-item {
     width: 150px;
 }
