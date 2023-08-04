@@ -1,6 +1,5 @@
 import React from "react";
 
-
 interface PerspectiveOrigin {
     X: number,
     Y: number

@@ -36,6 +36,7 @@ class Singleton {
   public selectedDesignType:IDesignType| null = null
   public currentMosaicIndexSelected:number = -1
 
+  
   public chessMode:boolean| null = null;
 
 
@@ -63,11 +64,22 @@ updateMosaicFunc: (() => void) | null = null;
       return Singleton.instance;
   }
 
-  
+
   public ChangeMosaicIndex(newIndex:number)
   {
       this.currentMosaicIndexSelected=newIndex;
+      console.log("Change Index");
   }
+
+  public SwapMosaicItems(fromIndex: number, toIndex: number) {
+    if(this.currentDesignList)
+        [this.currentDesignList[fromIndex], this.currentDesignList[toIndex]] = [this.currentDesignList[toIndex], this.currentDesignList[fromIndex]];
+    
+        if(this.updateMosaicFunc)
+        {
+            this.updateMosaicFunc();
+        }
+}
   
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
     console.log("SelectEnvironmentType called with environmentType", environmentType);
@@ -81,7 +93,6 @@ updateMosaicFunc: (() => void) | null = null;
 
     if(ExperienceViews.EnvironmentType)
     {
-
         if(this.currentEnvironmentType)
         {
             return true;
@@ -183,7 +194,7 @@ updateMosaicFunc: (() => void) | null = null;
     public EvaluatePercentage() {
         if (this.evaluatePercentageFunc) {
             
-            const maxPercentageValue=8;
+            const maxPercentageValue=5;
 
             let currProggressDone=0;
 
@@ -195,34 +206,33 @@ updateMosaicFunc: (() => void) | null = null;
             {
                 currProggressDone+=1;
             }
-            if(this.currentColorList)
-            {
-                currProggressDone+=1;
-            }
             if(this.currentDesignList)
             {
                 currProggressDone+=1;
             }
-            if(this.currentFormat)
+            if(this.currentColorList && this.currentGrout)
             {
                 currProggressDone+=1;
             }
-            if(this.currentGrout)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentStructure)
-            {
-                currProggressDone+=1;
-            }
+            
+            let AreaComplete=false;
+
             if(this.simulationArea)
             {
-                currProggressDone+=1;
+                AreaComplete=true;
             }
             else if(this.simulationWidht && this.simulationHeight)
             {
+                AreaComplete=true;
+            }
+
+            if(this.currentFormat && this.currentStructure &&AreaComplete)
+            {
                 currProggressDone+=1;
             }
+           
+           
+           
 
             let Percentage=currProggressDone*100/maxPercentageValue;
             if(Percentage>100)
@@ -311,7 +321,7 @@ public GetSelectedDesigns()
    
     if(this.currentDesignList)
     {
-        return this.currentDesignList;
+        return this.currentDesignList.slice();
     }
     
     return this.GenerateDefaultDesignsSelected();

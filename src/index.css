@@ -1,6 +1,6 @@
 :root{
   --color-primary:#00355A;
-  --color-middle:#0069B4;
+  --color-middle:#0069B4;  
   --color-second: #ABABAB;
   --color-third:#213C65;
   --color-fourth:#3ABAEC;
@@ -65,7 +65,7 @@
 }
 
 body {
-  font-family: 'Roboto';
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -73,9 +73,22 @@ body {
   width: 100vw;
   height: 100vh !important;
   background-color: #0C6F55;
+  overflow: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.button-background{
+  background-color: var(--color-primary) !important;
+  border: none !important;
+  outline: none !important;
+  transition: transform 1s ease-in-out;
+  cursor: pointer;
+}
+
+.button-background:hover{
+  transform: scale(1.1);
 }
