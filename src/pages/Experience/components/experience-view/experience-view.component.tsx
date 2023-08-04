@@ -215,8 +215,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
             <div className="w-50 h-100">
                 <ExperienceCanvas 
-                    backgroundImage=""
-                    mask={canvasMask}
+                    backgroundImage={Singleton.getInstance().currentColorList?.[0]?.source ?? ""}                    mask={canvasMask}
                     perspective={1000}
                     perspectiveOrigin={{ X: 50, Y: 50 }}
                     rotationX={0}

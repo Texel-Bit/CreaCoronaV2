@@ -26,7 +26,7 @@ class Singleton {
   public currentEnvironmentType: IEnvironmentType | null = null;
   public currentEnvironment: IEnvironment | null = null;
   public currentDesignList:IDesign[]| null = null;
-  public currentColorList:IColor[]| null = null;
+  public currentColorList:IColor[]| null = [];
   public colorBundleList:IColorBundle[]| null = null;
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
@@ -72,6 +72,20 @@ updateViewStatusFunc: Array<() => void> = [];
   {
       this.currentMosaicIndexSelected=newIndex;
       console.log("Change Index");
+  }
+
+
+  public GetCurrenColorTypeID()
+  {
+      if(this.currentColorList)
+      {
+        if(this.currentColorList.length>0)
+        {
+            return this.currentColorList[0].isFullField?1:2;
+        }
+      }
+
+      return 1
   }
 
   public SwapMosaicItems(fromIndex: number, toIndex: number) {
