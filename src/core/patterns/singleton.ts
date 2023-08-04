@@ -17,6 +17,7 @@ import { IFormat } from "../models/format/format.model";
 import { ExperienceViews } from "../../shared/enums/routes.enum";
 import { INumberData } from "../models/NumberData/number-data.model";
 import { ElementFlags } from "typescript";
+import { IColorBundle } from "../models/color/color-bundle.model";
 
 class Singleton {
   private static instance: Singleton;
@@ -26,6 +27,7 @@ class Singleton {
   public currentEnvironment: IEnvironment | null = null;
   public currentDesignList:IDesign[]| null = null;
   public currentColorList:IColor[]| null = null;
+  public colorBundleList:IColorBundle[]| null = null;
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
   public currentFormat: IFormat | null = null;
@@ -33,6 +35,7 @@ class Singleton {
   public simulationWidht:INumberData| null = null
   public simulationHeight:INumberData| null = null
   
+
   public selectedDesignType:IDesignType| null = null
   public currentMosaicIndexSelected:number = -1
 
@@ -205,6 +208,29 @@ updateViewStatusFunc: Array<() => void> = [];
 }
 
 
+public AddBundle(bundle:IColorBundle)
+{
+    // Initialize the list if it's not already initialized
+    if(!this.colorBundleList)
+    {
+        this.colorBundleList = [];
+    }
+
+    // Check if a bundle with the same id already exists in the list
+    const bundleExists = this.colorBundleList.some(existingBundle => existingBundle.id === bundle.id);
+
+    // Only add the new bundle to the list if a bundle with the same id doesn't already exist
+    if (!bundleExists) {
+        this.colorBundleList.push(bundle);
+    }
+}
+
+
+public ClearBundles()
+{
+    this.colorBundleList=[]
+
+}
     public ChangeExperienceView(view: ExperienceViews) {
         if (this.setContentFunc) {
             this.currentExperienceView=view;
