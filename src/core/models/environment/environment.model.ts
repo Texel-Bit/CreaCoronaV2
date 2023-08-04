@@ -7,4 +7,5 @@ export interface IEnvironment {
     maskImage:string
     name:string
     environmentType:IEnvironmentType
+    environmentAngle:any
 }

@@ -64,6 +64,11 @@ updateMosaicFunc: (() => void) | null = null;
   }
 
   
+  public ChangeMosaicIndex(newIndex:number)
+  {
+      this.currentMosaicIndexSelected=newIndex;
+  }
+  
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
     console.log("SelectEnvironmentType called with environmentType", environmentType);
     this.currentEnvironmentType=environmentType;
