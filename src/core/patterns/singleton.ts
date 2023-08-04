@@ -63,10 +63,11 @@ updateMosaicFunc: (() => void) | null = null;
       return Singleton.instance;
   }
 
-  
+
   public ChangeMosaicIndex(newIndex:number)
   {
       this.currentMosaicIndexSelected=newIndex;
+      console.log("Change Index");
   }
   
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
@@ -311,7 +312,7 @@ public GetSelectedDesigns()
    
     if(this.currentDesignList)
     {
-        return this.currentDesignList;
+        return this.currentDesignList.slice();
     }
     
     return this.GenerateDefaultDesignsSelected();

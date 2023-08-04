@@ -19,11 +19,15 @@
 
 
 .navbar-item {
-    width: 110px;
+    width: 150px;
 }
 
 .navbar-item-text {
     font-size: 15px;
     font-weight: 600;
     line-height: 1;
+}
+
+.iconNavBarOptions{
+    margin-left: 50px;
 }
