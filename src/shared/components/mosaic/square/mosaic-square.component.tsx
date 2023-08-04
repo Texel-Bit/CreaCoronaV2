@@ -10,6 +10,9 @@ interface ExperienceMosaicSquareProps
 
 
 export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
+   
+    console.log("Mosaic squares data ",props.squares);
+
     return(
         <div className='mosaic-square w-100'>
 

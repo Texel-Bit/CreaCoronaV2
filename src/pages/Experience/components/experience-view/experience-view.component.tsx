@@ -21,6 +21,7 @@ import { InitQuotationForm } from "../../../../shared/components/init-quotation-
 import { ExperienceStructureSelection } from "../../../../shared/components/experience-structure-selection/experience-structure-selection";
 import Singleton from "../../../../core/patterns/singleton";
 import { IDesignType } from "../../../../core/models/designType/design-type.model";
+import { IDesign } from "../../../../core/models/design/design.model";
 
 
 interface currentExperienceView
@@ -59,13 +60,21 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
 
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
+    const [selectedDesigns, setSelectedDesigns] = useState<IDesign[]>(Singleton.getInstance().GetSelectedDesigns() ?? []);
     const [canvasMask, setCanvasMask] = useState("");
+
+    useEffect(()=>{
+        
+    },[selectedDesigns])
 
 
     useEffect(() => {
 
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
         setDesignTypes(currentDesignTypes);
+
+        let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? [];
+        setSelectedDesigns(currentDesignsSelected);
 
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
@@ -74,6 +83,11 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         setCanvasMask(maskImage);
     }, []);
 
+    Singleton.getInstance().updateMosaicFunc = updateMosaic;
+
+    function updateMosaic() {
+        setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns() ?? [])
+    }
 
     function ChangeView(experieceView: ExperienceViews | null, value:number)
     {
@@ -125,8 +139,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <MosaicComponent mosaic={<MosaicSquare squares={[]}/>}/>
-                                <MosaicActionsBar/>
+                            <MosaicComponent mosaic={<MosaicSquare squares={selectedDesigns}/>}/>                                <MosaicActionsBar/>
                             </div>
                         </div>
                     </div> 

@@ -57,7 +57,7 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                     name:element2.DesignTypeName,
                     id:element2.idDesignType,
                     source:element2.DesignTypeIconPath,
-                    mosaicValue:element2.MosaicType_idMosaicType
+                    mosaicValue:element2.MosaicType_idMosaicType==3?4:1
                   };
 
                   singleton.addDesignType(currentDesignType);
