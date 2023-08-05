@@ -1,4 +1,5 @@
 import { IEnvironment } from "../models/environment/environment.model";
+import Singleton from "../patterns/singleton";
 
 class EnvironmentDataManager
 {
@@ -31,10 +32,13 @@ class EnvironmentDataManager
        this.environmentList = _environment;
     }
 
-    public GetAllEnvironment()
-    {
-      return this.environmentList;
-    }
+    public GetAllEnvironment(): IEnvironment[] {
+        const currentEnvironmentId = Singleton.getInstance().currentEnvironmentType?.id;
+        if (currentEnvironmentId) {
+          return this.environmentList.filter(env => env.environmentType.id === currentEnvironmentId);
+        }
+        return []; 
+      }
 }
 
 export default EnvironmentDataManager;
