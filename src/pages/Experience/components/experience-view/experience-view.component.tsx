@@ -29,6 +29,8 @@ import { getServerImagesUrl } from "../../../../shared/utilities/format-server-e
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
 import { idText } from "typescript";
 import { IGrout } from "../../../../core/models/grout/grout.model";
+import { IFormat } from "../../../../core/models/format/format.model";
+import { IStructure } from "../../../../core/models/structure/structure.model";
 
 
 interface currentExperienceView
@@ -71,10 +73,12 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [canvasMask, setCanvasMask] = useState("");
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
+    const [formats, setFormats] = useState<IFormat[]>();
+    const [structures, setStructures] = useState<IStructure[]>();
     
+
     const [colorType, setColorType] = useState(1);
 
-   
        useEffect(() => {
        
        
@@ -83,13 +87,42 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     }, [mosaicGrout]);
 
 
+
+    useEffect(() => {
     
+
+ }, [structures]);
+
+
+ useEffect(() => {
+    
+console.log("Formats updated ",formats);
+
+ }, [formats]);
+
+    
+ function SelectFormat(newFormat:IFormat)
+    {
+        Singleton.getInstance().SelectFormat(newFormat);
+    }
+
+    function UpdateFormats(currrentFormats:IFormat[])
+    {
+       setFormats(currrentFormats)
+    }
+
+
+    function UpdateStructures(currrentStructure:IStructure[])
+    {
+       setStructures(currrentStructure)
+    }
 
     function MosaicGroutChanged(currrentGrout:IGrout)
     {
         setMosaicGrout(getServerImagesUrl(currrentGrout.source))
     }
 
+    
 
     useEffect(() => {
 
@@ -110,6 +143,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
         Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
         Singleton.getInstance().updateMosaicFunc = updateMosaic;
+        Singleton.getInstance().updateFormatsFunc = UpdateFormats;
+        Singleton.getInstance().updateStructuresFunc = UpdateStructures;
 
         if (Singleton.getInstance().currentEnvironment != null)
         {
@@ -133,7 +168,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
             let elementSvg = await convertHtmlToImage(element);
             setCanvasImage(elementSvg ?? "");
         }
-        }, 300);
+        }, 500);
         
     }
 
@@ -289,11 +324,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <ExperienceStructureSelection structures={[]}/>
+                                <ExperienceStructureSelection structures={structures??[]}/>
                             </div>
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
-                            <ExperienceFormatSelection formats={[]} />
+                            <ExperienceFormatSelection formats={formats?.map(format=>{
+                                return {format,onClick:SelectFormat}
+                            })??[]} />
                             <InitQuotationForm/>
                         </div>
                     </div>

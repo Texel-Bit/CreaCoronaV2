@@ -37,6 +37,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
         
                 Singleton.getInstance().getDesignDataManager().ClearDesigns();
                 Singleton.getInstance().removeALlColors();
+                Singleton.getInstance().removeAllFormats();
                 
                 let currenDesignColors = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
@@ -53,7 +54,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-
+     
                 CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {
                     
 
@@ -62,6 +63,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                             return colorType.DesignColorType_idDesignColorType;
                         });
                     
+                        
                         let currStructure: IStructure = {
                             id: structure.idFormatSizeTexture,
                             name: structure.FormatSizeTextureName,
@@ -86,7 +88,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-                console.log(Singleton.getInstance().getFormatDataManager().getAllFormat())
+
+                
 
                 let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
