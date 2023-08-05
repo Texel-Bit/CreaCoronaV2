@@ -8,8 +8,9 @@
 }
 
 .color-palette-item {
-    padding: .8rem;
-    border: 1px solid var(--color-middle);
+    width: 30px;
+    height: 30px;
+    border: solid 1px rgb(136, 136, 136);
 }
 
 .color-palette-row {
@@ -24,15 +25,19 @@
 }
 
 .titleListRow{
-    width: 30%;
+    width: 26.5%;
     font-size: 15px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    padding-left: 15px;
 }
 
 .textures-selection-column.col-5.h-100{
     position: relative !important;
+}
+
+.seleccionSmall{
+    padding-left: 9px;
 }
 
 .optionsColorsList{
@@ -46,6 +51,7 @@
     -webkit-box-shadow: 1px 14px 5px 7px rgba(0,0,0,0.05);
     -moz-box-shadow: 1px 14px 5px 7px rgba(0,0,0,0.05);
     box-shadow: 1px 14px 5px 7px rgba(0,0,0,0.05);
+    border: 1px var(--color-middle) solid;
 }
 
 .hiddenList{
