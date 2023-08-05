@@ -27,6 +27,7 @@ import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/
 import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
 import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
+import { idText } from "typescript";
 
 
 interface currentExperienceView
@@ -65,7 +66,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
 
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
-    const [selectedDesigns, setSelectedDesigns] = useState<IDesign[]>(Singleton.getInstance().GetSelectedDesigns() ?? []);
+    const [selectedDesigns, setSelectedDesigns] = useState<HTMLElement[]>();
     const [canvasMask, setCanvasMask] = useState("");
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
@@ -82,14 +83,9 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
         setDesignTypes(currentDesignTypes);
 
-        let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? [];
-        setSelectedDesigns(currentDesignsSelected);
+        let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? []; 
 
-        if(currentDesignsSelected.length > 0)
-        {
-            // if (currentDesignsSelected[0].source)
-                updateCanvas();
-        }
+
 
         if (Singleton.getInstance().currentEnvironment != null)
         {
@@ -114,26 +110,26 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         }
     }
 
-    function updateMosaic() {
+    function updateMosaic(HTMLElement:HTMLElement[]) {
         
-        setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns()?? [])
+        setSelectedDesigns(HTMLElement)
 
         if (Singleton.getInstance().currentGrout)
             setMosaicGrout(getServerImagesUrl(Singleton.getInstance().currentGrout?.source ?? ""));
 
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
-        console.log("urrent colpor type "+colorTypeId);
+
+       
     }
     
 
     useEffect(()=>{
         
-        console.log(selectedDesigns);
-        if(selectedDesigns.length>0)
-        {
+        setTimeout(() => {
             updateCanvas();
-        }
+        }, 500);
+       
 
     },[selectedDesigns])
 
@@ -193,7 +189,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
                                     <>
                                         <MosaicComponent 
-                                            mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null} grout={mosaicGrout}/>} 
+                                            mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
                                             actions={false} />
                                         <MosaicActionsBar 
                                             buttons={[
@@ -206,14 +202,14 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
                                     <MosaicComponent
-                                        mosaic={<MosaicSquare squares={selectedDesigns} grout={mosaicGrout}/>}
+                                        mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
                                         actions={true}/>
                                 }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
                                     <MosaicComponent 
-                                        mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null} grout={mosaicGrout}/>}
+                                        mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout}/>}
                                         actions={false}/>
                                 }
                             </div>
@@ -242,7 +238,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
                                     <>
                                         <MosaicComponent 
-                                            mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null} grout={mosaicGrout}/>} 
+                                            mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
                                             actions={false} />
                                     </>
                                 }
@@ -250,14 +246,14 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
                                     <MosaicComponent
-                                        mosaic={<MosaicSquare squares={selectedDesigns} grout={mosaicGrout}/>}
+                                        mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
                                         actions={true}/>
                                 }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
                                     <MosaicComponent 
-                                        mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null} grout={mosaicGrout}/>}
+                                        mosaic={<MosaicBrick brick={selectedDesigns![0]?? null} grout={mosaicGrout}/>}
                                         actions={false}/>
                                 }
                             </div>

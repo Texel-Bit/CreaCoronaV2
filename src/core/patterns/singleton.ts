@@ -18,6 +18,8 @@ import { ExperienceViews } from "../../shared/enums/routes.enum";
 import { INumberData } from "../models/NumberData/number-data.model";
 import { ElementFlags } from "typescript";
 import { IColorBundle } from "../models/color/color-bundle.model";
+import SvgTexturizer, { TexturizeSvgOptions } from "../../shared/utilities/svg-texturizer.utility";
+import { getServerImagesUrl } from "../../shared/utilities/format-server-endpoints.utility";
 
 class Singleton {
   private static instance: Singleton;
@@ -46,7 +48,7 @@ class Singleton {
   public currentExperienceView:ExperienceViews| null = ExperienceViews.EnvironmentType;
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
 evaluatePercentageFunc: ((percentage:number) => void) | null = null;
-updateMosaicFunc: (() => void) | null = null;
+updateMosaicFunc: ((HTMLElement:HTMLElement[]) => void) | null = null;
 updateViewStatusFunc: Array<() => void> = [];
 
   private environmentDataManager: EnvironmentDataManager = new EnvironmentDataManager();
@@ -92,10 +94,7 @@ updateViewStatusFunc: Array<() => void> = [];
     if(this.currentDesignList)
         [this.currentDesignList[fromIndex], this.currentDesignList[toIndex]] = [this.currentDesignList[toIndex], this.currentDesignList[fromIndex]];
     
-        if(this.updateMosaicFunc)
-        {
-            this.updateMosaicFunc();
-        }
+        this.TexturizeMosaic();
 }
   
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
@@ -179,19 +178,13 @@ updateViewStatusFunc: Array<() => void> = [];
                 this.currentDesignList.push(design);
             }
 
-            if(this.updateMosaicFunc)
-            {
-                this.updateMosaicFunc();
-            }
+            this.TexturizeMosaic();
             
         }
         else if(this.currentMosaicIndexSelected>= 0 &&this.currentDesignList){
             console.log("Add deign to mosaic selected 2");
             this.currentDesignList[this.currentMosaicIndexSelected] = design;
-            if(this.updateMosaicFunc)
-            {
-                this.updateMosaicFunc();
-            }
+            this.TexturizeMosaic();
         }
         else
         {
@@ -199,10 +192,7 @@ updateViewStatusFunc: Array<() => void> = [];
             {
                 this.currentDesignList=[]
                 this.currentDesignList.push(design);
-                if(this.updateMosaicFunc)
-                {
-                    this.updateMosaicFunc();
-                }
+                this.TexturizeMosaic();
             }
             console.log("Add deign to mosaic selected 3");
         }
@@ -216,10 +206,7 @@ updateViewStatusFunc: Array<() => void> = [];
             this.currentDesignList.push(design);
         }
 
-        if(this.updateMosaicFunc)
-        {
-            this.updateMosaicFunc();
-        }
+        this.TexturizeMosaic();
     }
 }
 
@@ -308,9 +295,38 @@ public ClearBundles()
         }
     }
 
+    private async TexturizeMosaic() {
+        let TexturizedOptions: TexturizeSvgOptions[];
+    
+        if(this.currentColorList) {
+            let texturizer = new SvgTexturizer();
+    
+            TexturizedOptions = this.currentColorList.map((color,index) => {
+                return {layerId: `layer${index}`,textureUrl: getServerImagesUrl(color.source),tile: 1}
+            });
+    
+            if(this.currentDesignList)
+            {
+                let designPromises = this.currentDesignList.map(async(design) => {
+                    let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
+                    return texturizedDesign;
+                });
+                let TexturizedDesigns: HTMLElement[] = await Promise.all(designPromises); // wait for all promises to resolve
+                
+                if(this.updateMosaicFunc)
+                {
+                    this.updateMosaicFunc(TexturizedDesigns);
+                }
+                
+            }
+           
+        }
+    }
+
     public InitializeColors(colors:IColor[])
     {
         this.currentColorList=colors;
+        this.TexturizeMosaic();
     }
   
     public ChangeSelectedColor(color:IColor,index:number)
@@ -324,6 +340,8 @@ public ClearBundles()
           {
               this.currentColorList[index]=color
           }
+
+          //this.TexturizeMosaic();
 
           return this.currentColorList[index]=color
     }
@@ -454,12 +472,8 @@ public GenerateDefaultDesignsSelected() {
         }
     }
     
-    if(this.updateMosaicFunc)
-    {
-        this.updateMosaicFunc();
-    }
+    this.TexturizeMosaic();
 
-    
 }
 
 public addColor(color: IColor): void {
