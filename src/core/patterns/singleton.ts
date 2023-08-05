@@ -27,6 +27,7 @@ class Singleton {
   public currentEnvironment: IEnvironment | null = null;
   public currentDesignList:IDesign[]| null = null;
   public currentColorList:IColor[]| null = [];
+  public colorBundleList:IColorBundle[]| null = null;
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
   public currentFormat: IFormat | null = null;
@@ -38,8 +39,7 @@ class Singleton {
   public selectedDesignType:IDesignType| null = null
   public currentMosaicIndexSelected:number = -1
 
-  public colorBundleList:IColorBundle[]| null = null;
-
+  
   public chessMode:boolean| null = null;
 
 
@@ -88,9 +88,6 @@ updateViewStatusFunc: Array<() => void> = [];
       return 1
   }
 
- 
-
-  
   public SwapMosaicItems(fromIndex: number, toIndex: number) {
     if(this.currentDesignList)
         [this.currentDesignList[fromIndex], this.currentDesignList[toIndex]] = [this.currentDesignList[toIndex], this.currentDesignList[fromIndex]];
@@ -161,6 +158,8 @@ updateViewStatusFunc: Array<() => void> = [];
 
 
   }
+
+  
 
 
   public AddDesignToMosaic(design: IDesign) {
@@ -308,6 +307,27 @@ public ClearBundles()
             this.evaluatePercentageFunc(Percentage);
         }
     }
+
+    public InitializeColors(colors:IColor[])
+    {
+        this.currentColorList=colors;
+    }
+  
+    public ChangeSelectedColor(color:IColor,index:number)
+    {
+          if(!this.currentColorList)
+          {
+              this.currentColorList=[]
+          }
+  
+          if(this.currentColorList?.length<index)
+          {
+              this.currentColorList[index]=color
+          }
+
+          return this.currentColorList[index]=color
+    }
+  
 
   public SelectEnvironment(environment:IEnvironment)
   {

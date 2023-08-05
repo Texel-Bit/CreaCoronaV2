@@ -5,6 +5,6 @@ export interface IColor{
     id:string
     source:string
     name:string
-    design:IDesignType
+    design:IDesignType|null
     isFullField:boolean
 }
