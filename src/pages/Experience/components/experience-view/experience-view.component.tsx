@@ -66,8 +66,12 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [selectedDesigns, setSelectedDesigns] = useState<IDesign[]>(Singleton.getInstance().GetSelectedDesigns() ?? []);
     const [canvasMask, setCanvasMask] = useState("");
     const [canvasImage, setCanvasImage] = useState("");
+    const [colorType, setColorType] = useState(1);
 
    
+    useEffect(() => {
+
+    }, [colorType]);
 
 
     useEffect(() => {
@@ -78,6 +82,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? [];
         setSelectedDesigns(currentDesignsSelected);
 
+        
         if(currentDesignsSelected.length>0)
         {
             setCanvasImage(currentDesignsSelected[0].source??"");
@@ -95,6 +100,9 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     function updateMosaic() {
         
         setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns()?? [])
+        let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
+        setColorType(colorTypeId);
+        console.log("urrent colpor type "+colorTypeId);
     }
     
     useEffect(()=>{
@@ -197,7 +205,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
-                            <ExperienceColorPaletteSelection />
+                            {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection 
     colorArray={
         Singleton.getInstance().getColorDataManager().GetAllColors(
