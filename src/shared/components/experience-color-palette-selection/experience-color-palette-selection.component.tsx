@@ -4,6 +4,7 @@ import './experience-color-palette-selection.component.css';
 import Singleton from '../../../core/patterns/singleton';
 import { getAllDesignColorsBundle } from '../../../core/services/design.service';
 import { IColorBundle } from '../../../core/models/color/color-bundle.model';
+import { IColor } from '../../../core/models/color/color.model';
 
 export const ExperienceColorPaletteSelection = () => {
 
@@ -11,9 +12,10 @@ export const ExperienceColorPaletteSelection = () => {
     
     const [colorsBundle, setColorBundles] = useState<IColorBundle>();
 
+
     useEffect(() => {
 
-        console.log(colorsBundle);
+        console.log(colorsBundle,"Bundleeees ");
 
     },[colorsBundle]);
     
@@ -37,14 +39,35 @@ export const ExperienceColorPaletteSelection = () => {
                             Singleton.getInstance().currentEnvironmentType?.id||1
                         );
                         
-                       
+
+                        console.log("Curr color bundles ");
+
+                        CurrColorsSelected.data.forEach((element: {idDesignColorBundle:any,DesignColorBundleName:any, DesignColorInBundle: any[]; }) => {
+
+                            let colorArray:IColor[] = []; // initialize colorArray to an empty array
+                        
+                            element.DesignColorInBundle.forEach(color => {
+                                let currentColor = Singleton.getInstance().getColorDataManager().getColorById(color.id);
+                                if(currentColor)
+                                    colorArray.push(currentColor);
+                            })
+                                                    
+                            let currBundle:IColorBundle = {  // use '=' instead of '{'
+                                id: element.idDesignColorBundle,
+                                bundleName: element.DesignColorBundleName,
+                                colorList: colorArray
+                            }
+
+                            Singleton.getInstance().AddBundle(currBundle);
+                                             
+                        }); 
+                        
+
                         setColorBundles(CurrColorsSelected);
                         
                     } else {
-                        console.error('Required properties are not defined');
                     }
                 } else {
-                    console.error('currentColorList is not defined or empty');
                 }
             }
             
