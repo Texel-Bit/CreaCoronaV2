@@ -9,9 +9,20 @@ class StructureDataManager
         return this.structureList.find(structure => structure.id === id);
     }
 
+    public getAllStructuresByColorType(colorType: number): IStructure[] {
+      return this.structureList.filter(structure => structure.designColorType.includes(colorType));
+  }
+  
+  
+
     public addStructure(_structure:IStructure)
     {
        this.structureList.push(_structure);
+    }
+
+    public cleanStructures()
+    {
+       this.structureList=[]
     }
 
     public removeStructure(_structure:IStructure)

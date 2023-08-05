@@ -49,6 +49,8 @@ class Singleton {
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
 evaluatePercentageFunc: ((percentage:number) => void) | null = null;
 updateMosaicFunc: ((HTMLElement:HTMLElement[]) => void) | null = null;
+updateFormatsFunc: ((formats:IFormat[]) => void) | null = null;
+updateStructuresFunc: ((structures:IStructure[]) => void) | null = null;
 updateMosaicGroutFunc: ((IGrout:IGrout) => void) | null = null;
 updateViewStatusFunc: Array<() => void> = [];
 
@@ -97,6 +99,33 @@ updateViewStatusFunc: Array<() => void> = [];
 
       return 1
   }
+
+
+  public UpdateFormats()
+  {
+      if(this.updateFormatsFunc)
+      {
+        if(Singleton.instance.formatDataManager.getAllFormat())
+        {
+            this.updateFormatsFunc(Singleton.instance.formatDataManager.getAllFormat());
+        }
+      }
+  }
+
+  public SelectFormat(format:IFormat)
+  {
+    this.currentFormat=format;
+    this.structureDataManager.cleanStructures();
+    this.structureDataManager.setStructureArray(this.currentFormat.formats);
+    if (this.currentColorList && this.currentColorList[0]) {
+      if(this.updateStructuresFunc)
+      {
+        this.updateStructuresFunc(this.structureDataManager.getAllStructuresByColorType(this.currentColorList[0].isFullField ? 1 : 2));
+      }
+    }
+    
+}
+
 
   public GetCurrentGrout()
   {
@@ -331,6 +360,14 @@ public ClearBundles()
                 });
                 let TexturizedDesigns: HTMLElement[] = await Promise.all(designPromises); // wait for all promises to resolve
                 
+                if(this.selectedDesignType?.id==2)
+                {
+                    TexturizedDesigns.map((design)=>{
+                        texturizer.addBisels(design);
+                    })
+                    
+                }
+
                 if(this.updateMosaicFunc)
                 {
                     this.updateMosaicFunc(TexturizedDesigns);

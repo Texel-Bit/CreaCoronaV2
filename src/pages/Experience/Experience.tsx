@@ -19,7 +19,6 @@ export const Experience = () => {
     Singleton.getInstance().setContentFunc = setContent;
     Singleton.getInstance().UpdateViewsStatus();
 
-console.log(Singleton.getInstance().currentExperienceView,"  Singleton experience view ")
     return(
         <div className="experience-content">
             <BrandNavbar

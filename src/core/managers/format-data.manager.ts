@@ -9,10 +9,12 @@ class FormatDataManager
         return this.formatList.find(format => format.id === id);
     }
 
-    public addFormat(_format:IFormat)
-    {
-       this.formatList.push(_format);
-    }
+    public addFormat(_format: IFormat) {
+      if (!this.formatList.some(format => format.id === _format.id)) {
+          this.formatList.push(_format);
+      } 
+  }
+  
 
     public getAllFormat() {
       return this.formatList;
