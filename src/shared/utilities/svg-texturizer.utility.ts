@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-interface TexturizeSvgOptions {
+export interface TexturizeSvgOptions {
     layerId: string;
     textureUrl: string;
     tile: number;
