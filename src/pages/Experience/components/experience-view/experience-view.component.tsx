@@ -28,6 +28,7 @@ import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
 import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
 import { idText } from "typescript";
+import { IGrout } from "../../../../core/models/grout/grout.model";
 
 
 interface currentExperienceView
@@ -70,9 +71,26 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [canvasMask, setCanvasMask] = useState("");
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
+    
     const [colorType, setColorType] = useState(1);
 
    
+       useEffect(() => {
+       
+       
+       updateCanvas();
+
+    }, [mosaicGrout]);
+
+
+    
+
+    function MosaicGroutChanged(currrentGrout:IGrout)
+    {
+        setMosaicGrout(getServerImagesUrl(currrentGrout.source))
+    }
+
+
     useEffect(() => {
 
     }, [colorType]);
@@ -80,12 +98,18 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
     useEffect(() => {
 
+        if(Singleton.getInstance().currentGrout)
+        {
+            Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
+        }
+
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
         setDesignTypes(currentDesignTypes);
 
         let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? []; 
 
-
+        Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
+        Singleton.getInstance().updateMosaicFunc = updateMosaic;
 
         if (Singleton.getInstance().currentEnvironment != null)
         {
@@ -98,24 +122,25 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     }, []);
 
 
-    Singleton.getInstance().updateMosaicFunc = updateMosaic;
+    
 
-    const updateCanvas = async () => {
-        let element = document.getElementById("mosaic-element");
+    const updateCanvas =  () => {
+         setTimeout(async() => {
+            let element = document.getElementById("mosaic-element");
 
         if (element)
         {
             let elementSvg = await convertHtmlToImage(element);
             setCanvasImage(elementSvg ?? "");
         }
+        }, 300);
+        
     }
 
     function updateMosaic(HTMLElement:HTMLElement[]) {
         
         setSelectedDesigns(HTMLElement)
 
-        if (Singleton.getInstance().currentGrout)
-            setMosaicGrout(getServerImagesUrl(Singleton.getInstance().currentGrout?.source ?? ""));
 
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
@@ -126,9 +151,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
     useEffect(()=>{
         
-        setTimeout(() => {
-            updateCanvas();
-        }, 500);
+       updateCanvas();
        
 
     },[selectedDesigns])
@@ -230,7 +253,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                 )
                             } 
                         />
-                        <ExperienceGroutSelection grouts={[]} />
+                        <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">

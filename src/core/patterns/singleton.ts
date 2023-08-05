@@ -49,6 +49,7 @@ class Singleton {
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
 evaluatePercentageFunc: ((percentage:number) => void) | null = null;
 updateMosaicFunc: ((HTMLElement:HTMLElement[]) => void) | null = null;
+updateMosaicGroutFunc: ((IGrout:IGrout) => void) | null = null;
 updateViewStatusFunc: Array<() => void> = [];
 
   private environmentDataManager: EnvironmentDataManager = new EnvironmentDataManager();
@@ -76,6 +77,13 @@ updateViewStatusFunc: Array<() => void> = [];
       console.log("Change Index");
   }
 
+  public ChangeGrout(Grout:IGrout|null)
+  {
+      this.currentGrout=Grout;
+
+      if(this.updateMosaicGroutFunc && Grout)
+        this.updateMosaicGroutFunc(Grout);
+  }
 
   public GetCurrenColorTypeID()
   {
@@ -88,6 +96,16 @@ updateViewStatusFunc: Array<() => void> = [];
       }
 
       return 1
+  }
+
+  public GetCurrentGrout()
+  {
+      if(!this.currentGrout)
+      {
+        this.currentGrout=this.groutDataManager.getAllGrouts()[0];
+      }
+
+      return this.currentGrout;
   }
 
   public SwapMosaicItems(fromIndex: number, toIndex: number) {
@@ -398,6 +416,9 @@ public ClearBundles()
   public getFormatDataManager(): FormatDataManager {
       return this.formatDataManager;
   }
+
+
+
 
   public addEnvironment(environment: IEnvironment): void {
     this.environmentDataManager.addEnvironment(environment);
