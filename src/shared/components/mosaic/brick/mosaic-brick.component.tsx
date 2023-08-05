@@ -4,7 +4,7 @@ import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.u
 
 interface ExperienceMosaicBricksProps
 {
-    brick:IDesign;
+    brick:HTMLElement;
     grout: string
 }
 
@@ -52,31 +52,31 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
             </style>
 
             <div className="brick-row">
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
             <div className="brick-row-offset">
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
             <div className="brick-row">
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
             <div className="brick-row-offset">
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
             <div className="brick-row">
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
             <div className="brick-row-offset">
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
-                <img src={getServerImagesUrl(props.brick.source)} />
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
         </div>
     );

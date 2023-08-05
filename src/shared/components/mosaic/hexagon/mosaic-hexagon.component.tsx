@@ -4,7 +4,7 @@ import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.u
 
 interface ExperienceMosaicHexagonProps
 {
-    hexagon:IDesign;
+    hexagon:HTMLElement;
     grout: string;
 }
 
@@ -69,33 +69,33 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
 
             <div className="hexagon-column hexagon-column-1">
                 <div className="hexagon">
-                    <img src={getServerImagesUrl(props.hexagon.source)}/>
+                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                 </div>
                 <div className="hexagon">
-                    <img src={getServerImagesUrl(props.hexagon.source)}/>
+                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                 </div>
             </div>
 
             <div className="hexagon-column hexagon-column-2">
                 <div className="hexagon-column-2-wrapper">
                     <div className="hexagon">
-                        <img src={getServerImagesUrl(props.hexagon.source)}/>
+                        <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                     </div>
                     <div className="hexagon">
-                        <img src={getServerImagesUrl(props.hexagon.source)}/>
+                        <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                     </div>
                     <div className="hexagon">
-                        <img src={getServerImagesUrl(props.hexagon.source)}/>
+                        <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                     </div>
                 </div>
             </div>
 
             <div className="hexagon-column hexagon-column-3">
                 <div className="hexagon">
-                    <img src={getServerImagesUrl(props.hexagon.source)}/>
+                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                 </div>
                 <div className="hexagon">
-                    <img src={getServerImagesUrl(props.hexagon.source)}/>
+                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
                 </div>
             </div>
 
