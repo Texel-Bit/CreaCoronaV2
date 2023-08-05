@@ -1,12 +1,8 @@
 import icon from "../../../assets/icons/background_grid_small.png";
-import Singleton from "../../../core/patterns/singleton";
 import './environment-thumbnail.component.css';
 
-enum ModelType{
-EnvironmentType,
-Environment
-}
-interface propiedades{
+
+export interface EnvironmentThumbnailProps{
     name:string
     image:string
     id:number
@@ -14,7 +10,7 @@ interface propiedades{
 }
 
 
-export const EnvironmentThumbnail:React.FC<propiedades> = (props) => {
+export const EnvironmentThumbnail:React.FC<EnvironmentThumbnailProps> = (props) => {
 
     const handleEvent = (event: React.SyntheticEvent) => {
         console.log("handleEvent called");

@@ -1,0 +1,37 @@
+.carousel-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.corona-carousel-slide {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 40%;
+}
+
+.corona-carousel-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    padding-left: .2rem;
+    padding-right: .2rem;
+    transition: transform 0.5s ease;
+}
+
+.corona-carousel-btn {
+    height: 100%;
+    background-color: transparent;
+    border: none;
+}
+
+.corona-carousel-btn svg {
+    color: var(--color-middle);
+    font-size: 35px;
+}
