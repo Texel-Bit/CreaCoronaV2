@@ -20,12 +20,15 @@ export const getDesignColorsByType = (designTypeId: number, environmentTypeId: n
     
 
 export const getAllDesignColorsBundle = (designTypeId: number, designColorTypeId:number, environmentTypeId: number) => {
+    
+    console.log("Getting bundle  ");
     let params = {
         idDesignType: designTypeId,
         idDesignColorType: designColorTypeId,
         idEnvironmentType: environmentTypeId,
     }
     
+    console.log(params,"Paraaaaaaaaaaams  ");
     return postRequest("designColorBundle/getAllDesignColorBundleByFilters", params);
 }
 

@@ -77,11 +77,11 @@ updateViewStatusFunc: Array<() => void> = [];
 
   public GetCurrenColorTypeID()
   {
-      if(this.currentColorList)
+      if(this.currentDesignList)
       {
-        if(this.currentColorList.length>0)
+        if(this.currentDesignList.length>0)
         {
-            return this.currentColorList[0].isFullField?1:2;
+            return this.currentDesignList[0].fullField?1:2;
         }
       }
 
