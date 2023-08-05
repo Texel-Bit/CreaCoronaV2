@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { IDesign } from "../../../../core/models/design/design.model";
 import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
-import Singleton from "../../../../core/patterns/singleton";
 import './mosaic-square.component.css'
-import SwapVertIcon from '@material-ui/icons/SwapVert';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import RefreshIcon from '@material-ui/icons/Refresh';
+
 
 interface ExperienceMosaicSquareProps
 {
-    squares:IDesign[];
+    squares:HTMLElement[];
     grout: string;
 }
 
 
-
 export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
-   
-
-
 
     const [groutImageCss, setGroutImageCss] = useState("");
 
@@ -27,7 +20,6 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
         if (props.grout)
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
     }, [props]);
-
 
 
     return(
@@ -46,12 +38,8 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                 }
             </style>
             {
-                props.squares.map((square,i) => {
-                    return <div className="img-container" key={i}>
-                    <img   src={getServerImagesUrl(square.source)} alt={square.name} />
-                    
-                </div>
-                })
+                props.squares.map((square) => 
+                    <div className="img-container" dangerouslySetInnerHTML={{ __html: square.outerHTML }}></div>)
             }
 
         </div>
