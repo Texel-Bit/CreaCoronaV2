@@ -1,13 +1,25 @@
+import { useEffect, useState } from "react";
 import { IDesign } from "../../../../core/models/design/design.model";
 import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 
 interface ExperienceMosaicHexagonProps
 {
     hexagon:IDesign;
+    grout: string;
 }
 
 
 export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
+
+
+    const [groutImageCss, setGroutImageCss] = useState("");
+
+
+    useEffect(() => {
+        if (props.grout)
+            setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
+    }, [props]);
+
 
     return(
         <div id="mosaic-element" className='mosaic-hexagon'>
@@ -19,6 +31,7 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
                         display: grid;
                         grid-template-columns: 1fr 1fr 1fr;
                         height: 100%;
+                        ${groutImageCss}
                     }
 
                     .hexagon-column {
