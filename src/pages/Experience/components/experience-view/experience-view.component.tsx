@@ -285,7 +285,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                 <ExperienceCanvas 
                     backgroundImage={canvasImage}
                     mask={canvasMask}
-                    perspective={Singleton.getInstance().currentEnvironment?.environmentAngle.perspective}
+                    perspective={1000}
                     perspectiveOrigin={{
                         X: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.x,
                         Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.y

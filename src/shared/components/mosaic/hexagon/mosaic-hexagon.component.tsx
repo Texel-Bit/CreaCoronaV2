@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { IDesign } from "../../../../core/models/design/design.model";
-import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 
 interface ExperienceMosaicHexagonProps
 {
@@ -38,7 +36,7 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
                         width: 100%;
                     }
 
-                    .hexagon-column-1 .hexagon img {
+                    .hexagon-column-1 .hexagon svg {
                         position: relative;
                         left: -100%;
                     }
@@ -61,41 +59,41 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
                         width: 100%;
                     }
 
-                    .hexagon img {
+                    .hexagon svg {
                         width: 200%;
                     }
                 `}
             </style>
 
             <div className="hexagon-column hexagon-column-1">
-                <div className="hexagon">
-                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                 </div>
-                <div className="hexagon">
-                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                 </div>
             </div>
 
             <div className="hexagon-column hexagon-column-2">
                 <div className="hexagon-column-2-wrapper">
-                    <div className="hexagon">
-                        <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                    <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                        {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                     </div>
-                    <div className="hexagon">
-                        <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                    <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                        {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                     </div>
-                    <div className="hexagon">
-                        <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                    <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                        {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                     </div>
                 </div>
             </div>
 
             <div className="hexagon-column hexagon-column-3">
-                <div className="hexagon">
-                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                 </div>
-                <div className="hexagon">
-                    <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div>
+                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
+                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
                 </div>
             </div>
 
