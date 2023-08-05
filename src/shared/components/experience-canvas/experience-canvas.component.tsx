@@ -26,10 +26,12 @@ export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
 
     return(
         <div className="position-relative h-100">
-            <div className="design-canvas h-100 w-100" style={{
+            <div className="design-canvas" style={{
                 backgroundImage: `url(${props.backgroundImage})`,
-                transform: `rotateX(${props.rotationX}deg) rotateZ(${props.rotationZ}deg)`,
-                perspectiveOrigin: `${11 * props.perspectiveOrigin.X - 500}% ${11 * props.perspectiveOrigin.Y - 500}%`
+                transform: `rotateX(${props.rotationX}deg) rotateY(${props.rotationY}deg) rotateZ(${props.rotationZ}deg)`,
+                perspectiveOrigin: `${props.perspectiveOrigin.X}% ${props.perspectiveOrigin.Y}%`,
+                perspective: `${props.perspective}px`,
+                width: "300%", height: "300%"
             }}></div>
             <img
                 src={props.mask}
