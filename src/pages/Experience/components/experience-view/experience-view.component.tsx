@@ -65,6 +65,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
     const [selectedDesigns, setSelectedDesigns] = useState<IDesign[]>(Singleton.getInstance().GetSelectedDesigns() ?? []);
     const [canvasMask, setCanvasMask] = useState("");
+    const [canvasImage, setCanvasImage] = useState("");
 
    
 
@@ -77,6 +78,11 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? [];
         setSelectedDesigns(currentDesignsSelected);
 
+        if(currentDesignsSelected.length>0)
+        {
+            setCanvasImage(currentDesignsSelected[0].source??"");
+        }
+
         if (!Singleton.getInstance().currentEnvironment?.maskImage)
             return;
 
@@ -88,15 +94,24 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
     function updateMosaic() {
         
-        console.log(Singleton.getInstance().GetSelectedDesigns());
-        setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns() ?? [])
+        setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns()?? [])
     }
     
     useEffect(()=>{
         
-       
+        console.log(selectedDesigns);
+        if(selectedDesigns.length>0)
+        {
+            setCanvasImage(selectedDesigns[0].source??"");
+        }
 
     },[selectedDesigns])
+
+    useEffect(()=>{
+        
+       
+
+    },[canvasImage])
     
     function ChangeView(experieceView: ExperienceViews | null, value:number)
     {
@@ -221,7 +236,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
             <div className="w-50 h-100">
                 <ExperienceCanvas 
-                    backgroundImage={Singleton.getInstance().currentColorList?.[0]?.source ?? ""}
+                    backgroundImage={canvasImage}
                     mask={canvasMask}
                     perspective={1000}
                     perspectiveOrigin={{ X: 50, Y: 50 }}
