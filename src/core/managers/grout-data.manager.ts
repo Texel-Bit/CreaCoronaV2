@@ -9,10 +9,16 @@ class GroutDataManager
         return this.GroutList.find(Grout => Grout.id === id);
     }
 
-    public addGrout(_Grout:IGrout)
+    public getAllGrouts()
     {
-       this.GroutList.push(_Grout);
+        return this.GroutList;
     }
+    public addGrout(_Grout:IGrout)
+   {
+      if (!this.GroutList.some(grout => grout.id === _Grout.id)) {
+         this.GroutList.push(_Grout);
+      } 
+   }
 
     public removeGrout(_Grout:IGrout)
     {

@@ -4,5 +4,5 @@ export interface IStructure{
     id:string
     source:string
     name:string
-    format:IFormat
+    designColorType:number[]
 }

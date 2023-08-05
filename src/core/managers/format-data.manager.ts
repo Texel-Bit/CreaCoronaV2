@@ -14,6 +14,15 @@ class FormatDataManager
        this.formatList.push(_format);
     }
 
+    public getAllFormat() {
+      return this.formatList;
+  }
+
+    public deleteFormats()
+    {
+       this.formatList=[]
+    }
+
     public removeFormat(_format:IFormat)
     {
        this.formatList = this.formatList.filter(format => format.id !== _format.id);

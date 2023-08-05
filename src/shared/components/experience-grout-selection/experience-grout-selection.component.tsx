@@ -1,4 +1,5 @@
 import { IGrout } from '../../../core/models/grout/grout.model';
+import Singleton from '../../../core/patterns/singleton';
 import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
 import './experience-grout-selection.component.css';
 
@@ -12,6 +13,7 @@ export const ExperienceGroutSelection:React.FC<ExperienceGroutSelectionProps> = 
 
     const groutImage = "https://corona.texelbit.com:9445/uploads/Brecha/1c4806ac-7bc6-43c2-b4ce-3f74156f7499.png";
 
+    
     return(
         <div className='mw-100 overflow-hidden'>
 
@@ -22,7 +24,7 @@ export const ExperienceGroutSelection:React.FC<ExperienceGroutSelectionProps> = 
             <div className="border border-1 p-1 d-flex gap-1 grouts-containter">
                 {
                     props.grouts.map(grout => {
-                        return <div className='grout-thumbnail rounded px-3' style={{ backgroundImage: `url(${getServerImagesUrl(grout.source)})` }} />
+                        return <div className='grout-thumbnail rounded px-3' onClick={()=>Singleton.getInstance().ChangeGrout(grout)} style={{ backgroundImage: `url(${getServerImagesUrl(grout.source)})` }} />
                     })
                 }
             </div>

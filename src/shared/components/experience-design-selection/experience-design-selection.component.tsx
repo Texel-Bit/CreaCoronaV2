@@ -7,6 +7,8 @@ import { getServerImagesUrl } from '../../utilities/format-server-endpoints.util
 import { getAllDesignByTypeId } from '../../../core/services/design.service';
 import Singleton from '../../../core/patterns/singleton';
 import { IColor } from '../../../core/models/color/color.model';
+import { IFormat } from '../../../core/models/format/format.model';
+import { IStructure } from '../../../core/models/structure/structure.model';
 
 interface ExperienceDesingSelectionProps {
     designTypes: IDesignType[],
@@ -51,7 +53,41 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-                console.log(CurrColorsSelected.data)
+
+                CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {
+                    
+
+                    let FormatSizetexture = element.FormatSizeTexture.map((structure: any) => {
+                        let colorTypes = structure.DesignColorType_has_FormatSizeTexture.map((colorType: any) => {
+                            return colorType.DesignColorType_idDesignColorType;
+                        });
+                    
+                        let currStructure: IStructure = {
+                            id: structure.idFormatSizeTexture,
+                            name: structure.FormatSizeTextureName,
+                            source: structure.FormatSizeTextureMaskPath,
+                            designColorType: colorTypes
+                        };
+                    
+                        return currStructure;
+                    });
+
+                    let currDesign: IFormat = {
+                       id:element.idDesignTypeFormatSize,
+                       name:element.DesignTypeFormatSizeName,
+                       source:element.DesignTypeFormatSizeDefaultImagePath,
+                       width:element.DesignTypeFormatSizeWidht,
+                       height:element.DesignTypeFormatSizeHeight,
+                       formats:FormatSizetexture
+                    };
+                    
+                   
+                    Singleton.getInstance().addFormat(currDesign);
+                    return currDesign;
+                });
+
+                console.log(Singleton.getInstance().getFormatDataManager().getAllFormat())
+
                 let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
