@@ -1,11 +1,10 @@
 import React from 'react';
 import './experience-format-selection.component.css';
-import { ExperienceFormatThumbnail } from './experience-format-thumbnail/experience-format-thumbnail';
-import { IFormat } from '../../../core/models/format/format.model';
+import { ExperienceFormatThumbnail, ExperienceFormatThumbnailProps } from './experience-format-thumbnail/experience-format-thumbnail';
 
 
 interface ExperienceFormatSelectionProps {
-    formats: IFormat[];
+    formats: ExperienceFormatThumbnailProps[];
 }
 
 
@@ -20,13 +19,9 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
             <div className="d-flex p-2 justify-content-around w-100 align-items-center experience-format-container">
                 {
                     props.formats.map(format => {
-                        return <ExperienceFormatThumbnail 
-                                    height={format.height}
-                                    id={format.id}
-                                    name={format.name}
-                                    source={format.source}
-                                    width={format.width}
-                                    formats={format.formats} />
+                        return <ExperienceFormatThumbnail
+                                    format={format.format}
+                                    onClick={format.onClick} />
                     })
                 }
             </div>
