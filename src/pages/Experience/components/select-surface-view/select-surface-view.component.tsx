@@ -7,8 +7,9 @@ import Singleton from "../../../../core/patterns/singleton";
 import { IEnvironmentType } from "../../../../core/models/EnvironmentType/environment-type.model";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 import { getAllEnvironmentType } from "../../../../core/services/environment.service";
-import { getAllDesignType } from "../../../../core/services/design.service";
+import { getAllDesignType, getAllGrouts } from "../../../../core/services/design.service";
 import {IDesignType} from "../../../../core/models/designType/design-type.model";
+import { IGrout } from "../../../../core/models/grout/grout.model";
 
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
@@ -63,7 +64,21 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                   singleton.addDesignType(currentDesignType);
             
                 });
+
+                const grouts=await getAllGrouts();
+
+                grouts.data.forEach((grout: any) => {
+                 let currentDesignType: IGrout = {
+                     name:grout.brechaName,                     
+                     id:grout.idbrecha,                     
+                     source:grout.brechaColorPath                     
+                   };
+ 
+                   singleton.addGrout(currentDesignType);
+             
+                 });
                 
+                 console.log(grouts);
             }
             catch(error) {
                 console.log(error);

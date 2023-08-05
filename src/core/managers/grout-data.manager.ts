@@ -10,9 +10,11 @@ class GroutDataManager
     }
 
     public addGrout(_Grout:IGrout)
-    {
-       this.GroutList.push(_Grout);
-    }
+   {
+      if (!this.GroutList.some(grout => grout.id === _Grout.id)) {
+         this.GroutList.push(_Grout);
+      } 
+   }
 
     public removeGrout(_Grout:IGrout)
     {

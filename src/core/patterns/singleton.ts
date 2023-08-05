@@ -495,6 +495,11 @@ public addStructure(structure: IStructure): void {
 public addFormat(format: IFormat): void {
     this.formatDataManager.addFormat(format);
 }
+
+public removeAllFormats(): void {
+    this.formatDataManager.deleteFormats();
+}
+
 }
 
 export default Singleton;
