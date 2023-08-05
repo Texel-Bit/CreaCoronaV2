@@ -293,7 +293,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                             </div>
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
-                            <ExperienceFormatSelection/>
+                            <ExperienceFormatSelection formats={[]} />
                             <InitQuotationForm/>
                         </div>
                     </div>

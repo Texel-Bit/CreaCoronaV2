@@ -25,7 +25,7 @@ export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
     }, [props]);
 
     return(
-        <div className="position-relative h-100">
+        <div className="position-relative h-100 overflow-hidden">
             <div className="design-canvas" style={{
                 backgroundImage: `url(${props.backgroundImage})`,
                 transform: `rotateX(${props.rotationX}deg) rotateY(${props.rotationY}deg) rotateZ(${props.rotationZ}deg)`,
