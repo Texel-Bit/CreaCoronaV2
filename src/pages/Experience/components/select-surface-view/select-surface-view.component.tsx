@@ -99,8 +99,7 @@ diseño
         id={i.id}
         onEvents={[
             (e) => Singleton.getInstance().SelectEnvironmentType(i),
-            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment),
-            // Add as many handlers as you need
+            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment)
         ]}
     />
 })}
