@@ -10,6 +10,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 interface ExperienceMosaicSquareProps
 {
     squares:IDesign[];
+    grout: string;
 }
 
 
@@ -148,6 +149,16 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
     };
 
 
+    const [groutImageCss, setGroutImageCss] = useState("");
+
+
+    useEffect(() => {
+        if (props.grout)
+            setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
+    }, [props]);
+
+
+
     return(
         <div id="mosaic-element" className='mosaic-square w-100'>
 
@@ -159,6 +170,7 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                         grid-template-rows: repeat(2, 1fr);
                         grid-template-columns: repeat(2, 1fr);
                         padding: .2rem;
+                        ${groutImageCss}
                     }`
                 }
             </style>

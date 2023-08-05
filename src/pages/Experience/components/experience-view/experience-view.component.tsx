@@ -68,6 +68,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [selectedDesigns, setSelectedDesigns] = useState<IDesign[]>(Singleton.getInstance().GetSelectedDesigns() ?? []);
     const [canvasMask, setCanvasMask] = useState("");
     const [canvasImage, setCanvasImage] = useState("");
+    const [mosaicGrout, setMosaicGrout] = useState("");
     const [colorType, setColorType] = useState(1);
 
    
@@ -101,6 +102,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     }, []);
 
 
+    Singleton.getInstance().updateMosaicFunc = updateMosaic;
+
     const updateCanvas = async () => {
         let element = document.getElementById("mosaic-element");
 
@@ -111,17 +114,19 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         }
     }
 
-
-    Singleton.getInstance().updateMosaicFunc = updateMosaic;
-
     function updateMosaic() {
         
         setSelectedDesigns(Singleton.getInstance().GetSelectedDesigns()?? [])
+
+        if (Singleton.getInstance().currentGrout)
+            setMosaicGrout(getServerImagesUrl(Singleton.getInstance().currentGrout?.source ?? ""));
+
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
         console.log("urrent colpor type "+colorTypeId);
     }
     
+
     useEffect(()=>{
         
         console.log(selectedDesigns);
@@ -174,7 +179,6 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
             
                 {
-                   
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
@@ -188,7 +192,9 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
                                     <>
-                                        <MosaicComponent mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null}/>} actions={false} />
+                                        <MosaicComponent 
+                                            mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null} grout={mosaicGrout}/>} 
+                                            actions={false} />
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
@@ -199,12 +205,16 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                                 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
-                                    <MosaicComponent mosaic={<MosaicSquare squares={selectedDesigns}/>} actions={true}/>
+                                    <MosaicComponent
+                                        mosaic={<MosaicSquare squares={selectedDesigns} grout={mosaicGrout}/>}
+                                        actions={true}/>
                                 }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
-                                    <MosaicComponent mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null}/>} actions={false}/>
+                                    <MosaicComponent 
+                                        mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null} grout={mosaicGrout}/>}
+                                        actions={false}/>
                                 }
                             </div>
                         </div>
@@ -218,26 +228,46 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
-                            <ExperienceTextureSelection 
-    colorArray={
-        Singleton.getInstance().getColorDataManager().GetAllColors(
-            Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
-        )
-    } 
-/>                            <ExperienceGroutSelection grouts={[]} />
+                            <ExperienceTextureSelection colorArray={
+                                Singleton.getInstance().getColorDataManager().GetAllColors(
+                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
+                                )
+                            } 
+                        />
+                        <ExperienceGroutSelection grouts={[]} />
                         </div>
                         <div className="col-5 d-flex align-items-center">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                {/*  */}
-                                {/* <MosaicActionsBar/> */}
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    <>
+                                        <MosaicComponent 
+                                            mosaic={<MosaicHexagon hexagon={selectedDesigns[0] ?? null} grout={mosaicGrout}/>} 
+                                            actions={false} />
+                                    </>
+                                }
+                                
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    <MosaicComponent
+                                        mosaic={<MosaicSquare squares={selectedDesigns} grout={mosaicGrout}/>}
+                                        actions={true}/>
+                                }
+
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    <MosaicComponent 
+                                        mosaic={<MosaicBrick brick={selectedDesigns[0] ?? null} grout={mosaicGrout}/>}
+                                        actions={false}/>
+                                }
                             </div>
                         </div>
                     </div> 
                 }
 
                 {
-                     props.currentView==ExperienceViews.Format&&
-                 <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
+                    props.currentView==ExperienceViews.Format&&
+                    <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={[]}/>
@@ -247,7 +277,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                             <ExperienceFormatSelection/>
                             <InitQuotationForm/>
                         </div>
-                    </div> }
+                    </div>
+                }
 
                
 

@@ -1,13 +1,26 @@
+import { useEffect, useState } from "react";
 import { IDesign } from "../../../../core/models/design/design.model";
 import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 
 interface ExperienceMosaicBricksProps
 {
     brick:IDesign;
+    grout: string
 }
 
 
 export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
+
+
+    const [groutImageCss, setGroutImageCss] = useState("");
+
+
+    useEffect(() => {
+        if (props.grout)
+            setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
+    }, [props]);
+
+
     return(
         <div id="mosaic-element" className="mosaic-brick w-100">
 
@@ -19,6 +32,7 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                         gap: .4rem;
                         padding: .2rem;
                         overflow: hidden;
+                        ${groutImageCss}
                     }
                 
                     .brick-row {
