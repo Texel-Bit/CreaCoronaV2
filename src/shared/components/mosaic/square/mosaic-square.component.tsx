@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { IDesign } from "../../../../core/models/design/design.model";
-import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
 import './mosaic-square.component.css'
 
 
