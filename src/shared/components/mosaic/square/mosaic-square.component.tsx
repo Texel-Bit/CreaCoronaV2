@@ -149,7 +149,7 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
 
 
     return(
-        <div className='mosaic-square w-100'>
+        <div id="mosaic-element" className='mosaic-square w-100'>
 
             <style>
                 {

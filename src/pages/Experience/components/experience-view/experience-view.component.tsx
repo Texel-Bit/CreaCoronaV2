@@ -25,6 +25,8 @@ import { IDesign } from "../../../../core/models/design/design.model";
 import { ExperienceCanvas } from "../../../../shared/components/experience-canvas/experience-canvas.component";
 import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/mosaic-actions-mask/mosaic-actions-mask.component";
 import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
+import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
+import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
 
 
 interface currentExperienceView
@@ -82,18 +84,33 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? [];
         setSelectedDesigns(currentDesignsSelected);
 
-        
-        if(currentDesignsSelected.length>0)
+        if(currentDesignsSelected.length > 0)
         {
-            setCanvasImage(currentDesignsSelected[0].source??"");
+            // if (currentDesignsSelected[0].source)
+                updateCanvas();
         }
 
-        if (!Singleton.getInstance().currentEnvironment?.maskImage)
-            return;
+        if (Singleton.getInstance().currentEnvironment != null)
+        {
+            let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
+            setCanvasMask(maskImage);
+        }
 
-        let maskImage = `https://corona.texelbit.com:9445/${Singleton.getInstance().currentEnvironment?.maskImage}`;
-        setCanvasMask(maskImage);
+        console.log("ENVIRONMENT DATA => ", Singleton.getInstance().currentEnvironment?.environmentAngle);
+
     }, []);
+
+
+    const updateCanvas = async () => {
+        let element = document.getElementById("mosaic-element");
+
+        if (element)
+        {
+            let elementSvg = await convertHtmlToImage(element);
+            setCanvasImage(elementSvg ?? "");
+        }
+    }
+
 
     Singleton.getInstance().updateMosaicFunc = updateMosaic;
 
@@ -110,16 +127,11 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         console.log(selectedDesigns);
         if(selectedDesigns.length>0)
         {
-            setCanvasImage(selectedDesigns[0].source??"");
+            updateCanvas();
         }
 
     },[selectedDesigns])
 
-    useEffect(()=>{
-        
-       
-
-    },[canvasImage])
     
     function ChangeView(experieceView: ExperienceViews | null, value:number)
     {
@@ -246,12 +258,15 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
                 <ExperienceCanvas 
                     backgroundImage={canvasImage}
                     mask={canvasMask}
-                    perspective={1000}
-                    perspectiveOrigin={{ X: 50, Y: 50 }}
-                    rotationX={0}
-                    rotationY={0}
-                    rotationZ={0}
-                    scale={1}/>
+                    perspective={Singleton.getInstance().currentEnvironment?.environmentAngle.perspective}
+                    perspectiveOrigin={{
+                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.x,
+                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.y
+                    }}
+                    rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
+                    rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
+                    rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
+                    scale={Singleton.getInstance().currentEnvironment?.environmentAngle.size}/>
             </div>
 
         </div>
