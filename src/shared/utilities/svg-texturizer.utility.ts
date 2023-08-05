@@ -51,7 +51,7 @@ class SvgTexturizer {
     public texturize = async (svgUrl: string, options: TexturizeSvgOptions[]) => {
         const svgElement = await this.loadSvgByPath(svgUrl);
         const clonedSvg = this._buildClonedSvgElement(svgElement);
-        this.addBisels(clonedSvg); //TODO REMOVE
+
         options.map(option => {
             if (option.layerId != "" ) {
                 let patternId = this._addSvgPattern(clonedSvg, option);
@@ -65,6 +65,7 @@ class SvgTexturizer {
             }
 
         });
+        
         return clonedSvg;
     }
 
@@ -98,6 +99,7 @@ class SvgTexturizer {
     public addBisels = (svgElement: HTMLElement) => {       
         this._addBiselStyles(svgElement);
         this._addBiselGradients(svgElement);
+        this._addBiselEdges(svgElement);
 
     }
 
@@ -114,7 +116,15 @@ class SvgTexturizer {
     };
 
     private _addBiselEdges = (svgElement: HTMLElement) => {
-        
+
+        let contenidoAgregar = `<g id="edges">
+            <path id="rect862-8" class="cls-2" d="M396.43,4.45,381.11,21.07h0l.32,360.65h0l15,14.42c.12.12.32-.15.32-.32V4.77c0-.18-.2-.45-.32-.32Z" transform="translate(-4.63 -3.41)"/>
+            <path id="rect862-8-0" class="cls-3" d="M396.62,396.39l-15.19-14.67h0L20.78,382h0l-16,14.48C134.79,398.33,266.17,396.72,396.62,396.39Z" transform="translate(-4.63 -3.41)"/>
+            <path id="rect862-8-8" class="cls-4" d="M20.05,22.86h0l361.06-1.79h0L396.43,4.45,5.37,4.37Z" transform="translate(-4.63 -3.41)"/>
+            <path id="rect862-8-0-3" class="cls-5" d="M5.37,4.37,20.05,22.86h0L20.78,382,4.63,396.72Z" transform="translate(-4.63 -3.41)"/>
+        </g>`;
+
+        svgElement.insertAdjacentHTML('beforeend', contenidoAgregar);
     }
 
     private _addBiselGradients = (svgElement: HTMLElement) => {
