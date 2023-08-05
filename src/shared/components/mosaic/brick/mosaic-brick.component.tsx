@@ -9,7 +9,7 @@ interface ExperienceMosaicBricksProps
 
 export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
     return(
-        <div className="mosaic-brick w-100">
+        <div id="mosaic-element" className="mosaic-brick w-100">
 
             <style>
                 {`
@@ -56,6 +56,11 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                 <img src={getServerImagesUrl(props.brick.source)} />
             </div>
             <div className="brick-row">
+                <img src={getServerImagesUrl(props.brick.source)} />
+                <img src={getServerImagesUrl(props.brick.source)} />
+            </div>
+            <div className="brick-row-offset">
+                <img src={getServerImagesUrl(props.brick.source)} />
                 <img src={getServerImagesUrl(props.brick.source)} />
                 <img src={getServerImagesUrl(props.brick.source)} />
             </div>

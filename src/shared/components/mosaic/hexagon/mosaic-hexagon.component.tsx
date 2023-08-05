@@ -10,7 +10,7 @@ interface ExperienceMosaicHexagonProps
 export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
 
     return(
-        <div className='mosaic-hexagon'>
+        <div id="mosaic-element" className='mosaic-hexagon'>
 
             <style>
                 {`
