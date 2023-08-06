@@ -37,6 +37,7 @@ class Singleton {
   public simulationWidht:INumberData| null = null
   public simulationHeight:INumberData| null = null
   
+  private mosaicRotations=[0,90,270,180]
 
   public selectedDesignType:IDesignType| null = null
   public currentMosaicIndexSelected:number = -1
@@ -171,11 +172,22 @@ public ChangeBrickFormat(format:IFormat)
 
   public SwapMosaicItems(fromIndex: number, toIndex: number) {
     if(this.currentDesignList)
+    {
         [this.currentDesignList[fromIndex], this.currentDesignList[toIndex]] = [this.currentDesignList[toIndex], this.currentDesignList[fromIndex]];
+        [this.mosaicRotations[fromIndex], this.mosaicRotations[toIndex]] = [this.mosaicRotations[toIndex], this.mosaicRotations[fromIndex]];
+    }
     
         this.TexturizeMosaic();
 }
   
+public RotateCurrentMosaicObject() {
+    this.mosaicRotations[this.currentMosaicIndexSelected]+=90;
+    console.log(this.mosaicRotations);
+    this.TexturizeMosaic();
+}
+  
+
+
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
     this.currentEnvironmentType=environmentType;
     this.EvaluatePercentage();
@@ -391,20 +403,27 @@ public ClearBundles()
             return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
         });
 
-        let TexturizedOptionsInverted = newColorTemp.slice().reverse().map((color, index) => {
-            return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
-        });
-
+      
         let TexturizedDesigns: HTMLElement[] = [];
         
         for (let index = 0; index < this.currentDesignList.length; index++) {
 
-            let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
-                ? TexturizedOptions : TexturizedOptionsInverted;
+           
+           
 
-            console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), selectedTexturizedOptions);
-            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), selectedTexturizedOptions);
+            console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), TexturizedOptions);
+            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedOptions);
             console.log("TERMINA TEXTURIZACIÓN");
+
+            
+            if(this.selectedDesignType?.id == 2)
+            {
+                let layerNames = ['layer0', 'layer1', 'layer2', 'layer3', 'layer4'];
+                let rotation = this.mosaicRotations[index]; // Replace with your rotation angle
+                texturizer.rotateSvg(texturizedDesign, rotation);
+
+            }
+            
 
             if(this.currentStructure)
                 texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));

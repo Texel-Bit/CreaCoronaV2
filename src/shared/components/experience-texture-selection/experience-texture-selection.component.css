@@ -10,6 +10,7 @@
     width: 100% !important;
     max-width: 100%;
     border-color: var(--color-middle) !important;
+    max-height: 380px;
 }
 
 .textures-containter-grid {

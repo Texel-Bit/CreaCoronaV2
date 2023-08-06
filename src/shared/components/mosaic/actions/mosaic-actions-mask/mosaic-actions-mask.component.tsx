@@ -97,6 +97,11 @@ export const MosaicActionsMask = () => {
        Singleton.getInstance().SwapMosaicItems(index,currentIndex);
     }
 
+    function RotateObject()
+    {
+        
+       Singleton.getInstance().RotateCurrentMosaicObject();
+    }
 
     return (
         <div className="position-absolute w-100 h-100 mosaic-actions-mask gap-1 p-1">
@@ -106,7 +111,7 @@ export const MosaicActionsMask = () => {
                     <div className={`mosaic-actions-mask-item ${itemConf.selected ? 'selected' : ''}`} 
                          onClick={() => onActionItemClick(itemConf.index)}>
                         <button onClick={()=>SwapVertical(itemConf.index)}><SwapVertIcon /></button>
-                        <button><RefreshIcon /></button>
+                        <button onClick={RotateObject}><RefreshIcon  /></button>
                         <button onClick={()=>SwapHorizontal(itemConf.index)}><SwapHorizIcon /></button>
                     </div>
                 </>)
