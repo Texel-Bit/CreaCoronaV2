@@ -214,7 +214,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
         <div className="d-flex mh-100 overflow-hidden">
 
-            <div className="w-50 p-3 h-100 experience-behavior-container">
+            <div className="w-50 p-3 px-5 h-100 experience-behavior-container">
 
                 <div className="d-flex align-items-start">
                     <div className="col-2">
@@ -240,8 +240,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex pt-4 h-100 justify-content-around align-items-start overflow-hidden">
-                        <div className="h-100 col-5">
+                    <div className="d-flex pt-4 h-100 justify-content-between align-items-start overflow-hidden">
+                        <div className="h-100 col-6">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
@@ -283,7 +283,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-4 h-100 justify-content-between overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection colorArray={
