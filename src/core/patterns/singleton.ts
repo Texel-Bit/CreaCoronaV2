@@ -409,7 +409,7 @@ public ClearBundles()
             if(this.currentStructure)
                 texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
 
-            if (this.selectedDesignType?.id == 2)
+            if (this.selectedDesignType?.id === 2)
                 texturizer.addBisels(texturizedDesign);
 
             TexturizedDesigns.push(texturizedDesign);
