@@ -6,7 +6,7 @@
 
 
 .experience-steeps-button {
-    color: black;
+    color: var(--color-middle);
     border-color: var(--color-middle);
 }
 
@@ -15,8 +15,8 @@
 }
 
 .experience-steeps-button:active {
-    border-color: var(--color-fourth) !important;
-    background-color: var(--color-fourth) !important;
+    border-color: var(--color-middle) !important;
+    background-color: var(--color-middle) !important;
 }
 
 
