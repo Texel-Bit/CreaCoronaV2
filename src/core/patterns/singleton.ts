@@ -80,7 +80,6 @@ updateViewStatusFunc: Array<() => void> = [];
 
   public ChangeChessMode()
   {
-    console.log("Change Chess mode");
     this.chessMode=!this.chessMode;
     this.TexturizeMosaic();
   }
@@ -393,28 +392,32 @@ public ClearBundles()
             if (this.currentDesignList) {
                 // Create a new array for designPromises
                 let designPromises = [...this.currentDesignList.map(async (design, index) => {
-                    if (this.chessMode) {
-                       
-                        if (index === 1 || index === 2) {
+                    
+                    if(this.chessMode)
+                    {
+                        if(index==1 || index==2)
+                        {
                             texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptionsInverted);
                         }
                         else
                         {
                             texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
                         }
-
-                        return texturizedDesign;
                     }
-                    else{
+                    else
+                    {
                         texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
+
                     }
+                    
+                   
                     return texturizedDesign;
                 })];
     
                 // Create a new array for TexturizedDesigns
                 let TexturizedDesigns = [...await Promise.all(designPromises)]; // wait for all promises to resolve
 
-                
+
                 TexturizedDesigns.forEach((design) => {
                     if(this.currentStructure)
                     {
@@ -422,13 +425,12 @@ public ClearBundles()
                         design=texturizer.addFilter(design,getServerImagesUrl(this.currentStructure.source));
                     }
                     
+                    
                     if (this.selectedDesignType?.id == 2) {
                         texturizer.addBisels(design);
                     }
                    
                 });
-
-               
     
                 if (this.updateMosaicFunc) {
                     this.updateMosaicFunc([...TexturizedDesigns]);
@@ -457,12 +459,11 @@ public ClearBundles()
         this.TexturizeMosaic();
     }
   
-    public ChangeSelectedColor(color:IColor,index:number)
+    public colorIndex:number=0;
+
+    public ChangeSelectedColor(color:IColor)
     {
-        if(this.GetCurrenColorTypeID()==1)
-        {
-            index=0;
-        }
+         let index=this.colorIndex;
 
           if(!this.currentColorList)
           {
@@ -481,7 +482,17 @@ public ClearBundles()
               }
           }
 
-          return this.currentColorList[index]=color
+          console.log("Indexes ",this.colorIndex);
+        if(this.GetCurrenColorTypeID()==1)
+        {
+            index=0;
+            this.currentColorList=[]
+            this.currentColorList.push(color)
+        }
+
+        this.currentColorList[index]=color
+
+          this.TexturizeMosaic();
     }
   
 

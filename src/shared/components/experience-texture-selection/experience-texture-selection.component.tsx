@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { IColor } from '../../../core/models/color/color.model';
 import Singleton from '../../../core/patterns/singleton';
 import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
@@ -11,7 +12,11 @@ interface ExperienceTextureSelectionProps {
 
 export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProps> = ({colorArray, onColorClick}) => {
 
-    Singleton.getInstance().ChangeSelectedColor( colorArray[0] , parseInt(colorArray[0].id) )
+    useState(()=>{
+        Singleton.getInstance().colorIndex=0
+    Singleton.getInstance().ChangeSelectedColor( colorArray[0])
+
+    })
     
     return (
         <div className='h-100 mh-100 mw-100 textures-selection-container'>
@@ -31,7 +36,7 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
                     {colorArray.map((color, index) => (
                         <div key={index} style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }} onClick={(e:any)=>{
                             const coloractual = e.target.style.backgroundImage;
-                            Singleton.getInstance().ChangeSelectedColor( colorArray[0] , parseInt(colorArray[0].id));
+                            Singleton.getInstance().ChangeSelectedColor( color);
                             const elementSelected=document.getElementById(`${sessionStorage.getItem('BumbleId')}`)
                             if(elementSelected)elementSelected.style.backgroundImage=coloractual
                         }}></div>
