@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { IDesign } from "../../../../core/models/design/design.model";
-import { getServerImagesUrl } from "../../../utilities/format-server-endpoints.utility";
+
 
 interface ExperienceMosaicBricksProps
 {
@@ -13,11 +12,14 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
 
 
     const [groutImageCss, setGroutImageCss] = useState("");
+    // const []
 
 
     useEffect(() => {
         if (props.grout)
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
+
+        
     }, [props]);
 
 
