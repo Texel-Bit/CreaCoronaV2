@@ -36,8 +36,8 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                 }
             </style>
             {
-                props.squares.map((square) => 
-                    <div className="img-container" dangerouslySetInnerHTML={{ __html: square.outerHTML }}></div>)
+                props.squares.map((square, index) => 
+                    <div key={`MosaicSquareDesign${index}`} className="img-container" dangerouslySetInnerHTML={{ __html: square.outerHTML }}></div>)
             }
 
         </div>

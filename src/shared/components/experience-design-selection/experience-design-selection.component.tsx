@@ -140,14 +140,15 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     props.designTypes.map(designType => {
                         return <>
                             <input 
+                                key={`designTypeTagCheck${designType.id}`}
                                 type="radio" 
                                 className="btn-check" 
                                 name="designTypeSelector" 
                                 id={designType.id.toString()}
                                 checked={selectedDesignType?.id == designType.id}
-                                onChange={(event) => handleDesignTypeChange(event, designType)}
-                            />
-                            <label 
+                                onChange={(event) => handleDesignTypeChange(event, designType)}/>
+                            <label
+                                key={`designTypeTagText${designType.id}`}
                                 className="btn btn-sm btn-outline-primary rounded-0 rounded-top pb-0 px-3" 
                                 htmlFor={designType.id.toString()}>
                                 {designType.name}
@@ -161,7 +162,10 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
                     {
                         designColors.map(design => {
-                            return <img onClick={()=>SelectNewDesign(design)} src={getServerImagesUrl(design.source)}/>
+                            return <img 
+                                key={`designTypeTexture${design.id}`}
+                                onClick={()=>SelectNewDesign(design)}
+                                src={getServerImagesUrl(design.source)}/>
                         })
                     }
                 </div>

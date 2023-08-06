@@ -72,6 +72,7 @@ export const CoronaCarousel: React.FC<CoronaCarouselProps> = (props) => {
                     {
                         props.thumbnails.map(thumbnail => {
                             return <EnvironmentThumbnail
+                                        key={thumbnail.id}
                                         name={thumbnail.name}
                                         image={thumbnail.image}
                                         id={thumbnail.id}

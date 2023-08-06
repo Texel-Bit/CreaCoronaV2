@@ -13,10 +13,11 @@ export const MosaicActionsBar: React.FC<MosaicActionsBarProps> = (props) => {
             {
                 props.buttons.map(actionButton => {
                     return <MosaicActionBarButton
-                                icon={actionButton.icon}
-                                buttonClick={actionButton.buttonClick}
-                                styleColor={actionButton.styleColor}
-                                text={actionButton.text}/>
+                        key={`mosaicActionBarButton${actionButton.text}`}
+                        icon={actionButton.icon}
+                        buttonClick={actionButton.buttonClick}
+                        styleColor={actionButton.styleColor}
+                        text={actionButton.text}/>
                 })
             }
             </>
