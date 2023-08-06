@@ -85,16 +85,17 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     });
 
                     
-
+                    
                     let currFormat: IFormat = {
                        id:element.idDesignTypeFormatSize,
                        name:element.DesignTypeFormatSizeName,
                        source:element.DesignTypeFormatSizeDefaultImagePath,
                        width:element.DesignTypeFormatSizeWidht,
                        height:element.DesignTypeFormatSizeHeight,
+                       scale:element.DesignTypeFormatSizeMosaicScale                       ,
                        formats:FormatSizetexture
                     };
-                    
+
                     if(!defaultFormatSize)
                     {
                         defaultFormatSize=currFormat;
