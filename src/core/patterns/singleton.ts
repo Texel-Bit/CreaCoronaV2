@@ -248,6 +248,7 @@ public ChangeBrickFormat(format:IFormat)
 
         if(currentDesigns[0].fullField!==design.fullField)
         {
+            this.currentColorList=[]
             this.currentDesignList=[]
             let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
             for (let i = 0; i < maxDesignSelected; i++) {
@@ -394,7 +395,7 @@ public ClearBundles()
                 return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
             })];
 
-            let texturizedDesign:any;
+            let texturizedDesign:HTMLElement;
 
             if (this.currentDesignList) {
                 // Create a new array for designPromises
@@ -603,6 +604,7 @@ public GenerateDefaultDesignsSelected() {
     let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
     const currentDesigns = this.getDesignDataManager().getAllDesigns();
 
+   
     this.currentDesignList = []
    
 

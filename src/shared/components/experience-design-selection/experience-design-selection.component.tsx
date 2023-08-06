@@ -27,8 +27,15 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
         const SelectDesignTypeAsync = async() =>
         {
+
             if(selectedDesignType)
             {
+                const isSameDesignType=Singleton.getInstance().selectedDesignType === selectedDesignType
+
+                if(!isSameDesignType)
+                {
+                    Singleton.getInstance().currentColorList=[]
+                }
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
                 const CurrColorsSelected = await getAllDesignByTypeId(selectedDesignType.id);
@@ -39,7 +46,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 Singleton.getInstance().removeALlColors();
                 Singleton.getInstance().removeAllFormats();
                 
-                let currenDesignColors = CurrColorsSelected.data.Design.map((element: any) => {
+                let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
                     let currDesign: IDesign = {
@@ -104,7 +111,30 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-                Singleton.getInstance().GenerateDefaultDesignsSelected()
+                if(Singleton.getInstance().currentDesignList)
+                {
+                    if(Singleton.getInstance().currentDesignList!?.length>0)
+                    {                        
+                        if(!isSameDesignType)
+                        {
+                          Singleton.getInstance().GenerateDefaultDesignsSelected()
+                        }
+                        
+                    }
+                    else
+                    {
+                        Singleton.getInstance().GenerateDefaultDesignsSelected()
+                    }
+                   
+                    
+                }
+                else
+                {
+                    Singleton.getInstance().GenerateDefaultDesignsSelected()
+                }
+
+                
+                
                 setDesignColors(currenDesignColors);
             }
         }
@@ -115,7 +145,20 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
 
     useEffect(() => {
-        setSelectedDesignType(props.designTypes[0]);
+
+        if(!Singleton.getInstance().selectedDesignType)
+        {
+            setSelectedDesignType(props.designTypes[0]);
+        }
+        else
+        {
+            if(Singleton.getInstance().selectedDesignType)
+            {
+                setSelectedDesignType(Singleton.getInstance().selectedDesignType!);
+            }
+        }
+           
+
     }, [props.designTypes]);
 
 
