@@ -165,34 +165,23 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
     const updateCanvas =  () => {
-         setTimeout(async() => {
-
-             
+        setTimeout(async() => {            
 
             let element = document.getElementById("mosaic-element");
 
-        if (element)
-        {
-            const DefaultScale=[]
+            if (element)
+            {
+                let formatWidth = Singleton.getInstance().currentFormat?.width ?? 1;
+                let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
+                let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
 
+                let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
+                setSelectedFormatSize(newSize);
+                let elementSvg = await convertHtmlToImage(element);
+                setCanvasImage(elementSvg ?? "");
+            }
 
-            DefaultScale.push({id:1,value:1})
-            DefaultScale.push({id:2,value:1})
-            DefaultScale.push({id:3,value:1})
-
-            const foundItem = DefaultScale.find((item) => item.id === Singleton.getInstance().selectedDesignType?.id);
-            const scalar:number = foundItem?.value || 1;
-console.log(scalar,"  ",foundItem );
-
-            let formatScale=(Singleton.getInstance().currentFormat?.height ?? 1) * scalar;
-            let newScale = Singleton.getInstance().currentEnvironment?.environmentAngle.size + (formatScale / 100);
-            setSelectedFormatSize(newScale);
-
-            let elementSvg = await convertHtmlToImage(element);
-            setCanvasImage(elementSvg ?? "");
-        }
         }, 500);
-        
     }
 
     function updateMosaic(mosaicElements:HTMLElement[]) {

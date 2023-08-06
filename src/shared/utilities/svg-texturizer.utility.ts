@@ -54,7 +54,6 @@ class SvgTexturizer {
         options.forEach((option) => {
             
             if (option.layerId != "" ) {
-
                 console.log("RECORRIENDO TEXTURIZADOR => ", option);
                 let patternId = this._addSvgPattern(svgElement, option);
                 let currentLayer = svgElement.querySelector(`#${option.layerId}`);
@@ -229,7 +228,7 @@ class SvgTexturizer {
 
 
     private _buildSvgElement = async (svgUrl: string): Promise<HTMLElement> => {
-        const svgElement = await this.loadSvgByPath(svgUrl);
+        const svgElement = await this.loadSvgByPath(svgUrl) as HTMLElement;
 
         var xlinkNamespace = svgElement.getAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink');
         xlinkNamespace || svgElement.setAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink', this.LINK_NAMESPACE);
