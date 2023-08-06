@@ -77,8 +77,6 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                    singleton.addGrout(currentDesignType);
              
                  });
-                
-                 console.log(grouts);
             }
             catch(error) {
                 console.log(error);
@@ -102,26 +100,24 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 <div className="d-flex align-items-center w-100 h-100">
                     <div className="w-100">
                 <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-primary fw-bold">
-                Selecciona la superficie en la que aplicarás tu
-diseño
-</h4>
-                    <div className="d-flex gap-4 w-100 justify-content-around">
-                        {   singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
-    console.log("Rendering EnvironmentThumbnail with props", i);
-    return <EnvironmentThumbnail
-        name={i.name}
-        image={i.source}
-        id={i.id}
-        onEvents={[
-            (e) => Singleton.getInstance().SelectEnvironmentType(i),
-            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment)
-        ]}
-    />
-})}
+                Selecciona la superficie en la que aplicarás tu diseño
+    </h4>
+    <div className="d-flex gap-4 w-100 justify-content-around">
+        {
+            singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
+                return <EnvironmentThumbnail
+                    key={`selectSurfaceThumbnail${i.id}`}
+                    name={i.name}
+                    image={i.source}
+                    id={i.id}
+                    onEvents={[
+                        (e) => Singleton.getInstance().SelectEnvironmentType(i),
+                        (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment)
+                    ]}/>
+        })}
+    </div>  
 
-                    </div>  
-
-                    </div> 
+</div> 
 
                 </div>
 

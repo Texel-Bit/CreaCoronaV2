@@ -20,10 +20,6 @@ interface ExperienceCanvasProps {
 
 export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
 
-    useEffect(() => {
-        console.log("DISEÑO SELECCIONADO => ", props);
-    }, [props]);
-
     return(
         <div className="position-relative h-100 overflow-hidden">
             <div className="design-canvas" style={{

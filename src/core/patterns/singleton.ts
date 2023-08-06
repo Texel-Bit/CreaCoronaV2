@@ -76,7 +76,6 @@ updateViewStatusFunc: Array<() => void> = [];
   public ChangeMosaicIndex(newIndex:number)
   {
       this.currentMosaicIndexSelected=newIndex;
-      console.log("Change Index");
   }
 
   public ChangeGrout(Grout:IGrout|null)
@@ -145,7 +144,6 @@ updateViewStatusFunc: Array<() => void> = [];
 }
   
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
-    console.log("SelectEnvironmentType called with environmentType", environmentType);
     this.currentEnvironmentType=environmentType;
     this.EvaluatePercentage();
   }
@@ -210,7 +208,6 @@ updateViewStatusFunc: Array<() => void> = [];
 
   public AddDesignToMosaic(design: IDesign) {
 
-    console.log("Add deign to mosaic selected");
     const currentDesigns = this.GetSelectedDesigns();
 
     if (currentDesigns && currentDesigns.length > 0) {
@@ -218,7 +215,6 @@ updateViewStatusFunc: Array<() => void> = [];
 
         if(currentDesigns[0].fullField!==design.fullField)
         {
-            console.log("Add deign to mosaic selected 2");
             this.currentDesignList=[]
             let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
             for (let i = 0; i < maxDesignSelected; i++) {
@@ -229,7 +225,6 @@ updateViewStatusFunc: Array<() => void> = [];
             
         }
         else if(this.currentMosaicIndexSelected>= 0 &&this.currentDesignList){
-            console.log("Add deign to mosaic selected 2");
             this.currentDesignList[this.currentMosaicIndexSelected] = design;
             this.TexturizeMosaic();
         }
@@ -241,11 +236,9 @@ updateViewStatusFunc: Array<() => void> = [];
                 this.currentDesignList.push(design);
                 this.TexturizeMosaic();
             }
-            console.log("Add deign to mosaic selected 3");
         }
        
     } else  {
-        console.log("Add deign to mosaic selected 2");
         this.currentDesignList=[]
         let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
         
@@ -287,6 +280,9 @@ public ClearBundles()
             this.setContentFunc(view);
         }
 
+        if (view == ExperienceViews.Format)
+            this.UpdateFormats();
+        
         this.UpdateViewsStatus();
     }
 
@@ -414,10 +410,7 @@ public ClearBundles()
 
   public UpdateViewsStatus()
   {
-
-    console.log("Updating view status ",this.updateViewStatusFunc)
     this.updateViewStatusFunc.forEach(element => {
-       
        element();
     });
   }
@@ -462,8 +455,6 @@ public ClearBundles()
 }
 
 public addEnvironmentType(environmentType: IEnvironmentType): void {
-    
-    console.log("Attemping to add environment type ",environmentType)
     this.environmentTypeDataManager.addEnvironmentType(environmentType);
 }
 

@@ -28,7 +28,9 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
     // Confirmamos que los datos del usuario si se encuentren en la aplicación 
     const navigate = useNavigate();
-    if( sessionStorage.getItem('data')==null ) navigate(ExperienceRoutes.Login);
+    
+    if( sessionStorage.getItem('data')==null )
+        navigate(ExperienceRoutes.Login);
 
     const [ userdata , setUserData ] = useState(Object);
     const [ value , setValue ] = useState(props.number)
@@ -65,31 +67,34 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
             <div className="d-flex gap-sm-3 gap-4 p-1">
                 
                 <NavbarItem
-                text='selecciona la superficie'
-                imagen={superficie}
-                experienceView={ExperienceViews.EnvironmentType}
+                    key={`navbarItem${1}`}
+                    text='selecciona la superficie'
+                    imagen={superficie}
+                    experienceView={ExperienceViews.EnvironmentType}/>
 
-                />
                 <NavbarItem
-                text='Selecciona el ambiente'
-                imagen={ambiente}
-                experienceView={ExperienceViews.Environment}
-                />
+                    key={`navbarItem${2}`}
+                    text='Selecciona el ambiente'
+                    imagen={ambiente}
+                    experienceView={ExperienceViews.Environment}/>
+
                 <NavbarItem
-                text='Diseña tu revestimiento'
-                imagen={revestimiento}
-                experienceView={ExperienceViews.Design}
-                />
+                    key={`navbarItem${3}`}
+                    text='Diseña tu revestimiento'
+                    imagen={revestimiento}
+                    experienceView={ExperienceViews.Design}/>
+
                 <NavbarItem
-                text='Agrega color a tu diseño'
-                imagen={color}
-                experienceView={ExperienceViews.Color}
-                />
+                    key={`navbarItem${4}`}
+                    text='Agrega color a tu diseño'
+                    imagen={color}
+                    experienceView={ExperienceViews.Color}/>
+
                 <NavbarItem
-                text='Calcula tu espacio'
-                imagen={calcula}
-                experienceView={ExperienceViews.Format}
-                />
+                    key={`navbarItem${5}`}
+                    text='Calcula tu espacio'
+                    imagen={calcula}
+                    experienceView={ExperienceViews.Format}/>
 
             </div>
 

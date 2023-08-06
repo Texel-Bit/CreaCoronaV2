@@ -19,11 +19,9 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
     const [res,setRes]  = useState(Object)
 
     useEffect(()=>{
-        console.log("consulta ");
         fetch(consult,{method:'GET',headers:{'Content-type':'application/json','Jwt': `${sessionStorage.getItem('infoUser')}` }})
         .then(d=>d.json())
         .then(d=>{handlerResponse(d.data); 
-            console.log("Response ",d.data);
             const singleton = Singleton.getInstance();
         
            

@@ -31,6 +31,7 @@ import { idText } from "typescript";
 import { IGrout } from "../../../../core/models/grout/grout.model";
 import { IFormat } from "../../../../core/models/format/format.model";
 import { IStructure } from "../../../../core/models/structure/structure.model";
+import { ExperienceFormatThumbnailProps } from "../../../../shared/components/experience-format-selection/experience-format-thumbnail/experience-format-thumbnail";
 
 
 interface currentExperienceView
@@ -73,7 +74,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [canvasMask, setCanvasMask] = useState("");
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
-    const [formats, setFormats] = useState<IFormat[]>();
+    const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
     const [structures, setStructures] = useState<IStructure[]>();
     
 
@@ -94,33 +95,33 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
  }, [structures]);
 
 
- useEffect(() => {
     
-console.log("Formats updated ",formats);
-
- }, [formats]);
-
-    
- function SelectFormat(newFormat:IFormat)
-    {
-        Singleton.getInstance().SelectFormat(newFormat);
-    }
-
-    function UpdateFormats(currrentFormats:IFormat[])
-    {
-       setFormats(currrentFormats)
-    }
+function SelectFormat(newFormat:IFormat)
+{
+    Singleton.getInstance().SelectFormat(newFormat);
+}
 
 
-    function UpdateStructures(currrentStructure:IStructure[])
-    {
-       setStructures(currrentStructure)
-    }
+function UpdateFormats(currrentFormats:IFormat[])
+{
+    let formatsCollection = currrentFormats.map(format => ({
+        format,
+        onClick: SelectFormat
+    }));
 
-    function MosaicGroutChanged(currrentGrout:IGrout)
-    {
-        setMosaicGrout(getServerImagesUrl(currrentGrout.source))
-    }
+    setFormats(formatsCollection);
+}
+
+
+function UpdateStructures(currrentStructure:IStructure[])
+{
+    setStructures(currrentStructure)
+}
+
+function MosaicGroutChanged(currrentGrout:IGrout)
+{
+    setMosaicGrout(getServerImagesUrl(currrentGrout.source))
+}
 
     
 
@@ -130,7 +131,6 @@ console.log("Formats updated ",formats);
 
 
     useEffect(() => {
-
         if(Singleton.getInstance().currentGrout)
         {
             Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
@@ -151,9 +151,6 @@ console.log("Formats updated ",formats);
             let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
             setCanvasMask(maskImage);
         }
-
-        console.log("ENVIRONMENT DATA => ", Singleton.getInstance().currentEnvironment?.environmentAngle);
-
     }, []);
 
 
@@ -173,36 +170,29 @@ console.log("Formats updated ",formats);
     }
 
     function updateMosaic(HTMLElement:HTMLElement[]) {
-        
         setSelectedDesigns(HTMLElement)
-
-
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
-
-       
     }
     
 
     useEffect(()=>{
-        
        updateCanvas();
-       
-
     },[selectedDesigns])
 
     
     function ChangeView(experieceView: ExperienceViews | null, value:number)
     {
-        
-        if(experieceView) {
+        if(experieceView)
+        {
             let numericalValue: number = experieceView;
             let view: ExperienceViews = numericalValue + value;
             Singleton.getInstance().ChangeExperienceView(view);
-
             Singleton.getInstance().UpdateViewsStatus();
+
+            if (experieceView == ExperienceViews.Format)
+                Singleton.getInstance().UpdateFormats();
         }
-       
     }
 
 
@@ -281,13 +271,14 @@ console.log("Formats updated ",formats);
 
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
-                            {colorType==2 &&<ExperienceColorPaletteSelection />}
-                            <ExperienceTextureSelection colorArray={
-                                Singleton.getInstance().getColorDataManager().GetAllColors(
-                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
-                                )
-                            } 
-                        />
+                            {colorType == 2 && <ExperienceColorPaletteSelection />}
+                            <ExperienceTextureSelection 
+                                colorArray={
+                                        Singleton
+                                            .getInstance()
+                                            .getColorDataManager()
+                                            .GetAllColors(Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true)
+                                    }/>
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
                         <div className="col-5 d-flex align-items-center">
@@ -328,9 +319,7 @@ console.log("Formats updated ",formats);
                             </div>
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
-                            <ExperienceFormatSelection formats={formats?.map(format=>{
-                                return {format,onClick:SelectFormat}
-                            })??[]} />
+                            <ExperienceFormatSelection formats={formats ?? []} />
                             <InitQuotationForm/>
                         </div>
                     </div>

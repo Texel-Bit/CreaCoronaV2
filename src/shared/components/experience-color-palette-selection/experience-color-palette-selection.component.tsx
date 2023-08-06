@@ -5,6 +5,7 @@ import Singleton from '../../../core/patterns/singleton';
 import { getAllDesignColorsBundle } from '../../../core/services/design.service';
 import { IColorBundle } from '../../../core/models/color/color-bundle.model';
 import { IColor } from '../../../core/models/color/color.model';
+import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
 
 export const ExperienceColorPaletteSelection = () => {
 
@@ -135,51 +136,52 @@ export const ExperienceColorPaletteSelection = () => {
         }
     }
 
-    return(<>
-        <div className="p-1 w-100 d-flex align-items-center justify-content-between experience-color-palette-selection-container">
-            <small className='seleccionSmall'>Selección</small>
-            <div className='color-palette-row'>
-                <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option1" className='color-palette-item rounded-circle' ></div>
-                <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option2" className='color-palette-item rounded-circle' ></div>
-                <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option3" className='color-palette-item rounded-circle' ></div>
-                <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option4" className='color-palette-item rounded-circle' ></div>
-                <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option5" className='color-palette-item rounded-circle' ></div>
+    return(
+        <>
+            <div className="p-1 w-100 d-flex align-items-center justify-content-between experience-color-palette-selection-container">
+                <small className='seleccionSmall'>Selección</small>
+                <div className='color-palette-row'>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option1" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option2" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option3" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option4" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option5" className='color-palette-item rounded-circle' ></div>
+                </div>
+                <button type='button' className='btn btn-sm btn-primary select-color-palette-btn py-0 px-1'>
+                    <FaCaretDown />
+                </button>
             </div>
-            <button type='button' className='btn btn-sm btn-primary select-color-palette-btn py-0 px-1'>
-                <FaCaretDown />
-            </button>
-        </div>
-        <div className='optionsColorsList hiddenList'>
-            <br></br>
-          
-            <>
-                {
-                    colorsBundle?.map((element)=>{
-                        return(<>
-                        <div className='color-palette-rowList' onClick={()=>{
-                            Singleton.getInstance().InitializeColors(element.colorList)
-                                element.colorList.map((color,i)=>{
-                                    const node:any = document.getElementById(`circle-option${i+1}`);
-                                    if(node)node.style.backgroundImage=`url(https://corona.texelbit.com:9445/${color.source})`;
-                                })
-                                hiddenListColores()
-                            }}>
-                            <h4 className='titleListRow'>{element.bundleName}</h4>
-                            { element.colorList.map((color)=>{
-                                return(<>
-                                    <div className='color-palette-item rounded-circle' style={{ backgroundImage: `url(https://corona.texelbit.com:9445/${color.source})` }}></div>
-                                </>)
-                            })} 
-                            
-                        </div>
-                        <hr />
-                        </>)
-                    })
-                }
-            </>
-    
-            <br></br>
-        </div>
+            <div className='optionsColorsList hiddenList'>
+                <br></br>
+                <>
+                    {
+                        colorsBundle?.map((element)=>{
+                            return(
+                                <>
+                                    <div className='color-palette-rowList' onClick={()=>{
+                                        Singleton.getInstance().InitializeColors(element.colorList)
+                                            element.colorList.map((color,i)=>{
+                                                const node:any = document.getElementById(`circle-option${i+1}`);
+                                                if(node)node.style.backgroundImage=`url(${getServerImagesUrl(color.source)})`;
+                                            })
+                                            hiddenListColores()
+                                        }}>
+                                        <h4 className='titleListRow'>{element.bundleName}</h4>
+                                        { element.colorList.map((color)=>{
+                                            return(
+                                                <div className='color-palette-item rounded-circle' style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }}></div>
+                                            )
+                                        })} 
+                                        
+                                    </div>
+                                    <hr />
+                                </>
+                            )
+                        })
+                    }
+                </>
+                <br></br>
+            </div>
         </>
         
     );

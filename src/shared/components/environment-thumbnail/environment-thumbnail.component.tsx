@@ -13,7 +13,6 @@ export interface EnvironmentThumbnailProps{
 export const EnvironmentThumbnail:React.FC<EnvironmentThumbnailProps> = (props) => {
 
     const handleEvent = (event: React.SyntheticEvent) => {
-        console.log("handleEvent called");
         props.onEvents.forEach(handler => handler(event));
     };
     
@@ -23,14 +22,11 @@ export const EnvironmentThumbnail:React.FC<EnvironmentThumbnailProps> = (props) 
                 className='environment-thumbnail-image'
                 style={{ backgroundImage: `url("https://corona.texelbit.com:9445/${props.image}")` }}>
             </div>
-            <div className='p-1 d-flex align-items-center justify-content-center gap-3'>
 
+            <div className='p-1 d-flex align-items-center justify-content-center gap-3'>
                 <img src={icon} alt="navbar icon" height={35} />
                 <label className="color-primary fw-bold color-middle">{props.name}</label>
-
             </div>
-
         </div>
-
     );
 }

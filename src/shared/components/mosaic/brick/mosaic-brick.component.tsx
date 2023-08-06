@@ -51,29 +51,29 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                 `}
             </style>
 
-            <div className="brick-row">
+            <div key={"mosaicBrickRow1"} className="brick-row">
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
-            <div className="brick-row-offset">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div className="brick-row">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div className="brick-row-offset">
+            <div key={"mosaicBrickRow2"} className="brick-row-offset">
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
-            <div className="brick-row">
+            <div key={"mosaicBrickRow3"} className="brick-row">
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
             </div>
-            <div className="brick-row-offset">
+            <div key={"mosaicBrickRow4"} className="brick-row-offset">
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+            </div>
+            <div key={"mosaicBrickRow5"} className="brick-row">
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+            </div>
+            <div key={"mosaicBrickRow6"} className="brick-row-offset">
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
                 <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>

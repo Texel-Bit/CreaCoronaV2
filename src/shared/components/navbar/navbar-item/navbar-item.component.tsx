@@ -27,8 +27,6 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
     }, [props.imagen]);
 
     useEffect(() => {
-
-        console.log("Updating view status ",props.experienceView)
         if(Singleton.getInstance().currentExperienceView==props.experienceView)
         {
             updateColor(SelectedColor)
@@ -83,14 +81,6 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
        
 
     },[viewStatus]);
-
-
-    useEffect(() => {
-        
-        console.log(currColor,"  ",props.experienceView )
-    },[currColor]);
-
-
    
 
     function UpdateStatus()
