@@ -10,9 +10,9 @@
   --color-progressVar:#0069B4;
   --color-border: #d5d9dd;
   --color-confirm-alert-bg: #E2FFF2;
-  --color-confirm-alert-border: #0C6F55;
+  --color-confirm-alert-border: #11A678;
   --color-confirm-alert-text: #0C6F55;
-  --color-confirm-alert-hover: #1D7F66;
+  --color-confirm-alert-hover: #0C6F55;
   --color-confirm-alert-active: #0A4D33;
 
   --color-info-alert-bg: #CEEEFA;
@@ -101,10 +101,14 @@ code {
 }
 
 .button-background{
-  background-color: var(--color-primary) !important;
+  background-color: var(--color-middle) !important;
   border: none !important;
   outline: none !important;
-  transition: transform 1s ease-in-out;
+  transition: .3s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.button-background > * {
   cursor: pointer;
 }
 
