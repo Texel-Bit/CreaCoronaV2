@@ -119,7 +119,6 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         {
                           Singleton.getInstance().GenerateDefaultDesignsSelected()
                         }
-                        
                     }
                     else
                     {
