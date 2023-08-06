@@ -88,9 +88,6 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-
-                
-
                 let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     

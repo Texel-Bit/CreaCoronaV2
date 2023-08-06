@@ -85,6 +85,10 @@ export const ExperienceColorPaletteSelection = () => {
 
                         setColorBundles(Singleton.getInstance().colorBundleList);
                         
+                        if (Singleton.getInstance().colorBundleList) {
+                            Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
+                        }
+
                     } else {
                     }
                 } else {
@@ -122,7 +126,10 @@ export const ExperienceColorPaletteSelection = () => {
    
     let objetcSelected:string ;
 
-    const selectoptionBumble = () =>{
+    const selectoptionBumble = (newIndex:number) =>{
+        
+        Singleton.getInstance().colorIndex=newIndex;
+
         for(let i =1; i<6;i++){
 
             if(objetcSelected.includes(i.toString())){
@@ -141,11 +148,11 @@ export const ExperienceColorPaletteSelection = () => {
             <div className="p-1 w-100 d-flex align-items-center justify-content-between experience-color-palette-selection-container">
                 <small className='seleccionSmall'>Selección</small>
                 <div className='color-palette-row'>
-                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option1" className='color-palette-item rounded-circle' ></div>
-                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option2" className='color-palette-item rounded-circle' ></div>
-                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option3" className='color-palette-item rounded-circle' ></div>
-                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option4" className='color-palette-item rounded-circle' ></div>
-                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble() }} id="circle-option5" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(0) }} id="circle-option1" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(1) }} id="circle-option2" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(2) }} id="circle-option3" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(3) }} id="circle-option4" className='color-palette-item rounded-circle' ></div>
+                    <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(4) }} id="circle-option5" className='color-palette-item rounded-circle' ></div>
                 </div>
                 <button type='button' className='btn btn-sm btn-primary select-color-palette-btn py-0 px-1'>
                     <FaCaretDown />
