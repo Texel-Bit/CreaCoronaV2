@@ -382,7 +382,8 @@ public ClearBundles()
         if (!newColorTemp)
             return;
 
-            let texturizedDesign:HTMLElement;
+        if (newColorTemp?.length > 5)
+            newColorTemp = newColorTemp.slice(0, 5);
 
         let texturizer = new SvgTexturizer();
 
@@ -395,14 +396,15 @@ public ClearBundles()
         });
 
         let TexturizedDesigns: HTMLElement[] = [];
-
-        Promise.all(this.currentDesignList.map(async (design, index) => {
+        
+        for (let index = 0; index < this.currentDesignList.length; index++) {
 
             let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
                 ? TexturizedOptions : TexturizedOptionsInverted;
 
             console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), selectedTexturizedOptions);
-            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(design.source), selectedTexturizedOptions);
+            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), selectedTexturizedOptions);
+            console.log("TERMINA TEXTURIZACIÓN");
 
             if(this.currentStructure)
                 texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
@@ -411,13 +413,33 @@ public ClearBundles()
                 texturizer.addBisels(texturizedDesign);
 
             TexturizedDesigns.push(texturizedDesign);
-        }))
-        .then(() => {
-            if (this.updateMosaicFunc)
-                this.updateMosaicFunc(TexturizedDesigns);
-        });
+        }
 
-       
+        console.log("RESULTADO TEXTURIZACIÓN => ", TexturizedDesigns);
+        if (this.updateMosaicFunc)
+                this.updateMosaicFunc(TexturizedDesigns);
+
+        // let TexturizedDesignsPromises = this.currentDesignList.map(async (design, index) => {
+
+        //     let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
+        //         ? TexturizedOptions : TexturizedOptionsInverted;
+
+        //     console.log(index, selectedTexturizedOptions);
+        //     let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), selectedTexturizedOptions);
+
+        //     if(this.currentStructure)
+        //         texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
+
+        //     if (this.selectedDesignType?.id == 2)
+        //         texturizer.addBisels(texturizedDesign);
+
+        //     return texturizedDesign;
+        // });
+
+        // const TexturizedDesigns = await Promise.all(TexturizedDesignsPromises);
+
+        // if (this.updateMosaicFunc)
+        //   
     }
     
 
