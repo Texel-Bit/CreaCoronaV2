@@ -14,7 +14,7 @@ interface ExperienceCanvasProps {
     rotationX: number,
     rotationY: number,
     rotationZ: number,
-    scale: number
+    size: number
 }
 
 
@@ -25,12 +25,12 @@ export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
             <div className="design-canvas" style={{
                 backgroundImage: `url(${props.backgroundImage})`,
                 backgroundSize: `${
-                    (document.getElementById("mosaic-element")?.clientHeight ?? 1) / 2 * props.scale
+                    (props.size)
                 }px`,
                 transform: `rotateX(${props.rotationX}deg) rotateY(${props.rotationY}deg) rotateZ(${props.rotationZ}deg)`,
                 perspectiveOrigin: `${props.perspectiveOrigin.X}% ${props.perspectiveOrigin.Y}%`,
                 perspective: `${props.perspective}px`,
-                width: "300%", height: "300%"
+                width: "1000px", height: "1000px"
             }}></div>
             <img
                 src={props.mask}

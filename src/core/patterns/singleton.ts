@@ -92,6 +92,13 @@ updateViewStatusFunc: Array<() => void> = [];
         this.updateMosaicGroutFunc(Grout);
   }
 
+  public ChangeStructure(structure:IStructure|null)
+  {
+      this.currentStructure=structure;
+
+      this.TexturizeMosaic();
+  }
+
   public GetCurrenColorTypeID()
   {
       if(this.currentDesignList)
@@ -241,6 +248,7 @@ public ChangeBrickFormat(format:IFormat)
 
         if(currentDesigns[0].fullField!==design.fullField)
         {
+            this.currentColorList=[]
             this.currentDesignList=[]
             let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
             for (let i = 0; i < maxDesignSelected; i++) {
@@ -374,8 +382,7 @@ public ClearBundles()
         if (!newColorTemp)
             return;
 
-        if (newColorTemp?.length > 5)
-            newColorTemp = newColorTemp.slice(0, 5);
+            let texturizedDesign:HTMLElement;
 
         let texturizer = new SvgTexturizer();
 
@@ -410,27 +417,7 @@ public ClearBundles()
                 this.updateMosaicFunc(TexturizedDesigns);
         });
 
-        // let TexturizedDesignsPromises = this.currentDesignList.map(async (design, index) => {
-
-        //     let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
-        //         ? TexturizedOptions : TexturizedOptionsInverted;
-
-        //     console.log(index, selectedTexturizedOptions);
-        //     let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), selectedTexturizedOptions);
-
-        //     if(this.currentStructure)
-        //         texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
-
-        //     if (this.selectedDesignType?.id == 2)
-        //         texturizer.addBisels(texturizedDesign);
-
-        //     return texturizedDesign;
-        // });
-
-        // const TexturizedDesigns = await Promise.all(TexturizedDesignsPromises);
-
-        // if (this.updateMosaicFunc)
-        //     this.updateMosaicFunc(TexturizedDesigns)
+       
     }
     
 
@@ -590,6 +577,7 @@ public GenerateDefaultDesignsSelected() {
     let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
     const currentDesigns = this.getDesignDataManager().getAllDesigns();
 
+   
     this.currentDesignList = []
    
 

@@ -5,7 +5,7 @@ import './structure-thumbnail.component.css';
 
 export interface StructureThumbnailProps {
     structure: IStructure;
-    onClick: (structureId: IStructure) => void
+    onClick: (structure: IStructure) => void
 }
 
 

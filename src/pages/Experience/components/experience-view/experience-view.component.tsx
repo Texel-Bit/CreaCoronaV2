@@ -27,7 +27,7 @@ import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/
 import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
 import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
-import { idText } from "typescript";
+import { idText, isStringLiteral } from "typescript";
 import { IGrout } from "../../../../core/models/grout/grout.model";
 import { IFormat } from "../../../../core/models/format/format.model";
 import { IStructure } from "../../../../core/models/structure/structure.model";
@@ -76,7 +76,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
-    const [selectedFormatScale, setSelectedFormatScale] = useState(1);
+    const [selectedFormatSize, setSelectedFormatSize] = useState(1);
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
     
 
@@ -97,8 +97,6 @@ function ChangeChessMode()
 function SelectFormat(newFormat:IFormat)
 {
     Singleton.getInstance().SelectFormat(newFormat);
-    let newScale = Singleton.getInstance().currentEnvironment?.environmentAngle.size + (newFormat.height / 100);
-    setSelectedFormatScale(newScale);
     updateCanvas();
 }
 
@@ -168,10 +166,28 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
     const updateCanvas =  () => {
          setTimeout(async() => {
+
+             
+
             let element = document.getElementById("mosaic-element");
 
         if (element)
         {
+            const DefaultScale=[]
+
+
+            DefaultScale.push({id:1,value:1})
+            DefaultScale.push({id:2,value:1})
+            DefaultScale.push({id:3,value:1})
+
+            const foundItem = DefaultScale.find((item) => item.id === Singleton.getInstance().selectedDesignType?.id);
+            const scalar:number = foundItem?.value || 1;
+console.log(scalar,"  ",foundItem );
+
+            let formatScale=(Singleton.getInstance().currentFormat?.height ?? 1) * scalar;
+            let newScale = Singleton.getInstance().currentEnvironment?.environmentAngle.size + (formatScale / 100);
+            setSelectedFormatSize(newScale);
+
             let elementSvg = await convertHtmlToImage(element);
             setCanvasImage(elementSvg ?? "");
         }
@@ -384,7 +400,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
                     rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
                     rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
-                    scale={selectedFormatScale}/>
+                    size={selectedFormatSize}/>
             </div>
 
         </div>

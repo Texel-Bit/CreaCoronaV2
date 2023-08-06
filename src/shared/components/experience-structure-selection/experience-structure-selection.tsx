@@ -2,6 +2,7 @@ import { StructureThumbnail, StructureThumbnailProps } from "./structure-thumbna
 import "./experience-structure-selection.css";
 import { IStructure } from "../../../core/models/structure/structure.model";
 import React from "react";
+import Singleton from "../../../core/patterns/singleton";
 
 
 interface ExperienceStructureSelectionProps {
@@ -10,6 +11,12 @@ interface ExperienceStructureSelectionProps {
 
 
 export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionProps> = (props) => {
+    
+    function ChangeStructure(structure: IStructure)
+    {
+        Singleton.getInstance().ChangeStructure(structure)
+    }
+    
     return(
         <div className='mw-100 overflow-hidden'>
 
@@ -24,7 +31,7 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
                         return <StructureThumbnail 
                                 key={`structureThumbnail${struct.structure.id}`}
                                 structure={struct.structure}
-                                onClick={struct.onClick}/>
+                                onClick={ChangeStructure}/>
                     })
                 }
 
