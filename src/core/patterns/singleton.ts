@@ -78,6 +78,13 @@ updateViewStatusFunc: Array<() => void> = [];
       this.currentMosaicIndexSelected=newIndex;
   }
 
+  public ChangeChessMode()
+  {
+    console.log("Change Chess mode");
+    this.chessMode=!this.chessMode;
+    this.TexturizeMosaic();
+  }
+
   public ChangeGrout(Grout:IGrout|null)
   {
       this.currentGrout=Grout;
@@ -116,13 +123,27 @@ updateViewStatusFunc: Array<() => void> = [];
     this.currentFormat=format;
     this.structureDataManager.cleanStructures();
     this.structureDataManager.setStructureArray(this.currentFormat.formats);
-    if (this.currentColorList && this.currentColorList[0]) {
+    if (this.currentColorList && this.currentColorList[0]) 
+    {
       if(this.updateStructuresFunc)
       {
         this.updateStructuresFunc(this.structureDataManager.getAllStructuresByColorType(this.currentColorList[0].isFullField ? 1 : 2));
       }
+    } 
+
+    if(this.selectedDesignType?.id==1)
+    {
+        this.ChangeBrickFormat(format);
     }
-    
+
+}
+
+public ChangeBrickFormat(format:IFormat)
+{
+    if(this.currentDesignList)
+        this.currentDesignList[0].source=format.source
+
+    this.TexturizeMosaic();
 }
 
 
@@ -340,20 +361,56 @@ public ClearBundles()
 
     private async TexturizeMosaic() {
         let TexturizedOptions: TexturizeSvgOptions[];
+        let TexturizedOptionsInverted: TexturizeSvgOptions[];
     
+
+        if(this.currentColorList)
+          {
+              if(this.currentColorList?.length>5)
+              {
+                  this.currentColorList=this.currentColorList.slice(0,5);
+              }
+          }
+
+          console.log("Current Color List size ",this.currentColorList?.length)
         if(this.currentColorList) {
             let texturizer = new SvgTexturizer();
     
+
             TexturizedOptions = this.currentColorList.map((color,index) => {
                 return {layerId: `layer${index}`,textureUrl: getServerImagesUrl(color.source),tile: 1}
             });
-    
+
+                const currentIndex=this.currentColorList.length;
+
+                TexturizedOptionsInverted = this.currentColorList.slice().reverse().map((color, index) => {
+                    return {layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1};
+                });
+
+
             if(this.currentDesignList)
             {
-                let designPromises = this.currentDesignList.map(async(design) => {
-                    let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
+                let designPromises = this.currentDesignList.map(async(design,index) => {
+                    
+                    let temporalTexturizedOptions = TexturizedOptions.slice();
+                    if (this.chessMode) {
+                        
+                        if(index==1 ||index==2)
+                        {
+                           
+                            temporalTexturizedOptions= TexturizedOptionsInverted
+                            console.log(TexturizedOptionsInverted);
+                        }
+                        else
+                        {
+                            console.log(TexturizedOptions);
+                        }
+                    }
+                    
+                    let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), temporalTexturizedOptions);
                     return texturizedDesign;
                 });
+
                 let TexturizedDesigns: HTMLElement[] = await Promise.all(designPromises); // wait for all promises to resolve
                 
                 if(this.selectedDesignType?.id==2)
@@ -376,12 +433,30 @@ public ClearBundles()
 
     public InitializeColors(colors:IColor[])
     {
+
+        this.currentColorList=[]
         this.currentColorList=colors;
+
+        let TempColorList:IColor[]=[];
+
+        if(this.currentColorList)
+        {
+            if(this.currentColorList?.length>5)
+            {
+                this.currentColorList=this.currentColorList.slice(0,5);
+            }
+        }
+
         this.TexturizeMosaic();
     }
   
     public ChangeSelectedColor(color:IColor,index:number)
     {
+        if(this.GetCurrenColorTypeID()==1)
+        {
+            index=0;
+        }
+
           if(!this.currentColorList)
           {
               this.currentColorList=[]
@@ -391,8 +466,13 @@ public ClearBundles()
           {
               this.currentColorList[index]=color
           }
-
-          //this.TexturizeMosaic();
+          if(this.currentColorList)
+          {
+              if(this.currentColorList?.length>5)
+              {
+                  this.currentColorList=this.currentColorList.slice(0,5);
+              }
+          }
 
           return this.currentColorList[index]=color
     }

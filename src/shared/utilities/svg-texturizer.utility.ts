@@ -51,8 +51,9 @@ class SvgTexturizer {
     public texturize = async (svgUrl: string, options: TexturizeSvgOptions[]) => {
         const svgElement = await this.loadSvgByPath(svgUrl);
         const clonedSvg = this._buildClonedSvgElement(svgElement);
-
-        options.map(option => {
+       
+        options.map((option,index) => {
+            
             if (option.layerId != "" ) {
                 let patternId = this._addSvgPattern(clonedSvg, option);
                 let currentLayer = clonedSvg.querySelector(`#${option.layerId}`);
