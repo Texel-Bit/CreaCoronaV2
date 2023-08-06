@@ -93,6 +93,10 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 
  }, [structures]);
 
+function ChangeChessMode()
+{
+    Singleton.getInstance().ChangeChessMode();
+}
 
     
 function SelectFormat(newFormat:IFormat)
@@ -278,14 +282,13 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
                     <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
-                            {colorType == 2 && <ExperienceColorPaletteSelection />}
-                            <ExperienceTextureSelection 
-                                colorArray={
-                                        Singleton
-                                            .getInstance()
-                                            .getColorDataManager()
-                                            .GetAllColors(Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true)
-                                    }/>
+                            {colorType==2 &&<ExperienceColorPaletteSelection />}
+                            <ExperienceTextureSelection colorArray={
+                                Singleton.getInstance().getColorDataManager().GetAllColors(
+                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
+                                )
+                            } 
+                        />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
                         <div className="col-5 d-flex align-items-center">
@@ -304,7 +307,17 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                                     <MosaicComponent
                                         mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
                                         actions={true}/>
+
                                 }
+                                 {
+                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                 <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
+                                                { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
+                                            ]}/>
+                                        }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
