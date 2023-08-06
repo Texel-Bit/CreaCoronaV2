@@ -42,15 +42,10 @@
     width: 34px;
 }
 
-.navbar-item path {
-    fill: var(--color-textVar) !important;
-}
-
 .navbar-item-text {
     font-size: 15px;
     font-weight: 600;
     line-height: 1;
-    color: var(--color-progressVar) !important;
 }
 
 .iconNavBarOptions{

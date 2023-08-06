@@ -48,26 +48,48 @@ class SvgTexturizer {
     }
 
 
-    public texturize = async (id: number, svgUrl: string, options: TexturizeSvgOptions[]) => {
-        const svgElement = await this._buildSvgElement(svgUrl);
-       
-        options.forEach((option) => {
-            
-            if (option.layerId != "" ) {
-                console.log("RECORRIENDO TEXTURIZADOR => ", option);
-                let patternId = this._addSvgPattern(svgElement, option);
-                let currentLayer = svgElement.querySelector(`#${option.layerId}`);
+    // Function to apply texture to the SVG
+public texturize = async (id: number, svgUrl: string, options: TexturizeSvgOptions[]) => {
+    const svgElement = await this._buildSvgElement(svgUrl);
 
-                if (currentLayer) {
-                    currentLayer.setAttribute('class', '');
-                    currentLayer.setAttribute('fill', `url(#${patternId})`);
-                }
+    options.forEach((option) => {
+        if (option.layerId != "" ) {
+            console.log("RECORRIENDO TEXTURIZADOR => ", option);
+            let patternId = this._addSvgPattern(svgElement, option);
+            let currentLayer = svgElement.querySelector(`#${option.layerId}`);
+
+            if (currentLayer) {
+                currentLayer.setAttribute('class', '');
+                currentLayer.setAttribute('fill', `url(#${patternId})`);
             }
-        });
-       
-        svgElement.setAttribute("id", id.toString());
-        return svgElement;
+        }
+    });
+
+    svgElement.setAttribute("id", id.toString());
+    return svgElement;
+}
+
+// Function to apply rotation to the SVG layers
+
+    
+    
+public rotateSvg = (svgElement: HTMLElement, rotation: number): SVGSVGElement => {
+    let castSvgElement = svgElement as unknown as SVGSVGElement;
+    
+    // Select the specific group to rotate
+    let rotatingContent = castSvgElement.getElementById('rotatingContent');
+    
+    if (rotation !== 0 && rotatingContent) {
+        rotatingContent.setAttribute('style', `transform: rotate(${rotation}deg); transform-origin: center center;`);
     }
+    return castSvgElement;
+}
+
+
+
+
+
+    
 
 
     public addFilter = (svgElement: HTMLElement, filterUrl: string) => {
@@ -228,7 +250,7 @@ class SvgTexturizer {
 
 
     private _buildSvgElement = async (svgUrl: string): Promise<HTMLElement> => {
-        const svgElement = await this.loadSvgByPath(svgUrl) as HTMLElement;
+        const svgElement = await this.loadSvgByPath(svgUrl);
 
         var xlinkNamespace = svgElement.getAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink');
         xlinkNamespace || svgElement.setAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink', this.LINK_NAMESPACE);

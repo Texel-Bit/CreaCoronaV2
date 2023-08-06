@@ -64,7 +64,7 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
 
                 <div className="w-100">
 
-                    <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-primary fw-bold">
+                    <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%', color: 'var(--color-middle)'}} className="mb-2 pb-5 text-center fw-bold">
                         Selecciona el ambiente en el que aplicarás tu diseño
                     </h4>
 
