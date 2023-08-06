@@ -252,7 +252,7 @@ console.log(scalar,"  ",foundItem );
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex pt-4 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-4 h-100 justify-content-around align-items-start overflow-hidden">
                         <div className="h-100 col-5">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>

@@ -47,7 +47,7 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
     const SelectedColor: NavBarItemColor = {
         FontColor: "#213365",
         IconColor: "#213365", 
-        BackgroundColor: "#3ABAEC" 
+        BackgroundColor: "#bed9ef" 
     };
 
     const UnCompleteColor: NavBarItemColor = {
