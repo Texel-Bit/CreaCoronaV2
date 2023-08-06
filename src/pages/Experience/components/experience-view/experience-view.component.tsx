@@ -75,16 +75,15 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
+    const [selectedFormatScale, setSelectedFormatScale] = useState(1);
     const [structures, setStructures] = useState<IStructure[]>();
     
 
     const [colorType, setColorType] = useState(1);
 
-       useEffect(() => {
-       
-       
-       updateCanvas();
 
+    useEffect(() => {
+       updateCanvas();
     }, [mosaicGrout]);
 
 
@@ -99,6 +98,14 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 function SelectFormat(newFormat:IFormat)
 {
     Singleton.getInstance().SelectFormat(newFormat);
+
+    let newScale = Singleton.getInstance().currentEnvironment?.environmentAngle.size + (newFormat.height / 100);
+    setSelectedFormatScale(newScale);
+
+    // if (Singleton.getInstance().selectedDesignType?.id == 1)
+    //     Singleton.getInstance().AddDesignToMosaic(Singleton.getInstance().);
+
+    updateCanvas();
 }
 
 
@@ -316,6 +323,28 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures??[]}/>
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    <>
+                                        <MosaicComponent 
+                                            mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
+                                            actions={false} />
+                                    </>
+                                }
+                                
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    <MosaicComponent
+                                        mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
+                                        actions={true}/>
+                                }
+
+                                {
+                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    <MosaicComponent 
+                                        mosaic={<MosaicBrick brick={selectedDesigns![0]?? null} grout={mosaicGrout}/>}
+                                        actions={false}/>
+                                }
                             </div>
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
@@ -342,7 +371,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
                     rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
                     rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
-                    scale={Singleton.getInstance().currentEnvironment?.environmentAngle.size}/>
+                    scale={selectedFormatScale}/>
             </div>
 
         </div>
