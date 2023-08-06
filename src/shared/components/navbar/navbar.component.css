@@ -37,6 +37,11 @@
     width: 150px;
 }
 
+.navbar-item svg {
+    height: 34px;
+    width: 34px;
+}
+
 .navbar-item path {
     fill: var(--color-textVar) !important;
 }
