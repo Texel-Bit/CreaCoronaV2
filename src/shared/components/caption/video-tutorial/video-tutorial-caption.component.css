@@ -7,6 +7,7 @@
     mix-blend-mode: normal;
     width: 100%;
     color: var(--color-white);
+    width: 90%;
 }
 
 .video-button-text {

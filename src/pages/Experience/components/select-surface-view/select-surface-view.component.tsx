@@ -99,7 +99,7 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
             <div className="col-6 px-5">
                 <div className="d-flex align-items-center w-100 h-100">
                     <div className="w-100">
-                <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-primary fw-bold">
+                <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-middle fw-bold">
                 Selecciona la superficie en la que aplicarás tu diseño
     </h4>
     <div className="d-flex gap-4 w-100 justify-content-around">
