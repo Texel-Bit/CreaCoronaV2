@@ -92,6 +92,13 @@ updateViewStatusFunc: Array<() => void> = [];
         this.updateMosaicGroutFunc(Grout);
   }
 
+  public ChangeStructure(structure:IStructure|null)
+  {
+      this.currentStructure=structure;
+
+      this.TexturizeMosaic();
+  }
+
   public GetCurrenColorTypeID()
   {
       if(this.currentDesignList)
@@ -421,7 +428,7 @@ public ClearBundles()
                 TexturizedDesigns.forEach((design) => {
                     if(this.currentStructure)
                     {
-                        
+                        console.log("Structure ",this.currentStructure);
                         design=texturizer.addFilter(design,getServerImagesUrl(this.currentStructure.source));
                     }
                     
