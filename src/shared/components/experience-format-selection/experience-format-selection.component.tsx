@@ -20,6 +20,7 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
                 {
                     props.formats.map(format => {
                         return <ExperienceFormatThumbnail
+                                    key={`experienceFormatThumbnail${format.format.id}`}
                                     format={format.format}
                                     onClick={format.onClick} />
                     })

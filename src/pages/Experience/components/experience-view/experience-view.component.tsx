@@ -32,6 +32,7 @@ import { IGrout } from "../../../../core/models/grout/grout.model";
 import { IFormat } from "../../../../core/models/format/format.model";
 import { IStructure } from "../../../../core/models/structure/structure.model";
 import { ExperienceFormatThumbnailProps } from "../../../../shared/components/experience-format-selection/experience-format-thumbnail/experience-format-thumbnail";
+import { StructureThumbnailProps } from "../../../../shared/components/experience-structure-selection/structure-thumbnail/structure-thumbnail.component";
 
 
 interface currentExperienceView
@@ -76,7 +77,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [mosaicGrout, setMosaicGrout] = useState("");
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
     const [selectedFormatScale, setSelectedFormatScale] = useState(1);
-    const [structures, setStructures] = useState<IStructure[]>();
+    const [structures, setStructures] = useState<StructureThumbnailProps[]>();
     
 
     const [colorType, setColorType] = useState(1);
@@ -87,12 +88,6 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     }, [mosaicGrout]);
 
 
-
-    useEffect(() => {
-    
-
- }, [structures]);
-
 function ChangeChessMode()
 {
     Singleton.getInstance().ChangeChessMode();
@@ -102,14 +97,15 @@ function ChangeChessMode()
 function SelectFormat(newFormat:IFormat)
 {
     Singleton.getInstance().SelectFormat(newFormat);
-
     let newScale = Singleton.getInstance().currentEnvironment?.environmentAngle.size + (newFormat.height / 100);
     setSelectedFormatScale(newScale);
-
-    // if (Singleton.getInstance().selectedDesignType?.id == 1)
-    //     Singleton.getInstance().AddDesignToMosaic(Singleton.getInstance().);
-
     updateCanvas();
+}
+
+
+function SelectStructure (newStructure: IStructure)
+{
+    
 }
 
 
@@ -126,7 +122,12 @@ function UpdateFormats(currrentFormats:IFormat[])
 
 function UpdateStructures(currrentStructure:IStructure[])
 {
-    setStructures(currrentStructure)
+    let structuresCollection = currrentStructure.map(structure => ({
+        structure,
+        onClick: SelectStructure
+    }));
+
+    setStructures(structuresCollection);
 }
 
 function MosaicGroutChanged(currrentGrout:IGrout)
@@ -335,7 +336,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
-                                <ExperienceStructureSelection structures={structures??[]}/>
+                                <ExperienceStructureSelection structures={structures ?? []}
+                                />
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
                                     <>

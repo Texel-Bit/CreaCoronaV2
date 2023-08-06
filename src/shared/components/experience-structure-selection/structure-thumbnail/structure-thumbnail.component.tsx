@@ -1,19 +1,19 @@
 import { IStructure } from '../../../../core/models/structure/structure.model';
+import { getServerImagesUrl } from '../../../utilities/format-server-endpoints.utility';
 import './structure-thumbnail.component.css';
 
 
-interface ExperienceStructureSelectionProps {
-    structure: IStructure
+export interface StructureThumbnailProps {
+    structure: IStructure;
+    onClick: (structureId: IStructure) => void
 }
 
 
-export const StructureThumbnail:React.FC<ExperienceStructureSelectionProps> = (props) => {
-
-    const structureImage = "https://corona.texelbit.com:9445/uploads/FormatSizeTexture/323f9529-d86f-4845-a269-abf05b98799c.png";
+export const StructureThumbnail:React.FC<StructureThumbnailProps> = (props) => {
 
     return(
-        <div className="structure-thumbnail">
-            <div className="rounded m-auto" style={{ backgroundImage: `url(${props.structure.source})` }}/>
+        <div className="structure-thumbnail text-center" onClick={() => props.onClick(props.structure)}>
+            <div className="rounded m-auto" style={{ backgroundImage: `url(${getServerImagesUrl(props.structure.source)})` }}/>
             <small>{props.structure.name}</small>
         </div>
     );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Singleton from "../../../../core/patterns/singleton";
 
 
 interface ExperienceMosaicBricksProps
@@ -12,14 +13,19 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
 
 
     const [groutImageCss, setGroutImageCss] = useState("");
-    // const []
+    const [bondPattern, setBondPattern] = useState(true);
+    const [rowsAmount, setRowsAmount] = useState(0);
 
 
     useEffect(() => {
         if (props.grout)
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
 
-        
+        let selectedFormat = Singleton.getInstance().currentFormat;
+        let hasBoundPattern = selectedFormat == undefined || selectedFormat.id == "1";
+
+        setRowsAmount(hasBoundPattern ? 6 : 4);
+        setBondPattern(hasBoundPattern);
     }, [props]);
 
 
@@ -53,33 +59,18 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                 `}
             </style>
 
-            <div key={"mosaicBrickRow1"} className="brick-row">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div key={"mosaicBrickRow2"} className="brick-row-offset">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div key={"mosaicBrickRow3"} className="brick-row">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div key={"mosaicBrickRow4"} className="brick-row-offset">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div key={"mosaicBrickRow5"} className="brick-row">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
-            <div key={"mosaicBrickRow6"} className="brick-row-offset">
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-            </div>
+            {
+                Array.from({ length: rowsAmount }).map((_, index) => {
+
+                    let rowOffset = index % 2 != 0 && bondPattern;
+
+                    return <div key={`mosaicBrickRow${index}`} className={rowOffset ? "brick-row-offset" : "brick-row"}>
+                        <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                        <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
+                        {rowOffset && <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>}
+                    </div>
+                })
+            }
         </div>
     );
 }
