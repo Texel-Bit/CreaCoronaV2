@@ -1,11 +1,11 @@
-import { StructureThumbnail } from "./structure-thumbnail/structure-thumbnail.component";
+import { StructureThumbnail, StructureThumbnailProps } from "./structure-thumbnail/structure-thumbnail.component";
 import "./experience-structure-selection.css";
 import { IStructure } from "../../../core/models/structure/structure.model";
 import React from "react";
 
 
 interface ExperienceStructureSelectionProps {
-    structures: IStructure[]
+    structures: StructureThumbnailProps[];
 }
 
 
@@ -21,7 +21,10 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
                 
                 {
                     props.structures.map(struct => {
-                        return <StructureThumbnail structure={struct}/>
+                        return <StructureThumbnail 
+                                key={`structureThumbnail${struct.structure.id}`}
+                                structure={struct.structure}
+                                onClick={struct.onClick}/>
                     })
                 }
 

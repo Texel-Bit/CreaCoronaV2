@@ -1,6 +1,9 @@
 
 .structure-thumbnail div {
-    width: 45px !important;
-    height: 30px;
+    width: 56px !important;
+    height: 33px;
     border: 2px solid var(--color-middle);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
