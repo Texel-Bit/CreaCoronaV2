@@ -106,7 +106,7 @@ function SelectFormat(newFormat:IFormat)
 function SelectStructure (newStructure: IStructure)
 {
     Singleton.getInstance().SelectStructure(newStructure);
-
+    updateCanvas();
 }
 
 
@@ -152,8 +152,6 @@ function MosaicGroutChanged(currrentGrout:IGrout)
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
         setDesignTypes(currentDesignTypes);
 
-        let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? []; 
-
         Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
         Singleton.getInstance().updateMosaicFunc = updateMosaic;
         Singleton.getInstance().updateFormatsFunc = UpdateFormats;
@@ -181,12 +179,10 @@ function MosaicGroutChanged(currrentGrout:IGrout)
         
     }
 
-    function updateMosaic(HTMLElement:HTMLElement[]) {
-        console.log("Update mosaic")
-        setSelectedDesigns(HTMLElement)
-        console.log(HTMLElement)
+    function updateMosaic(mosaicElements:HTMLElement[]) {
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
+        setSelectedDesigns(mosaicElements)
     }
     
 

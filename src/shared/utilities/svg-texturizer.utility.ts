@@ -48,34 +48,35 @@ class SvgTexturizer {
     }
 
 
-    public texturize = async (svgUrl: string, options: TexturizeSvgOptions[]) => {
-        const svgElement = await this.loadSvgByPath(svgUrl);
-        const clonedSvg = this._buildClonedSvgElement(svgElement);
+    public texturize = async (id: number, svgUrl: string, options: TexturizeSvgOptions[]) => {
+        const svgElement = await this._buildSvgElement(svgUrl);
        
-        options.map((option,index) => {
+        options.forEach((option) => {
             
             if (option.layerId != "" ) {
-                let patternId = this._addSvgPattern(clonedSvg, option);
-                let currentLayer = clonedSvg.querySelector(`#${option.layerId}`);
+
+                console.log("RECORRIENDO TEXTURIZADOR => ", option);
+                let patternId = this._addSvgPattern(svgElement, option);
+                let currentLayer = svgElement.querySelector(`#${option.layerId}`);
+
                 if (currentLayer) {
                     currentLayer.setAttribute('class', '');
-                    // currentLayer.classList = new DOMTokenList();
                     currentLayer.setAttribute('fill', `url(#${patternId})`);
                 }
             }
-
         });
-        
-        return clonedSvg;
+       
+        svgElement.setAttribute("id", id.toString());
+        return svgElement;
     }
 
 
-    public addFilter = (svgElement: HTMLElement, filterUrl: string): HTMLElement => {
-        const clonedSvg = svgElement.cloneNode(true) as HTMLElement;
-        let filterId = this._addSvgFilter(clonedSvg, filterUrl);
-        const imageTagsList = clonedSvg.querySelectorAll('defs pattern image');
-        const imagePathList = clonedSvg.querySelectorAll('path');
-        const imageRectList = clonedSvg.querySelectorAll('rect');
+    public addFilter = (svgElement: HTMLElement, filterUrl: string) => {
+        let filterId = this._addSvgFilter(svgElement, filterUrl);
+
+        const imageTagsList = svgElement.querySelectorAll('defs pattern image');
+        const imagePathList = svgElement.querySelectorAll('path');
+        const imageRectList = svgElement.querySelectorAll('rect');
 
         Array.from(imageTagsList).map((image, index) => {
             image.setAttribute('filter', `url(#${filterId})`);
@@ -91,8 +92,41 @@ class SvgTexturizer {
         Array.from(imageRectList).map((image, index) => {
             image.setAttribute('filter', `url(#${filterId})`);
         });
+    }
 
-        return clonedSvg;
+
+    public rotateImage = (svgElement: HTMLElement, degrees: number) => {
+        // let rotationContent = `
+        //     <g transform="{rotate(${degrees} 100 100)}">
+        //         <circle cx="100" cy="100" r="50" fill="blue" />
+        //     </g>`;
+
+        // svgElement.insertAdjacentHTML('beforeend', rotationContent);
+        // svgElement.setAttribute('style', `transform: rotate(${degrees}deg)`);
+
+        
+        Array.from(svgElement.children). filter(pathElement => {
+            if (pathElement.tagName.toLowerCase() === 'path')
+            {
+                let pathId = pathElement.getAttribute('id');
+
+                if (pathId?.includes('layer'))
+                {
+                    let centerX = 50;
+                    let centerY = 50;
+                    // console.log("SVG ELEMENT WIDTH => ", centerX, centerY);
+                    pathElement.setAttribute('transform', `rotate(${degrees} ${centerX} ${centerY})`);
+                }
+            }
+        }) as SVGPathElement[];
+
+        // console.log("ELEMENTOS A ROTAR", elementsToRotate.length);
+
+        // if (elementToRotate) {
+        //     const centerX = Number(elementToRotate.getAttribute('cx'));
+        //     const centerY = Number(elementToRotate.getAttribute('cy'));
+        //     elementToRotate.setAttribute('transform', `rotate(${degrees} ${centerX} ${centerY})`);
+        // }
     }
 
 
@@ -100,7 +134,6 @@ class SvgTexturizer {
         this._addBiselStyles(svgElement);
         this._addBiselGradients(svgElement);
         this._addBiselEdges(svgElement);
-
     }
 
     private _addBiselStyles = (svgElement: HTMLElement) => {
@@ -195,16 +228,16 @@ class SvgTexturizer {
     }
 
 
-    private _buildClonedSvgElement = (svgElement: HTMLElement): HTMLElement => {
-        const clonedSvgElement = svgElement.cloneNode(true) as HTMLElement;
+    private _buildSvgElement = async (svgUrl: string): Promise<HTMLElement> => {
+        const svgElement = await this.loadSvgByPath(svgUrl);
 
-        var xlinkNamespace = clonedSvgElement.getAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink');
-        xlinkNamespace || clonedSvgElement.setAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink', this.LINK_NAMESPACE);
+        var xlinkNamespace = svgElement.getAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink');
+        xlinkNamespace || svgElement.setAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink', this.LINK_NAMESPACE);
 
-        let defsElement = this._getElementDefs(clonedSvgElement);
-        clonedSvgElement.prepend(defsElement);
+        let defsElement = this._getElementDefs(svgElement);
+        svgElement.prepend(defsElement);
 
-        return clonedSvgElement;
+        return svgElement;
     }
 
 
