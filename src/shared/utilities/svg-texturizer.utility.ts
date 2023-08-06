@@ -57,7 +57,6 @@ class SvgTexturizer {
             if (option.layerId != "" ) {
                 let patternId = this._addSvgPattern(clonedSvg, option);
                 let currentLayer = clonedSvg.querySelector(`#${option.layerId}`);
-
                 if (currentLayer) {
                     currentLayer.setAttribute('class', '');
                     // currentLayer.classList = new DOMTokenList();

@@ -138,6 +138,12 @@ updateViewStatusFunc: Array<() => void> = [];
 
 }
 
+public SelectStructure(structure:IStructure)
+{
+    this.currentStructure=structure;
+    this.TexturizeMosaic();
+}
+
 public ChangeBrickFormat(format:IFormat)
 {
     if(this.currentDesignList)
@@ -360,76 +366,77 @@ public ClearBundles()
     }
 
     private async TexturizeMosaic() {
-        let TexturizedOptions: TexturizeSvgOptions[];
-        let TexturizedOptionsInverted: TexturizeSvgOptions[];
+        // Create a new array by slicing currentColorList
+        let newColorTemp = this.currentColorList?.slice();
     
-
-        if(this.currentColorList)
-          {
-              if(this.currentColorList?.length>5)
-              {
-                  this.currentColorList=this.currentColorList.slice(0,5);
-              }
-          }
-
-          console.log("Current Color List size ",this.currentColorList?.length)
-        if(this.currentColorList) {
+        if (newColorTemp) {
+            if (newColorTemp?.length > 5) {
+                // Create a new array by slicing the first 5 elements of newColorTemp
+                newColorTemp = [...newColorTemp.slice(0, 5)];
+            }
+        }
+    
+        if (newColorTemp) {
             let texturizer = new SvgTexturizer();
     
+            // Creating new arrays for TexturizedOptions and TexturizedOptionsInverted
+            let TexturizedOptions = [...newColorTemp.map((color, index) => {
+                return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
+            })];
+    
+            let TexturizedOptionsInverted = [...newColorTemp.slice().reverse().map((color, index) => {
+                return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
+            })];
 
-            TexturizedOptions = this.currentColorList.map((color,index) => {
-                return {layerId: `layer${index}`,textureUrl: getServerImagesUrl(color.source),tile: 1}
-            });
+            let texturizedDesign:any;
 
-                const currentIndex=this.currentColorList.length;
-
-                TexturizedOptionsInverted = this.currentColorList.slice().reverse().map((color, index) => {
-                    return {layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1};
-                });
-
-
-            if(this.currentDesignList)
-            {
-                let designPromises = this.currentDesignList.map(async(design,index) => {
-                    
-                    let temporalTexturizedOptions = TexturizedOptions.slice();
+            if (this.currentDesignList) {
+                // Create a new array for designPromises
+                let designPromises = [...this.currentDesignList.map(async (design, index) => {
                     if (this.chessMode) {
-                        
-                        if(index==1 ||index==2)
-                        {
-                           
-                            temporalTexturizedOptions= TexturizedOptionsInverted
-                            console.log(TexturizedOptionsInverted);
+                       
+                        if (index === 1 || index === 2) {
+                            texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptionsInverted);
                         }
                         else
                         {
-                            console.log(TexturizedOptions);
+                            texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
                         }
+
+                        return texturizedDesign;
+                    }
+                    else{
+                        texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
+                    }
+                    return texturizedDesign;
+                })];
+    
+                // Create a new array for TexturizedDesigns
+                let TexturizedDesigns = [...await Promise.all(designPromises)]; // wait for all promises to resolve
+
+                
+                TexturizedDesigns.forEach((design) => {
+                    if(this.currentStructure)
+                    {
+                        
+                        design=texturizer.addFilter(design,getServerImagesUrl(this.currentStructure.source));
                     }
                     
-                    let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), temporalTexturizedOptions);
-                    return texturizedDesign;
+                    if (this.selectedDesignType?.id == 2) {
+                        texturizer.addBisels(design);
+                    }
+                   
                 });
 
-                let TexturizedDesigns: HTMLElement[] = await Promise.all(designPromises); // wait for all promises to resolve
-                
-                if(this.selectedDesignType?.id==2)
-                {
-                    TexturizedDesigns.map((design)=>{
-                        texturizer.addBisels(design);
-                    })
-                    
+               
+    
+                if (this.updateMosaicFunc) {
+                    this.updateMosaicFunc([...TexturizedDesigns]);
                 }
-
-                if(this.updateMosaicFunc)
-                {
-                    this.updateMosaicFunc(TexturizedDesigns);
-                }
-                
             }
-           
         }
     }
+    
 
     public InitializeColors(colors:IColor[])
     {

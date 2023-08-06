@@ -105,7 +105,8 @@ function SelectFormat(newFormat:IFormat)
 
 function SelectStructure (newStructure: IStructure)
 {
-    
+    Singleton.getInstance().SelectStructure(newStructure);
+
 }
 
 
@@ -166,7 +167,6 @@ function MosaicGroutChanged(currrentGrout:IGrout)
     }, []);
 
 
-    
 
     const updateCanvas =  () => {
          setTimeout(async() => {
@@ -182,7 +182,9 @@ function MosaicGroutChanged(currrentGrout:IGrout)
     }
 
     function updateMosaic(HTMLElement:HTMLElement[]) {
+        console.log("Update mosaic")
         setSelectedDesigns(HTMLElement)
+        console.log(HTMLElement)
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
     }
