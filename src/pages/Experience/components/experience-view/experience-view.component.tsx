@@ -407,7 +407,7 @@ function SetupsTitles()
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-5 h-100">
                             <ExperienceFormatSelection formats={formats ?? []} />
-                            <InitQuotationForm/>
+                            <InitQuotationForm states={Singleton.getInstance().currentStateList ?? []}/>
                         </div>
                     </div>
                 }
@@ -421,7 +421,7 @@ function SetupsTitles()
                 <ExperienceCanvas 
                     backgroundImage={canvasImage}
                     mask={canvasMask}
-                    perspective={1000}
+                    perspective={500}
                     perspectiveOrigin={{
                         X: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.x,
                         Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.y

@@ -1,7 +1,14 @@
 import { useRef, useState } from 'react';
-import './login.css'
+import './modalCotization.css'
+import { FaWindowClose } from 'react-icons/fa';
 
-export const Login:React.FC = () => {
+
+interface QuotationModalProps {
+    closeModalEvent: () => void;
+}
+
+
+export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
 
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
@@ -23,7 +30,11 @@ export const Login:React.FC = () => {
             <div className="modalCotizationContent">
               <div className='fristContent'>
                 {/* Close Modal */}
-                <h2 className='closeModal'>X</h2>
+                {/* <h2 className='closeModal' onClick={props.closeModalEvent}>X</h2> */}
+                <button type="button" className='closeModal border-0 btn button btn-lg' onClick={props.closeModalEvent}>
+                    <FaWindowClose size={30}/>
+                </button>
+
                 {/* Titles&Image */}
                 <div className='titlesContainer'>
                     <img className='titleImage'></img>
@@ -154,7 +165,7 @@ export const Login:React.FC = () => {
                         Acepta todas las condiciones
                     </label>
 
-                    <button className='buttonsCotizar cancelCoti' type="button" onClick={handleSubmit}>
+                    <button className='buttonsCotizar cancelCoti' type="button" onClick={props.closeModalEvent}>
                         Cancelar
                     </button>
 
