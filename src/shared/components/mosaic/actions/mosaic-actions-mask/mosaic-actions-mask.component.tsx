@@ -51,7 +51,7 @@ export const MosaicActionsMask = () => {
 
             {
                 itemsCongig.map(itemConf => <>
-                    <div className={`mosaic-actions-mask-item ${itemConf.selected ? 'selected' : ''}`} 
+                    <div className={`mosaic-actions-mask-item cursor-pointer cursor-pointer-hover ${itemConf.selected ? 'selected' : ''}`} 
                          onClick={() => onActionItemClick(itemConf.index)}>
                         <button><SwapVertIcon /></button>
                         <button><RefreshIcon /></button>

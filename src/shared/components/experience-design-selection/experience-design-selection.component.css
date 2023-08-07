@@ -1,5 +1,6 @@
 .design-types-selection-group {
-    gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .design-types-selection-group .btn {

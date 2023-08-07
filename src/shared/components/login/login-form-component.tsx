@@ -107,16 +107,16 @@ export const LoginForm:React.FC = () => {
                 </div>
             </div>
             
-            <Button 
+            <button
                 type="button" 
-                className="button-background"
+                className="button-background btn-corona btn-corona-primary"
                 onClick={handleLogin}
                 >
                 {btn=='load'? <div className="spinner-border spinner-border-sm" role="status">
                                 <span className="visually-hidden">Cargando...</span>
                             </div> 
                         : <span>Iniciar Sesión</span>}
-            </Button>
+            </button>
 
         </Form>
     );

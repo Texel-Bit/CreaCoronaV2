@@ -6,6 +6,7 @@ export interface MosaicActionBarButtonProps {
     icon: IconType;
     text: string;
     styleColor: string;
+    classButton: string;
 }
 
 
@@ -18,7 +19,7 @@ export const MosaicActionBarButton: React.FC<MosaicActionBarButtonProps> = (prop
 
     return(
         <div className='d-block-inline text-center'>
-            <button type="button" className="btn btn-primary" onClick={props.buttonClick} style={buttonStyle}> 
+            <button type="button" className={'btn-corona btn-corona-icon '+props.classButton} onClick={props.buttonClick} style={buttonStyle}> 
                 <props.icon />
             </button>
             <p className='m-0'>{props.text}</p>

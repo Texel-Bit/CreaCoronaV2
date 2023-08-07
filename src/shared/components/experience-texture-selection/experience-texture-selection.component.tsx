@@ -34,7 +34,7 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
             <div className="border border-1 p-2 textures-containter-grid-content">
                 <div className="textures-containter-grid gap-1">
                     {colorArray.map((color, index) => (
-                        <div key={index} style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }} onClick={(e:any)=>{
+                            <div key={index} className='cursor-pointer cursor-pointer-hover' style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }} onClick={(e:any)=>{
                             const coloractual = e.target.style.backgroundImage;
                             Singleton.getInstance().ChangeSelectedColor( color);
                             const elementSelected=document.getElementById(`${sessionStorage.getItem('BumbleId')}`)

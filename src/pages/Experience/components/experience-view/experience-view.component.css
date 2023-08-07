@@ -8,18 +8,24 @@
 
 .experience-steeps-button {
     color: var(--color-middle);
-    border-color: var(--color-middle);
+    text-transform: uppercase;
+    border-radius: 8px !important;
+    transition: .3s ease !important;
+    border: 2px solid var(--color-middle);
+    font-weight: 600;
 }
 
 .experience-steeps-button:hover {
-    background-color: var(--color-middle);
+    background-color: #CEEEFA;
+    color: var(--color-middle) !important;
+    border: 2px solid var(--color-middle) !important;
 }
 
 .experience-steeps-button:active {
-    border-color: var(--color-middle) !important;
-    background-color: var(--color-middle) !important;
+    background-color: #B0E3F7 !important;
+    color: #213C65 !important;
+    border: 2px solid #213C65 !important;
 }
-
 
 .textures-selection-column {
     display: grid;
