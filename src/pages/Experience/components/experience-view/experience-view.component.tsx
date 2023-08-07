@@ -150,13 +150,22 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
     useEffect(() => {
+        
         if(Singleton.getInstance().currentGrout)
         {
             Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
         }
 
+
+
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
+        
+        
+
+        console.log(currentDesignTypes)
+        
         setDesignTypes(currentDesignTypes);
+
 
         Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
         Singleton.getInstance().updateMosaicFunc = updateMosaic;
@@ -310,7 +319,7 @@ function SetupsTitles()
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.id == 1 && selectedDesigns&&
                                     <MosaicComponent 
                                         mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout}/>}
                                         actions={false}/>

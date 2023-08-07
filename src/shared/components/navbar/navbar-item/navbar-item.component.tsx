@@ -1,6 +1,6 @@
 import { FormCheck } from "react-bootstrap";
 import {navbarItemsProps} from '../../../../core/models/navBarItems/service-navBar';
-import { ViewStatus } from "../../../enums/routes.enum";
+import { ExperienceViews, ViewStatus } from "../../../enums/routes.enum";
 import { useEffect, useState } from "react";
 import Singleton from "../../../../core/patterns/singleton";
 
@@ -103,7 +103,24 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
 
     function ClickButton()
     {
-        console.log("Click Button");
+        const currentExperienceView = Singleton.getInstance().currentExperienceView??ExperienceViews.EnvironmentType;
+        const propExperienceView = props.experienceView;
+        
+        // Ensure they are both defined and part of the enum
+        if (currentExperienceView in ExperienceViews && propExperienceView in ExperienceViews) {
+            // Cast to numbers and compare
+            if (+currentExperienceView >= +propExperienceView) {
+                if(currentExperienceView!=propExperienceView)
+                {
+                    Singleton.getInstance().ChangeExperienceView(propExperienceView);
+                }
+            }
+            else
+            {
+                
+            }
+        }
+       
     }
 
     return (

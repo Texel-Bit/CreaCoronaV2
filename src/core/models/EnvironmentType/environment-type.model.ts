@@ -4,6 +4,6 @@ export interface IEnvironmentType {
     id:number;
     source:string;
     name:string;
-    designTypesIDS:any[];
+    designTypesIDS:number[];
     designTypes:IDesignType[]|null;
 }

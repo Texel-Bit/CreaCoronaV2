@@ -197,54 +197,26 @@ public RotateCurrentMosaicObject() {
 
 
   public ValidateViewCompleteStatus(currentView:ExperienceViews) {
+    
+
     let viewComplete =false;
 
-    if(currentView==ExperienceViews.EnvironmentType)
-    {
-        if(this.currentEnvironmentType)
-        {
-            return true;
+    const currentExperienceView = Singleton.getInstance().currentExperienceView??ExperienceViews.EnvironmentType;
+    const propExperienceView = currentView;
+    
+    // Ensure they are both defined and part of the enum
+    if (currentExperienceView in ExperienceViews && propExperienceView in ExperienceViews) {
+        // Cast to numbers and compare
+        if (+currentExperienceView >= +propExperienceView) {
+            viewComplete= true;
         }
-    }
-
-    if(currentView==ExperienceViews.Environment)
-    {
-        if(this.currentEnvironment)
+        else
         {
-            return true;
-        }
-    }
-
-    if(currentView==ExperienceViews.Design)
-    {
-
-        if(this.currentDesignList )
-        {
-            if(this.currentDesignList.length>0 )
-            {
-                return true;
-            }
-           
-        }
-    }
-
-    if(currentView==ExperienceViews.Color)
-    {
-        if(this.currentColorList&& this.currentGrout)
-        {
-            return true;
-        }
-    }
-
-    if(currentView==ExperienceViews.Format)
-    {
-        if(this.currentFormat && this.currentStructure && (this.simulationArea||(this.simulationWidht && this.simulationHeight)))
-        {
-            return true
+            viewComplete= false;
         }
     }
    
- 
+ this.EvaluatePercentage();
     return viewComplete;
 
 
@@ -337,51 +309,18 @@ public ClearBundles()
     public EvaluatePercentage() {
         if (this.evaluatePercentageFunc) {
             
-            const maxPercentageValue=5;
+            let Percentage=0;
+            const MaxPercentage=5;
 
-            let currProggressDone=0;
+            if (+this.currentExperienceView!-1) 
+            {
+                Percentage=+this.currentExperienceView!-1
+            }
 
-            if(this.currentEnvironment)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentEnvironmentType)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentDesignList)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentColorList && this.currentGrout)
-            {
-                currProggressDone+=1;
-            }
+            Percentage=Percentage*100/MaxPercentage;
+           
             
-            let AreaComplete=false;
 
-            if(this.simulationArea)
-            {
-                AreaComplete=true;
-            }
-            else if(this.simulationWidht && this.simulationHeight)
-            {
-                AreaComplete=true;
-            }
-
-            if(this.currentFormat && this.currentStructure &&AreaComplete)
-            {
-                currProggressDone+=1;
-            }
-           
-           
-           
-
-            let Percentage=currProggressDone*100/maxPercentageValue;
-            if(Percentage>100)
-            {
-                Percentage=100;
-            }
             this.evaluatePercentageFunc(Percentage);
         }
     }
