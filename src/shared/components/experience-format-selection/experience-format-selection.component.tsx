@@ -12,7 +12,7 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
     return(
         <div className='mw-100 overflow-hidden'>
 
-            <div className="background-color-middle px-3 w-50 rounded-top">
+            <div className="background-color-middle px-3 py-1 w-50 rounded-top">
                 <h6 className="m-0 color-white fw-normal">Formato</h6>
             </div>
 

@@ -19,6 +19,7 @@ import revestimiento from '../../../assets/icons/Revestimiento.svg';
 import color from '../../../assets/icons/Color.svg';
 import calcula from '../../../assets/icons/Calcular.svg';
 import Singleton from "../../../core/patterns/singleton";
+import { Height } from "@material-ui/icons";
 
 
 interface propValue {number:number; sendDataParent:(data:number)=>void }
@@ -68,7 +69,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
                 
                 <NavbarItem
                     key={`navbarItem${1}`}
-                    text='selecciona la superficie'
+                    text='Selecciona la superficie'
                     imagen={superficie}
                     experienceView={ExperienceViews.EnvironmentType}/>
 
@@ -92,7 +93,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
                 <NavbarItem
                     key={`navbarItem${5}`}
-                    text='Define la Cantidad y cotiza'
+                    text='Define la cantidad y cotiza'
                     imagen={calcula}
                     experienceView={ExperienceViews.Format}/>
 
@@ -107,7 +108,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
                 <div className="d-flex gap-3 align-items-center">
 
                     <img
-
+                        style={{height: "24px"}}
                         src={ImageAvatar}
                         className="d-inline-block align-top h-1"
                         alt="Usuario conectado"/>

@@ -110,7 +110,7 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}
         
     return(
-        <div className="h-100 d-flex">
+        <div className="h-100 d-md-flex d-grid vw-100">
             
             <div className="col-6 h-100 px-5 video-tutorial-container">
                 <VideoTutorialCaption/>

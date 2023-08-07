@@ -203,7 +203,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                                 onChange={(event) => handleDesignTypeChange(event, designType)}/>
                             <label
                                 key={`designTypeTagText${designType.id}`}
-                                className="btn btn-sm btn-outline-primary rounded-0 rounded-top pb-0 px-3" 
+                                className="btn-corona-secondary rounded-0 rounded-top pb-0 px-3 cursor-pointer"
+                                style={{border: '1px solid #0069B4', textAlign: 'center'}}
                                 htmlFor={designType.id.toString()}>
                                 {designType.name}
                             </label>
@@ -216,7 +217,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
                     {
                         designColors.map(design => {
-                            return <img 
+                            return <img
+                                className='cursor-pointer cursor-pointer-hover'
                                 key={`designTypeTexture${design.id}`}
                                 onClick={()=>SelectNewDesign(design)}
                                 src={getServerImagesUrl(design.source)}/>

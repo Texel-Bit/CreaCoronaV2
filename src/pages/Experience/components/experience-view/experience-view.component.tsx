@@ -66,12 +66,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         descriptionFull:<h6>Selecciona el color de tu preferencia de acabado brillante</h6>
     });
 
+
+
     dict.set(ExperienceViews.Format, {
-        title: "DEFINE LA CANTIDAD Y COTIZA",
+        title: "Define la cantidad y cotiza",
         icon: OpenIco,
-        description: <h6>Selecciona el Formato y Estructura de tu revestimiento, ingresa las Medidas de tu espacio y Cotiza</h6>,
-        descriptionFull:<h6></h6>
-    });
+        description: <h6>Selecciona el formato y estructura de tu revestimiento, <br></br>ingresa las Medidas de tu espacio y cotiza</h6>,
+        descriptionFull:<h6></h6>    });
 
 
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
@@ -150,7 +151,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
     useEffect(() => {
-        
+
         if(Singleton.getInstance().currentGrout)
         {
             Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
@@ -160,9 +161,6 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
         
-        
-
-        console.log(currentDesignTypes)
         
         setDesignTypes(currentDesignTypes);
 
@@ -290,12 +288,12 @@ function SetupsTitles()
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex pt-4 h-100 justify-content-between align-items-start overflow-hidden">
+                    <div className="d-flex pt-5 h-100 justify-content-between align-items-start overflow-hidden">
                         <div className="h-100 col-6">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
-                        <div className="col-5 d-flex align-items-center">
+                        <div className="col-5 d-flex align-items-start">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
@@ -305,8 +303,8 @@ function SetupsTitles()
                                             actions={false} />
                                         <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "", classButton: "btn-corona-destructive" }
                                             ]}/>
                                     </>
                                 }
@@ -333,7 +331,7 @@ function SetupsTitles()
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex pt-4 h-100 justify-content-between overflow-hidden">
+                    <div className="d-flex pt-5 h-100 justify-content-between overflow-hidden">
                         <div className="textures-selection-column col-5 h-100">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection colorArray={
@@ -344,7 +342,7 @@ function SetupsTitles()
                         />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
-                        <div className="col-5 d-flex align-items-center">
+                        <div className="col-5 d-flex align-items-start">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
@@ -385,7 +383,7 @@ function SetupsTitles()
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
+                    <div className="d-flex pt-5 h-100 justify-content-between overflow-hidden">
                         <div className="col-5 d-flex">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}

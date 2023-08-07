@@ -154,7 +154,7 @@ export const ExperienceColorPaletteSelection = () => {
                     <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(3) }} id="circle-option4" className='color-palette-item rounded-circle' ></div>
                     <div onClick={(e:any)=>{objetcSelected= e.target.id ; selectoptionBumble(4) }} id="circle-option5" className='color-palette-item rounded-circle' ></div>
                 </div>
-                <button type='button' className='btn btn-sm btn-primary select-color-palette-btn py-0 px-1'>
+                <button type='button' className='btn btn-sm btn-corona-primary select-color-palette-btn py-0 px-1'>
                     <FaCaretDown />
                 </button>
             </div>
