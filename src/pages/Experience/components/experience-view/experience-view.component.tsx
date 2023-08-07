@@ -82,6 +82,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [mosaicGrout, setMosaicGrout] = useState("");
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
     const [selectedFormatSize, setSelectedFormatSize] = useState(1);
+    const [selectedPerspective, setSelectedPerspective] = useState(500);
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
     
     
@@ -192,8 +193,14 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
                 let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
                 setSelectedFormatSize(newSize);
+                
+                let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
+                setSelectedPerspective(newPerspective);
+
                 let elementSvg = await convertHtmlToImage(element);
                 setCanvasImage(elementSvg ?? "");
+
+                
             }
 
         }, 500);
@@ -364,9 +371,9 @@ function SetupsTitles()
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
                                  <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "",classButton: "btn-corona-primary" },
                                                /* { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },*/
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                         }
 
@@ -428,10 +435,10 @@ function SetupsTitles()
                 <ExperienceCanvas 
                     backgroundImage={canvasImage}
                     mask={canvasMask}
-                    perspective={500}
+                    perspective={selectedPerspective}
                     perspectiveOrigin={{
-                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.x,
-                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.y
+                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
+                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
                     }}
                     rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
                     rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
