@@ -1,5 +1,5 @@
 .environment-thumbnail-image {
-    height: 260px;
+    height: 240px;
     width: 320px;
     background-size: cover;
     background-position: center;
@@ -7,3 +7,9 @@
     cursor: pointer;
 }
 
+@media screen and (width:390px) and (height: 844px) {
+    .environment-thumbnail-image {
+        height: 118px;
+        width: 200px;
+    }
+}

@@ -212,11 +212,11 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
     return(
 
-        <div className="d-flex mh-100 overflow-hidden">
+        <div className="d-flex mh-100 flex-column flex-md-row pt-4 pt-md-0 px-2 px-md-0">
 
-            <div className="w-50 p-3 px-5 h-100 experience-behavior-container">
+            <div className="w-100 w-md-50 p-md-3 px-md-5 h-100 experience-behavior-container experience-behavior-container--modifier">
 
-                <div className="d-flex align-items-start">
+                <div className="d-flex align-items-start header-view">
                     <div className="col-2">
                         <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
                     </div>
@@ -240,12 +240,12 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex pt-5 h-100 justify-content-between align-items-start overflow-hidden">
-                        <div className="h-100 col-6">
+                    <div className="d-flex flex-column flex-md-row pt-md-5 pt-2 h-100 justify-content-md-between align-items-start overflow-hidden gap-3 gap-md-0">
+                        <div className="h-md-100 col-md-6 w-100">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
-                        <div className="col-5 d-flex align-items-start">
+                        <div className="col-5 d-flex align-items-start mx-auto mx-md-none">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
@@ -283,8 +283,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex pt-5 h-100 justify-content-between overflow-hidden">
-                        <div className="textures-selection-column col-5 h-100">
+                    <div className="d-flex flex-column flex-md-row pt-2 pt-md-5 h-100 justify-content-md-between overflow-hidden gap-4 gap-md-0">
+                        <div className="textures-selection-column col-12 col-md-5 h-md-100 position-relative">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection colorArray={
                                 Singleton.getInstance().getColorDataManager().GetAllColors(
@@ -294,7 +294,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                         />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
-                        <div className="col-5 d-flex align-items-start">
+                        <div className="col-5 d-flex align-items-start mx-auto mx-md-none">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
@@ -335,8 +335,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-5 h-100 justify-content-between overflow-hidden">
-                        <div className="col-5 d-flex">
+                    <div className="d-flex pt-4 pt-md-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row">
+                        <div className="col-8 col-md-5 d-flex mx-auto mx-md-none">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
@@ -364,7 +364,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                                 }
                             </div>
                         </div>
-                        <div className="textures-selection-column d-flex flex-column col-5 h-100">
+                        <div className="textures-selection-column d-flex flex-column col-8 col-md-5 mx-auto mx-md-none h-md-100 pt-4 pt-md-0">
                             <ExperienceFormatSelection formats={formats ?? []} />
                             <InitQuotationForm/>
                         </div>
@@ -376,7 +376,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
             </div>
 
-            <div className="w-50 h-100">
+            <div className="w-100 w-md-50 h-100">
                 <ExperienceCanvas 
                     backgroundImage={canvasImage}
                     mask={canvasMask}
