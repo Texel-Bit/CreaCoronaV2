@@ -80,7 +80,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
                 <NavbarItem
                     key={`navbarItem${3}`}
-                    text='Diseña tu revestimiento'
+                    text='Diseña el revestimiento'
                     imagen={revestimiento}
                     experienceView={ExperienceViews.Design}/>
 
@@ -92,7 +92,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
                 <NavbarItem
                     key={`navbarItem${5}`}
-                    text='Calcula tu espacio'
+                    text='Define la Cantidad y cotiza'
                     imagen={calcula}
                     experienceView={ExperienceViews.Format}/>
 

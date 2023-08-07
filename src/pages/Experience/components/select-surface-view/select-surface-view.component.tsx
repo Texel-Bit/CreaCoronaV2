@@ -10,6 +10,8 @@ import { getAllEnvironmentType } from "../../../../core/services/environment.ser
 import { getAllDesignType, getAllGrouts } from "../../../../core/services/design.service";
 import {IDesignType} from "../../../../core/models/designType/design-type.model";
 import { IGrout } from "../../../../core/models/grout/grout.model";
+import { getAllState } from "../../../../core/services/localization.service";
+import { IState } from "../../../../core/models/State/state.model";
 
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
@@ -65,6 +67,24 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
             
                 });
 
+                const states=await getAllState();
+
+               
+
+                states.data.forEach((element2: any) => {
+                 let currentState: IState = {
+                     stateName:element2.stateName,
+                     id:element2.idstate,
+                    
+                   };
+                   
+                   if ( singleton.currentStateList && ! singleton.currentStateList.some(item => item.id === currentState.id)) {
+                    singleton.currentStateList?.push(currentState)
+                  }
+
+                 });
+
+  
                 const grouts=await getAllGrouts();
 
                 grouts.data.forEach((grout: any) => {

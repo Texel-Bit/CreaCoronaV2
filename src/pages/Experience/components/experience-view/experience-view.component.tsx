@@ -44,7 +44,8 @@ interface contentData
 {
     title:string;
     icon:string;
-    description:ReactElement
+    description:ReactElement,
+    descriptionFull:ReactElement
 }
 
 export const ExperienceView:React.FC<currentExperienceView>=(props) => {
@@ -52,21 +53,24 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     let dict = new Map<ExperienceViews, contentData>();
 
     dict.set(ExperienceViews.Design, {
-        title: "Diseña tu revestimiento",
+        title: "Diseña el revestimiento",
         icon: CozyIco,
-        description: <h6>Selecciona <b className="color-middle">1 opción</b> de mosaico</h6>
+        description: <h6>Selecciona hasta <b className="color-middle">4 opciónes</b> de grafica</h6>,
+        descriptionFull:<h6>Seleccionaste una opción para revestimiento sin grafica</h6>
     });
     
     dict.set(ExperienceViews.Color, {
         title: "Agrega color a tu diseño",
         icon: PalletIco,
-        description: <h6>Selecciona <b className="color-middle">1 opción</b> de color plano pensados para ti.</h6>
+        description: <h6>Selecciona hasta 5 colores distintos para aplicarle a tu diseño</h6>,
+        descriptionFull:<h6>Selecciona el color de tu preferencia de acabado brillante</h6>
     });
 
     dict.set(ExperienceViews.Format, {
-        title: "Calcula tu espacio",
+        title: "DEFINE LA CANTIDAD Y COTIZA",
         icon: OpenIco,
-        description: <h6>Agrega las medidas de tu espacio para generar la cotización</h6>
+        description: <h6>Selecciona el Formato y Estructura de tu revestimiento, ingresa las Medidas de tu espacio y Cotiza</h6>,
+        descriptionFull:<h6></h6>
     });
 
 
@@ -78,6 +82,10 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
     const [selectedFormatSize, setSelectedFormatSize] = useState(1);
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
+    
+    
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState<ReactElement>();
     
 
     const [colorType, setColorType] = useState(1);
@@ -182,6 +190,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
             }
 
         }, 500);
+
+        SetupsTitles();
     }
 
     function updateMosaic(mosaicElements:HTMLElement[]) {
@@ -207,9 +217,39 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
             if (experieceView == ExperienceViews.Format)
                 Singleton.getInstance().UpdateFormats();
+
+            SetupsTitles();
+           
         }
     }
 
+function SetupsTitles()
+{
+   const experieceView=Singleton.getInstance().currentExperienceView??ExperienceViews.Environment;
+
+    setTitle(dict.get(experieceView)?.title??"")
+
+    if(experieceView==ExperienceViews.Design)
+    {
+        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            setDescription(dict.get(experieceView)?.descriptionFull??<></>)
+        }
+        else{
+            setDescription(dict.get(experieceView)?.description??<></>)
+        }
+    }
+    else if(experieceView==ExperienceViews.Color)
+    {
+        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            setDescription(dict.get(experieceView)?.descriptionFull??<></>)
+        }
+        else{
+            setDescription(dict.get(experieceView)?.description??<></>)
+        }
+    }
+}
 
     return(
 
@@ -224,8 +264,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     
                     <div className="col-8">
                         <ExperienceSteepTitle 
-                            title={dict.get(props.currentView ?? ExperienceViews.Design)?.title ?? ""}
-                            description={dict.get(props.currentView ?? ExperienceViews.Design)?.description ?? <></>}
+                            title={title}
+                            description={description ?? <></>}
                             icon={dict.get(props.currentView ?? ExperienceViews.Design)?.icon ?? ""}
                         />
                     </div>
@@ -318,7 +358,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                                  <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
-                                                { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },
+                                               /* { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },*/
                                                 { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
                                             ]}/>
                                         }

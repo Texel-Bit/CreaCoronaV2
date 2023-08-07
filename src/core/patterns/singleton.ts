@@ -20,6 +20,7 @@ import { ElementFlags } from "typescript";
 import { IColorBundle } from "../models/color/color-bundle.model";
 import SvgTexturizer, { TexturizeSvgOptions } from "../../shared/utilities/svg-texturizer.utility";
 import { getServerImagesUrl } from "../../shared/utilities/format-server-endpoints.utility";
+import { IState } from "../models/State/state.model";
 
 class Singleton {
   private static instance: Singleton;
@@ -29,6 +30,7 @@ class Singleton {
   public currentEnvironment: IEnvironment | null = null;
   public currentDesignList:IDesign[]| null = null;
   public currentColorList:IColor[]| null = [];
+  public currentStateList:IState[]| null = [];
   public colorBundleList:IColorBundle[]| null = null;
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
