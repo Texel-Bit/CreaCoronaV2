@@ -101,11 +101,15 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
        
     }
 
+    function ClickButton()
+    {
+        console.log("Click Button");
+    }
 
     return (
-       <div className="p-2 border rounded navbar-item d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: currColor?.BackgroundColor}}>
+       <div onClick={ClickButton} className="p-2 border rounded navbar-item d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: currColor?.BackgroundColor}}>
 
-<div className="pb-1" style={{fill: currColor?.BackgroundColor}}>
+<div  className="pb-1" style={{fill: currColor?.BackgroundColor}}>
     {svgData && 
     <div >
         <div dangerouslySetInnerHTML={{ __html: svgData }} style={{fill: currColor?.IconColor, width: '1%', height: '1%'}} />
