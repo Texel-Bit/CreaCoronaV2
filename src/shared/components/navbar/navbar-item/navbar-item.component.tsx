@@ -1,6 +1,6 @@
 import { FormCheck } from "react-bootstrap";
 import {navbarItemsProps} from '../../../../core/models/navBarItems/service-navBar';
-import { ViewStatus } from "../../../enums/routes.enum";
+import { ExperienceViews, ViewStatus } from "../../../enums/routes.enum";
 import { useEffect, useState } from "react";
 import Singleton from "../../../../core/patterns/singleton";
 
@@ -101,11 +101,32 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
        
     }
 
+    function ClickButton()
+    {
+        const currentExperienceView = Singleton.getInstance().currentExperienceView??ExperienceViews.EnvironmentType;
+        const propExperienceView = props.experienceView;
+        
+        // Ensure they are both defined and part of the enum
+        if (currentExperienceView in ExperienceViews && propExperienceView in ExperienceViews) {
+            // Cast to numbers and compare
+            if (+currentExperienceView >= +propExperienceView) {
+                if(currentExperienceView!=propExperienceView)
+                {
+                    Singleton.getInstance().ChangeExperienceView(propExperienceView);
+                }
+            }
+            else
+            {
+                
+            }
+        }
+       
+    }
 
     return (
-       <div className="p-2 border rounded navbar-item d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: currColor?.BackgroundColor}}>
+       <div onClick={ClickButton} className="p-2 border rounded navbar-item d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: currColor?.BackgroundColor}}>
 
-<div className="pb-1" style={{fill: currColor?.BackgroundColor}}>
+<div  className="pb-1" style={{fill: currColor?.BackgroundColor}}>
     {svgData && 
     <div >
         <div dangerouslySetInnerHTML={{ __html: svgData }} style={{fill: currColor?.IconColor, width: '1%', height: '1%'}} />

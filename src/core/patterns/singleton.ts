@@ -20,6 +20,7 @@ import { ElementFlags } from "typescript";
 import { IColorBundle } from "../models/color/color-bundle.model";
 import SvgTexturizer, { TexturizeSvgOptions } from "../../shared/utilities/svg-texturizer.utility";
 import { getServerImagesUrl } from "../../shared/utilities/format-server-endpoints.utility";
+import { IState } from "../models/State/state.model";
 
 class Singleton {
   private static instance: Singleton;
@@ -29,6 +30,7 @@ class Singleton {
   public currentEnvironment: IEnvironment | null = null;
   public currentDesignList:IDesign[]| null = null;
   public currentColorList:IColor[]| null = [];
+  public currentStateList:IState[]| null = [];
   public colorBundleList:IColorBundle[]| null = null;
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
@@ -37,6 +39,7 @@ class Singleton {
   public simulationWidht:INumberData| null = null
   public simulationHeight:INumberData| null = null
   
+  private mosaicRotations=[0,90,270,180]
 
   public selectedDesignType:IDesignType| null = null
   public currentMosaicIndexSelected:number = -1
@@ -171,11 +174,22 @@ public ChangeBrickFormat(format:IFormat)
 
   public SwapMosaicItems(fromIndex: number, toIndex: number) {
     if(this.currentDesignList)
+    {
         [this.currentDesignList[fromIndex], this.currentDesignList[toIndex]] = [this.currentDesignList[toIndex], this.currentDesignList[fromIndex]];
+        [this.mosaicRotations[fromIndex], this.mosaicRotations[toIndex]] = [this.mosaicRotations[toIndex], this.mosaicRotations[fromIndex]];
+    }
     
         this.TexturizeMosaic();
 }
   
+public RotateCurrentMosaicObject() {
+    this.mosaicRotations[this.currentMosaicIndexSelected]+=90;
+    console.log(this.mosaicRotations);
+    this.TexturizeMosaic();
+}
+  
+
+
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
     this.currentEnvironmentType=environmentType;
     this.EvaluatePercentage();
@@ -183,54 +197,26 @@ public ChangeBrickFormat(format:IFormat)
 
 
   public ValidateViewCompleteStatus(currentView:ExperienceViews) {
+    
+
     let viewComplete =false;
 
-    if(currentView==ExperienceViews.EnvironmentType)
-    {
-        if(this.currentEnvironmentType)
-        {
-            return true;
+    const currentExperienceView = Singleton.getInstance().currentExperienceView??ExperienceViews.EnvironmentType;
+    const propExperienceView = currentView;
+    
+    // Ensure they are both defined and part of the enum
+    if (currentExperienceView in ExperienceViews && propExperienceView in ExperienceViews) {
+        // Cast to numbers and compare
+        if (+currentExperienceView >= +propExperienceView) {
+            viewComplete= true;
         }
-    }
-
-    if(currentView==ExperienceViews.Environment)
-    {
-        if(this.currentEnvironment)
+        else
         {
-            return true;
-        }
-    }
-
-    if(currentView==ExperienceViews.Design)
-    {
-
-        if(this.currentDesignList )
-        {
-            if(this.currentDesignList.length>0 )
-            {
-                return true;
-            }
-           
-        }
-    }
-
-    if(currentView==ExperienceViews.Color)
-    {
-        if(this.currentColorList&& this.currentGrout)
-        {
-            return true;
-        }
-    }
-
-    if(currentView==ExperienceViews.Format)
-    {
-        if(this.currentFormat && this.currentStructure && (this.simulationArea||(this.simulationWidht && this.simulationHeight)))
-        {
-            return true
+            viewComplete= false;
         }
     }
    
- 
+ this.EvaluatePercentage();
     return viewComplete;
 
 
@@ -323,128 +309,97 @@ public ClearBundles()
     public EvaluatePercentage() {
         if (this.evaluatePercentageFunc) {
             
-            const maxPercentageValue=5;
+            let Percentage=0;
+            const MaxPercentage=5;
 
-            let currProggressDone=0;
+            if (+this.currentExperienceView!-1) 
+            {
+                Percentage=+this.currentExperienceView!-1
+            }
 
-            if(this.currentEnvironment)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentEnvironmentType)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentDesignList)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentColorList && this.currentGrout)
-            {
-                currProggressDone+=1;
-            }
+            Percentage=Percentage*100/MaxPercentage;
+           
             
-            let AreaComplete=false;
 
-            if(this.simulationArea)
-            {
-                AreaComplete=true;
-            }
-            else if(this.simulationWidht && this.simulationHeight)
-            {
-                AreaComplete=true;
-            }
-
-            if(this.currentFormat && this.currentStructure &&AreaComplete)
-            {
-                currProggressDone+=1;
-            }
-           
-           
-           
-
-            let Percentage=currProggressDone*100/maxPercentageValue;
-            if(Percentage>100)
-            {
-                Percentage=100;
-            }
             this.evaluatePercentageFunc(Percentage);
         }
     }
 
-    private async TexturizeMosaic() {
-        // Create a new array by slicing currentColorList
+    private async TexturizeMosaic()
+    {
+        if (!this.currentDesignList)
+            return;
+
         let newColorTemp = this.currentColorList?.slice();
-    
-        if (newColorTemp) {
-            if (newColorTemp?.length > 5) {
-                // Create a new array by slicing the first 5 elements of newColorTemp
-                newColorTemp = [...newColorTemp.slice(0, 5)];
+        
+        if (!newColorTemp)
+            return;
+
+        if (newColorTemp?.length > 5)
+            newColorTemp = newColorTemp.slice(0, 5);
+
+        let texturizer = new SvgTexturizer();
+
+        let TexturizedOptions = newColorTemp.map((color, index) => {
+            return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
+        });
+
+      
+        let TexturizedDesigns: HTMLElement[] = [];
+        
+        for (let index = 0; index < this.currentDesignList.length; index++) {
+
+           
+           
+
+            console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), TexturizedOptions);
+            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedOptions);
+            console.log("TERMINA TEXTURIZACIÓN");
+
+            
+            if(this.selectedDesignType?.id == 2)
+            {
+                let layerNames = ['layer0', 'layer1', 'layer2', 'layer3', 'layer4'];
+                let rotation = this.mosaicRotations[index]; // Replace with your rotation angle
+                texturizer.rotateSvg(texturizedDesign, rotation);
+
             }
+            
+
+            if(this.currentStructure)
+                texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
+
+            if (this.selectedDesignType?.id === 2)
+                texturizer.addBisels(texturizedDesign);
+
+            TexturizedDesigns.push(texturizedDesign);
         }
-    
-        if (newColorTemp) {
-            let texturizer = new SvgTexturizer();
-    
-            // Creating new arrays for TexturizedOptions and TexturizedOptionsInverted
-            let TexturizedOptions = [...newColorTemp.map((color, index) => {
-                return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
-            })];
-    
-            let TexturizedOptionsInverted = [...newColorTemp.slice().reverse().map((color, index) => {
-                return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
-            })];
 
-            let texturizedDesign:HTMLElement;
+        console.log("RESULTADO TEXTURIZACIÓN => ", TexturizedDesigns);
+        if (this.updateMosaicFunc)
+                this.updateMosaicFunc(TexturizedDesigns);
 
-            if (this.currentDesignList) {
-                // Create a new array for designPromises
-                let designPromises = [...this.currentDesignList.map(async (design, index) => {
-                    
-                    if(this.chessMode)
-                    {
-                        if(index==1 || index==2)
-                        {
-                            texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptionsInverted);
-                        }
-                        else
-                        {
-                            texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
-                        }
-                    }
-                    else
-                    {
-                        texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), TexturizedOptions);
+        // let TexturizedDesignsPromises = this.currentDesignList.map(async (design, index) => {
 
-                    }
-                    
-                   
-                    return texturizedDesign;
-                })];
-    
-                // Create a new array for TexturizedDesigns
-                let TexturizedDesigns = [...await Promise.all(designPromises)]; // wait for all promises to resolve
+        //     let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
+        //         ? TexturizedOptions : TexturizedOptionsInverted;
 
+        //     console.log(index, selectedTexturizedOptions);
+        //     let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), selectedTexturizedOptions);
 
-                TexturizedDesigns.forEach((design) => {
-                    if(this.currentStructure)
-                    {
-                        console.log("Structure ",this.currentStructure);
-                        design=texturizer.addFilter(design,getServerImagesUrl(this.currentStructure.source));
-                    }
-                    
-                    
-                    if (this.selectedDesignType?.id == 2) {
-                        texturizer.addBisels(design);
-                    }
-                   
-                });
-    
-                if (this.updateMosaicFunc) {
-                    this.updateMosaicFunc([...TexturizedDesigns]);
-                }
-            }
-        }
+        //     if(this.currentStructure)
+        //         texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
+
+        //     if (this.selectedDesignType?.id == 2)
+        //         texturizer.addBisels(texturizedDesign);
+
+        //     return texturizedDesign;
+        // });
+
+        // const TexturizedDesigns = await Promise.all(TexturizedDesignsPromises);
+
+        // if (this.updateMosaicFunc)
+        //   
     }
     
 

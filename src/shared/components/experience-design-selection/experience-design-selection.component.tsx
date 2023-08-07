@@ -31,6 +31,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
             if(selectedDesignType)
             {
                 const isSameDesignType=Singleton.getInstance().selectedDesignType === selectedDesignType
+                let defaultFormatSize:IFormat;
 
                 if(!isSameDesignType)
                 {
@@ -46,6 +47,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 Singleton.getInstance().removeALlColors();
                 Singleton.getInstance().removeAllFormats();
                 
+               
+
                 let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
@@ -81,19 +84,29 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         return currStructure;
                     });
 
-                    let currDesign: IFormat = {
+                    
+                    
+                    let currFormat: IFormat = {
                        id:element.idDesignTypeFormatSize,
                        name:element.DesignTypeFormatSizeName,
                        source:element.DesignTypeFormatSizeDefaultImagePath,
                        width:element.DesignTypeFormatSizeWidht,
                        height:element.DesignTypeFormatSizeHeight,
+                       scale:element.DesignTypeFormatSizeMosaicScale                       ,
                        formats:FormatSizetexture
                     };
-                    
+
+                    if(!defaultFormatSize)
+                    {
+                        defaultFormatSize=currFormat;
+                        Singleton.getInstance().SelectFormat(defaultFormatSize);
+                    }
                    
-                    Singleton.getInstance().addFormat(currDesign);
-                    return currDesign;
+                    Singleton.getInstance().addFormat(currFormat);
+                    return currFormat;
                 });
+
+               
 
                 let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
@@ -111,6 +124,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
+               
+
                 if(Singleton.getInstance().currentDesignList)
                 {
                     if(Singleton.getInstance().currentDesignList!?.length>0)
@@ -119,7 +134,6 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         {
                           Singleton.getInstance().GenerateDefaultDesignsSelected()
                         }
-                        
                     }
                     else
                     {

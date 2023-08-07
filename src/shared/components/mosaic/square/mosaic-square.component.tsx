@@ -13,13 +13,10 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
 
     const [groutImageCss, setGroutImageCss] = useState("");
 
-
     useEffect(() => {
-       
         if (props.grout)
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
     }, [props]);
-
 
     return(
         <div id="mosaic-element" className='mosaic-square w-100'>
@@ -28,17 +25,17 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                 {
                     `.mosaic-square {
                         display: grid;
-                        gap: .4rem;
+                        gap: .1rem;
                         grid-template-rows: repeat(2, 1fr);
                         grid-template-columns: repeat(2, 1fr);
-                        padding: .2rem;
+                        padding: .05rem;
                         ${groutImageCss}
                     }`
                 }
             </style>
             {
-                props.squares.map((square, index) => 
-                    <div key={`MosaicSquareDesign${index}`} className="img-container" dangerouslySetInnerHTML={{ __html: square.outerHTML }}></div>)
+                props.squares.map((square) => 
+                    <div className="img-container" dangerouslySetInnerHTML={{ __html: square.outerHTML }}></div>)
             }
 
         </div>

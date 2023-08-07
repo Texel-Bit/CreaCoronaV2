@@ -27,7 +27,7 @@ import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/
 import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
 import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
-import { idText } from "typescript";
+import { idText, isStringLiteral } from "typescript";
 import { IGrout } from "../../../../core/models/grout/grout.model";
 import { IFormat } from "../../../../core/models/format/format.model";
 import { IStructure } from "../../../../core/models/structure/structure.model";
@@ -44,7 +44,8 @@ interface contentData
 {
     title:string;
     icon:string;
-    description:ReactElement
+    description:ReactElement,
+    descriptionFull:ReactElement
 }
 
 export const ExperienceView:React.FC<currentExperienceView>=(props) => {
@@ -54,20 +55,24 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     dict.set(ExperienceViews.Design, {
         title: "Diseña el revestimiento",
         icon: CozyIco,
-        description: <h6>Selecciona <b className="color-middle">1 opción</b> de mosaico</h6>
+        description: <h6>Selecciona hasta <b className="color-middle">4 opciónes</b> de grafica</h6>,
+        descriptionFull:<h6>Seleccionaste una opción para revestimiento sin grafica</h6>
     });
     
     dict.set(ExperienceViews.Color, {
         title: "Agrega color a tu diseño",
         icon: PalletIco,
-        description: <h6>Selecciona el color de tu preferencia de acabado brillante</h6>
+        description: <h6>Selecciona hasta 5 colores distintos para aplicarle a tu diseño</h6>,
+        descriptionFull:<h6>Selecciona el color de tu preferencia de acabado brillante</h6>
     });
+
+
 
     dict.set(ExperienceViews.Format, {
         title: "Define la cantidad y cotiza",
         icon: OpenIco,
-        description: <h6>Selecciona el formato y estructura de tu revestimiento, <br></br>ingresa las Medidas de tu espacio y cotiza</h6>
-    });
+        description: <h6>Selecciona el formato y estructura de tu revestimiento, <br></br>ingresa las Medidas de tu espacio y cotiza</h6>,
+        descriptionFull:<h6></h6>    });
 
 
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
@@ -76,8 +81,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [canvasImage, setCanvasImage] = useState("");
     const [mosaicGrout, setMosaicGrout] = useState("");
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
-    const [selectedFormatScale, setSelectedFormatScale] = useState(1);
+    const [selectedFormatSize, setSelectedFormatSize] = useState(1);
+    const [selectedPerspective, setSelectedPerspective] = useState(500);
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
+    
+    
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState<ReactElement>();
     
 
     const [colorType, setColorType] = useState(1);
@@ -97,8 +107,6 @@ function ChangeChessMode()
 function SelectFormat(newFormat:IFormat)
 {
     Singleton.getInstance().SelectFormat(newFormat);
-    let newScale = Singleton.getInstance().currentEnvironment?.environmentAngle.size + (newFormat.height / 100);
-    setSelectedFormatScale(newScale);
     updateCanvas();
 }
 
@@ -106,7 +114,7 @@ function SelectFormat(newFormat:IFormat)
 function SelectStructure (newStructure: IStructure)
 {
     Singleton.getInstance().SelectStructure(newStructure);
-
+    updateCanvas();
 }
 
 
@@ -144,15 +152,19 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
     useEffect(() => {
+
         if(Singleton.getInstance().currentGrout)
         {
             Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
         }
 
+
+
         let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
+        
+        
         setDesignTypes(currentDesignTypes);
 
-        let currentDesignsSelected = Singleton.getInstance().GetSelectedDesigns() ?? []; 
 
         Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
         Singleton.getInstance().updateMosaicFunc = updateMosaic;
@@ -169,24 +181,37 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
     const updateCanvas =  () => {
-         setTimeout(async() => {
+        setTimeout(async() => {            
+
             let element = document.getElementById("mosaic-element");
 
-        if (element)
-        {
-            let elementSvg = await convertHtmlToImage(element);
-            setCanvasImage(elementSvg ?? "");
-        }
+            if (element)
+            {
+                let formatWidth = Singleton.getInstance().currentFormat?.width ?? 1;
+                let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
+                let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
+
+                let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
+                setSelectedFormatSize(newSize);
+                
+                let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
+                setSelectedPerspective(newPerspective);
+
+                let elementSvg = await convertHtmlToImage(element);
+                setCanvasImage(elementSvg ?? "");
+
+                
+            }
+
         }, 500);
-        
+
+        SetupsTitles();
     }
 
-    function updateMosaic(HTMLElement:HTMLElement[]) {
-        console.log("Update mosaic")
-        setSelectedDesigns(HTMLElement)
-        console.log(HTMLElement)
+    function updateMosaic(mosaicElements:HTMLElement[]) {
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
         setColorType(colorTypeId);
+        setSelectedDesigns(mosaicElements)
     }
     
 
@@ -206,9 +231,39 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
             if (experieceView == ExperienceViews.Format)
                 Singleton.getInstance().UpdateFormats();
+
+            SetupsTitles();
+           
         }
     }
 
+function SetupsTitles()
+{
+   const experieceView=Singleton.getInstance().currentExperienceView??ExperienceViews.Environment;
+
+    setTitle(dict.get(experieceView)?.title??"")
+
+    if(experieceView==ExperienceViews.Design)
+    {
+        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            setDescription(dict.get(experieceView)?.descriptionFull??<></>)
+        }
+        else{
+            setDescription(dict.get(experieceView)?.description??<></>)
+        }
+    }
+    else if(experieceView==ExperienceViews.Color)
+    {
+        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            setDescription(dict.get(experieceView)?.descriptionFull??<></>)
+        }
+        else{
+            setDescription(dict.get(experieceView)?.description??<></>)
+        }
+    }
+}
 
     return(
 
@@ -223,8 +278,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                     
                     <div className="col-8">
                         <ExperienceSteepTitle 
-                            title={dict.get(props.currentView ?? ExperienceViews.Design)?.title ?? ""}
-                            description={dict.get(props.currentView ?? ExperienceViews.Design)?.description ?? <></>}
+                            title={title}
+                            description={description ?? <></>}
                             icon={dict.get(props.currentView ?? ExperienceViews.Design)?.icon ?? ""}
                         />
                     </div>
@@ -269,7 +324,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.id == 1 && selectedDesigns&&
                                     <MosaicComponent 
                                         mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout}/>}
                                         actions={false}/>
@@ -316,9 +371,9 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
                                  <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "", classButton: "btn-corona-primary"},
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "", classButton: "btn-corona-destructive" }
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "",classButton: "btn-corona-primary" },
+                                               /* { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },*/
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                         }
 
@@ -366,7 +421,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                         </div>
                         <div className="textures-selection-column d-flex flex-column col-8 col-md-5 mx-auto mx-md-none h-md-100 pt-4 pt-md-0">
                             <ExperienceFormatSelection formats={formats ?? []} />
-                            <InitQuotationForm/>
+                            <InitQuotationForm states={Singleton.getInstance().currentStateList ?? []}/>
                         </div>
                     </div>
                 }
@@ -380,15 +435,15 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                 <ExperienceCanvas 
                     backgroundImage={canvasImage}
                     mask={canvasMask}
-                    perspective={1000}
+                    perspective={selectedPerspective}
                     perspectiveOrigin={{
-                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.x,
-                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.y
+                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
+                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
                     }}
                     rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
                     rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
                     rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
-                    scale={selectedFormatScale}/>
+                    size={selectedFormatSize}/>
             </div>
 
         </div>
