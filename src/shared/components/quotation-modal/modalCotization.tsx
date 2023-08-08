@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import './modalCotization.css'
 import { FaWindowClose } from 'react-icons/fa';
 import Singleton from '../../../core/patterns/singleton';
-import { simulateQuotation } from '../../../core/services/quotation.service';
+import { createQuotation, simulateQuotation } from '../../../core/services/quotation.service';
+import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
+import { IUserCustomer } from '../../../core/models/user/user.model';
+import { Mail } from '@material-ui/icons';
+import { convertHtmlToImage } from '../../utilities/html-to-image.utility';
 
 interface QuotationModalProps {
     closeModalEvent: () => void;
@@ -19,10 +23,34 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
     const [price, setPrice] = useState("0");
     const [units, setUnits] = useState(0);
 
+    const [calculating, setCalculate] = useState(true);
+
 
     const formRef = useRef(null);
    
+    const SendQuotation = async () => {
+
+        let element = document.getElementById("Simulation-Canvas");
+        if(element)
+        {
+            console.log("Founded canvas ")
+            let elementSvg = await convertHtmlToImage(element);
+            Singleton.getInstance().simulationImage=elementSvg;
+        }
+        
+
+        let QuotationData = Singleton.getInstance().GetQuotationData(GetUserData(), 2); 
+        
+        let response = await createQuotation(QuotationData);
+
+        console.log(Response)
+        console.log("Data ", QuotationData)
+    };
+
     useEffect(() => {
+
+        setCalculate(true);
+
         const simulate = async () => {
             try {
 
@@ -31,11 +59,13 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
                     currency: 'COP',
                   });
 
-             let QuotationData=Singleton.getInstance().GetQuotationData();
-                
+             let QuotationData=Singleton.getInstance().GetQuotationData(GetUserData());
+             
+            
                 
             let response = await simulateQuotation( QuotationData);
 
+            setCalculate(false);
             setUnits(response.data.cantidadValdosas)
             
             
@@ -43,20 +73,6 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
               const formattedValue = formatter.format(response.data.quotationPrice);
 setPrice(formattedValue)
 
-            console.log(response);
-
-                /*
-                response.data.forEach((element: any) => {
-
-                   
-                    };
-                    
-*/
-                 
-               
-               
-
-               
             }
             catch(error) {
                 console.log(error);
@@ -68,12 +84,29 @@ setPrice(formattedValue)
     },[]);
 
 
+ 
+
+    function GetUserData()
+    {
+       let infoUser:IUserCustomer={
+        name:nombre,
+        lastName:apellido,
+        phone:telefono,
+        email:correo
+       };
+
+       return infoUser;
+    }
+
+ 
     const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event.preventDefault();
       console.log('Nombre:', nombre);
       console.log('Apellido:', apellido);
       console.log('Teléfono:', telefono);
       console.log('Correo:', correo);
+
+      SendQuotation();
     };
      
     return(
@@ -96,7 +129,10 @@ setPrice(formattedValue)
                     </div>
                 </div>
                 {/* price */}
-                <h1 className="priceCotization">{price}</h1>
+                <div className="priceContainer">
+    <h1 className="priceCotization">{price}</h1>
+    {calculating && <div className="loading-spinner"></div>}
+</div>
                 {/* departamentList */}
               
                 {/* Negociemos */}
@@ -162,22 +198,65 @@ setPrice(formattedValue)
               </div>
     
               <div className="secondContent">
-                <h4 className="subTitleDeesgin">Diseño final</h4>
+                <h4 className="subTitleDeesgin">Diseño final {Singleton.getInstance().selectedDesignType?.name}</h4>
                 <div className="contentDesingFinal">
-                    {/* iamgen de diseño final */}
+
+                <div style={{justifyContent:'flex-start'}} className="timeline-content timeline-content--modifier">
+                    <img className="mosaicResumeImage" src={Singleton.getInstance().mosaicImage}/>
+                    <div className="timeline-colors">
+                        {
+                            Singleton.getInstance().currentDesignList &&
+                            Singleton.getInstance().currentDesignList!.map((element, index) => (
+                                <p key={index}>{element.name}</p>
+                            ))
+                        }
+                    </div>
                 </div>
-                <h3 className="unitys">Unidades:{units}</h3>
+
+                </div>
+
+                 <div className="priceContainer">
+                    <h3 className="unitys">Unidades:{units}</h3>
+                    {calculating &&<div className="loading-spinner"></div>}
+                </div>
+
+               
     
                 <div className="details">
     
-                    <h3 className="detailsFormat">Formato:</h3>
-                    <p className="textFormat">Lorem ipsum dolor</p>
-                    <h3 className="detailsAria">Área:</h3>
-                    <p className="textAria">Lorem ipsum dolor</p>
-                    <h3 className="detailsStyle">Estilo:</h3>
-                    <p className="textStyle">Lorem ipsum dolor</p>
-                    <h3 className="detailsColors">Colores:</h3>
-                    <p className="textColors">Lorem ipsum dolor</p>
+                <div className="timeline-step-mosaic">
+            <span className="timeline-title">Formato:</span>
+            <div className="timeline-content">
+                {Singleton.getInstance().currentFormat?.name}
+            </div>
+        </div>
+
+                    {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
+            <span className="timeline-title">Colores: ({Singleton.getInstance().GetCurrenColorTypeID()==1?"Campo Lleno":"Con Diseño"})</span>
+            <div className="timeline-content-quotation timeline-content-grid">
+                {Singleton.getInstance().currentColorList!.map((color, index) => (
+                    <div key={index} className="color-item-Quotation">
+                        <img src={getServerImagesUrl(color.source)} alt={color.name}/>
+                        {color.name}
+                    </div>
+                ))}
+            </div>
+        </div>}
+
+        
+                     <div className="timeline-step-mosaic">
+                    <span className="timeline-title">Área:</span>
+                    {Singleton.getInstance().quotationArea==0?(Singleton.getInstance().quotationWidth*Singleton.getInstance().quotationHeight):Singleton.getInstance().quotationArea} M<sup>2</sup>
+                    </div>
+
+                    {Singleton.getInstance().currentStructure&&
+        <div className="timeline-step-mosaic">
+            <span className="timeline-title ">Estructura:</span>
+            <div className="timeline-content-quotation ">
+                <img style={{maxWidth:"40px",border: "2px solid #213C65"}} src={getServerImagesUrl(Singleton.getInstance().currentStructure!?.source)} alt={Singleton.getInstance().currentStructure!.name}/>
+                {Singleton.getInstance().currentStructure!.name}
+            </div>
+                </div> }
     
                 </div>
               </div>

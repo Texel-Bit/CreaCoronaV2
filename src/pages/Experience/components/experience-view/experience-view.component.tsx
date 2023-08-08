@@ -200,6 +200,8 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                 let elementSvg = await convertHtmlToImage(element);
                 setCanvasImage(elementSvg ?? "");
 
+                Singleton.getInstance().mosaicImage=elementSvg;
+                
                 
             }
 

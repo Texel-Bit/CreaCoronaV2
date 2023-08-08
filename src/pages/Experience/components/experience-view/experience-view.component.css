@@ -124,6 +124,34 @@
     margin-bottom: 20px;
     gap: 5px;
 }
+.timeline-step-mosaic {
+    display: flex;
+    align-items: flex-start;  /* ensure alignment to top */
+    flex-direction: row; /* ensure horizontal layout */
+    margin-bottom: 20px;
+    gap: 5px;
+}
+.loading-spinner {
+    display: inline-block;
+    align-content:flex-start;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top: 3px solid var(--color-middle); /* Adjust the color as needed */
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .priceContainer {
+    display: flex;
+    align-items: center; 
+    flex-direction: row;
+    gap: 10px;
+  }
 
 .timeline-title {
     flex-shrink: 0; /* ensures that title doesn't shrink */
@@ -136,8 +164,13 @@
 .timeline-content {
     display: flex;
     flex-direction: column; /* stack content vertically */
+    gap: 2px;
 }
 
+.timeline-content-quotation {
+    display: flex;
+    flex-direction: row; /* stack content vertically */
+}
 @media screen and (min-width: 1900px) {
     .timeline-content-grid {
         grid-template-columns: 1fr;
@@ -156,6 +189,21 @@
     justify-content: flex-start;
     gap: 10px;
     font-size: 12px;
+}
+.color-item-Quotation {
+    display: flex;
+    margin-top: 10px;
+    margin-right: 5px;
+    flex-direction: row; /* make it horizontal */
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+}
+.color-item-Quotation img {
+    margin-right: 2px; /* spacing between the image and its label */
+    width: 30px;
+    height: auto;
 }
 .color-itemMosaic {
     display: flex;

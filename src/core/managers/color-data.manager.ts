@@ -4,7 +4,7 @@ class ColorDataManager
 {
     private colorList: IColor[] = [];
 
-    public getColorById(id:string)
+    public getColorById(id:number)
     {
         return this.colorList.find(color => color.id === id);
     }

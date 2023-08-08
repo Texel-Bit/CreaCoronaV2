@@ -6,7 +6,7 @@ export interface IQuotationProductDetail {
 
 export interface IQuotationDesignColors {
     DesignColors_idDesignColors: number,
-    esignColors_Index: number
+    DesignColors_Index: number
 }
 
 export interface IQuotationParams {

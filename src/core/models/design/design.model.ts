@@ -1,7 +1,7 @@
 import { IDesignType } from "../designType/design-type.model"
 
 export interface IDesign{
-    id:string
+    id:number
     source:string
     name:string
     designType:IDesignType|null,

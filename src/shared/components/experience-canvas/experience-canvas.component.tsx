@@ -22,7 +22,7 @@ export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
 
     console.log("Background size ",props)
     return(
-        <div className="aspect-ratio-16-9 overflow-hidden" style={{
+        <div id="Simulation-Canvas" className="aspect-ratio-16-9 overflow-hidden" style={{
             perspective: `${props.perspective}px`,
             perspectiveOrigin: `${props.perspectiveOrigin.X}% ${props.perspectiveOrigin.Y}%`
         }}>

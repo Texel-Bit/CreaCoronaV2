@@ -4,7 +4,7 @@ class DesignDataManager
 {
     private designList: IDesign[] = [];
 
-    public getDesignById(id:string)
+    public getDesignById(id:number)
     {
         return this.designList.find(design => design.id === id);
     }

@@ -21,7 +21,9 @@ import { IColorBundle } from "../models/color/color-bundle.model";
 import SvgTexturizer, { TexturizeSvgOptions } from "../../shared/utilities/svg-texturizer.utility";
 import { getServerImagesUrl } from "../../shared/utilities/format-server-endpoints.utility";
 import { IState } from "../models/State/state.model";
-import { IQuotationParams } from "../models/quotation/quotation.model";
+import { IQuotationDesignColors, IQuotationParams, IQuotationProductDetail } from "../models/quotation/quotation.model";
+import { IUserCustomer } from "../models/user/user.model";
+
 
 class Singleton {
   private static instance: Singleton;
@@ -40,6 +42,9 @@ class Singleton {
   public quotationArea:number= 0;
   public quotationWidth:number= 0;
   public quotationHeight:number= 0;
+
+  public mosaicImage:any;
+  public simulationImage:any;
 
 
 
@@ -165,25 +170,47 @@ public ChangeBrickFormat(format:IFormat)
     this.TexturizeMosaic();
 }
 
-public GetQuotationData()
+public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
 {
+    let DesignColorsQuotation:IQuotationDesignColors[]=[]
+    let DesignProductDetails:IQuotationProductDetail[]=[]
+    let MosaicImage=demo==2?this.mosaicImage:null;
+    let SimulationImage=demo==2?this.simulationImage:null;
+
+    if(demo==2)
+    {
+        this.currentColorList?.forEach((element,index) => {
+            DesignColorsQuotation.push({
+                DesignColors_idDesignColors: element.id,  // You need to replace 'propertyName1' with the actual property name expected in IQuotationDesignColors
+                DesignColors_Index: index   // Same for 'propertyName2'
+            });
+        });
+
+        this.currentDesignList?.forEach((element,index) => {
+            DesignProductDetails.push({
+                Design_idDesign: element.id,  // You need to replace 'propertyName1' with the actual property name expected in IQuotationDesignColors
+                quotationProductUnits:1
+            });
+        });
+    }
+
     let quotationParams:IQuotationParams={
-        demo:1,
+        demo:demo,
         idFormatSize:this.currentFormat?.id||1,
-        DesignColors_has_quotation: [],
-        idFormatSizeTexture: Singleton.getInstance().currentFormat?.id||1,
+        DesignColors_has_quotation: DesignColorsQuotation,
+        idFormatSizeTexture: this.currentStructure?.id||1,
         idstate: this.currentState?.id||1,
         quatitionArea: this.quotationArea,
         quotationHeight: this.quotationHeight,
-        quotationProductDetails: [],
+        quotationProductDetails: DesignProductDetails,
         quotationWidth: this.quotationWidth,
-        customerName: "Manuel",
+        customerName: infoUser.name,
         idbrecha: this.currentGrout?.id||1,
-        customerLastname: "Garcia",
-        customerEmail: "Manuel.garcia.jaimes@gmail.com",
-        customerPhoneNumber: "123456",
-        desingPatternImage: null,
-        simulationImage: null
+        customerLastname: infoUser.lastName,
+        customerEmail: infoUser.email,
+        customerPhoneNumber: infoUser.phone,
+        desingPatternImage: MosaicImage,
+        simulationImage: SimulationImage
        }
 
     return quotationParams;

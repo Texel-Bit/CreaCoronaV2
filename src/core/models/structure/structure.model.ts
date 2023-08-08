@@ -1,7 +1,7 @@
 import { IFormat } from "../format/format.model"
 
 export interface IStructure{
-    id:string
+    id:number
     source:string
     name:string
     designColorType:number[]
