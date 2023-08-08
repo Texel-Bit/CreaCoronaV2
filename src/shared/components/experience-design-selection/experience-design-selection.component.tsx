@@ -51,7 +51,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 }
                 
                 
-               
+               console.log("Before ",Singleton.getInstance().currentDesignList);
 
                 let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
@@ -67,6 +67,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     Singleton.getInstance().addDesign(currDesign);
                     return currDesign;
                 });
+
+                console.log("After ",Singleton.getInstance().currentDesignList);
 
      
                 CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {

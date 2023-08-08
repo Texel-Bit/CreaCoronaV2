@@ -336,7 +336,7 @@ function SetupsTitles()
                         <div className="col-5 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    Singleton.getInstance().selectedDesignType?.id === 3 && selectedDesigns &&
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
