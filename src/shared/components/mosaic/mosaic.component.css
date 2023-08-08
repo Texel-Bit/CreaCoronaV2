@@ -6,3 +6,14 @@
     align-items: center;
     overflow: hidden;
 }
+
+.action__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.action__buttons p {
+    font-size: 14px;
+    margin-top: .2rem !important;
+}

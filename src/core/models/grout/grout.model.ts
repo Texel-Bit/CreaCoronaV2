@@ -1,5 +1,5 @@
 export interface IGrout{
-    id:string
+    id:number
     source:string
     name:string
 }

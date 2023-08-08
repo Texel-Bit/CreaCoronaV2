@@ -14,30 +14,30 @@ interface ExperienceCanvasProps {
     rotationX: number,
     rotationY: number,
     rotationZ: number,
-    size: number
+    size: number,
 }
 
 
 export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
 
+    console.log("Background size ",props)
     return(
-        <div className="position-absolute h-100 overflow-hidden" style={{
-                perspective: `${props.perspective}px`,
-                perspectiveOrigin: `${props.perspectiveOrigin.X}% ${props.perspectiveOrigin.Y}%`
-            }}>
-
-            <div className="design-canvas" style={{
+        <div id="Simulation-Canvas" className="aspect-ratio-16-9 overflow-hidden" style={{
+            perspective: `${props.perspective}px`,
+            perspectiveOrigin: `${props.perspectiveOrigin.X}% ${props.perspectiveOrigin.Y}%`
+        }}>
+        
+            <div className="image-pattern" style={{
                 backgroundImage: `url(${props.backgroundImage})`,
                 backgroundSize: `${props.size}px`,
-                transform: `rotateX(${props.rotationX}deg) rotateY(${props.rotationY}deg) rotateZ(${props.rotationZ}deg)`,
-                width: "1000px", height: "1000px"
+                backgroundRepeat: 'repeat',
+                transform: `rotateX(${props.rotationX}deg) rotateY(${props.rotationY}deg) rotateZ(${props.rotationZ}deg)`
             }}></div>
-
-            <img
+        
+            <img 
                 src={props.mask}
-                className="position-absolute h-100 w-100 object-fit-cover top-0"
+                className="image-16-9"
                 alt="Environment Image"/>
-
         </div>
     );
 }

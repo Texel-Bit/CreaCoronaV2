@@ -21,6 +21,9 @@ import { IColorBundle } from "../models/color/color-bundle.model";
 import SvgTexturizer, { TexturizeSvgOptions } from "../../shared/utilities/svg-texturizer.utility";
 import { getServerImagesUrl } from "../../shared/utilities/format-server-endpoints.utility";
 import { IState } from "../models/State/state.model";
+import { IQuotationDesignColors, IQuotationParams, IQuotationProductDetail } from "../models/quotation/quotation.model";
+import { IUserCustomer } from "../models/user/user.model";
+
 
 class Singleton {
   private static instance: Singleton;
@@ -35,10 +38,16 @@ class Singleton {
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
   public currentFormat: IFormat | null = null;
-  public simulationArea:INumberData| null = null;
-  public simulationWidht:INumberData| null = null
-  public simulationHeight:INumberData| null = null
-  
+  public currentState:IState| null = null;
+  public quotationArea:number= 0;
+  public quotationWidth:number= 0;
+  public quotationHeight:number= 0;
+
+  public mosaicImage:any;
+  public simulationImage:any;
+
+
+
   private mosaicRotations=[0,90,270,180]
 
   public selectedDesignType:IDesignType| null = null
@@ -161,7 +170,51 @@ public ChangeBrickFormat(format:IFormat)
     this.TexturizeMosaic();
 }
 
+public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
+{
+    let DesignColorsQuotation:IQuotationDesignColors[]=[]
+    let DesignProductDetails:IQuotationProductDetail[]=[]
+    let MosaicImage=demo==2?this.mosaicImage:null;
+    let SimulationImage=demo==2?this.simulationImage:null;
 
+    if(demo==2)
+    {
+        this.currentColorList?.forEach((element,index) => {
+            DesignColorsQuotation.push({
+                DesignColors_idDesignColors: element.id,  // You need to replace 'propertyName1' with the actual property name expected in IQuotationDesignColors
+                DesignColors_Index: index   // Same for 'propertyName2'
+            });
+        });
+
+        this.currentDesignList?.forEach((element,index) => {
+            DesignProductDetails.push({
+                Design_idDesign: element.id,  // You need to replace 'propertyName1' with the actual property name expected in IQuotationDesignColors
+                quotationProductUnits:1
+            });
+        });
+    }
+
+    let quotationParams:IQuotationParams={
+        demo:demo,
+        idFormatSize:this.currentFormat?.id||1,
+        DesignColors_has_quotation: DesignColorsQuotation,
+        idFormatSizeTexture: this.currentStructure?.id||1,
+        idstate: this.currentState?.id||1,
+        quatitionArea: this.quotationArea,
+        quotationHeight: this.quotationHeight,
+        quotationProductDetails: DesignProductDetails,
+        quotationWidth: this.quotationWidth,
+        customerName: infoUser.name,
+        idbrecha: this.currentGrout?.id||1,
+        customerLastname: infoUser.lastName,
+        customerEmail: infoUser.email,
+        customerPhoneNumber: infoUser.phone,
+        desingPatternImage: MosaicImage,
+        simulationImage: SimulationImage
+       }
+
+    return quotationParams;
+}
   public GetCurrentGrout()
   {
       if(!this.currentGrout)
@@ -197,54 +250,26 @@ public RotateCurrentMosaicObject() {
 
 
   public ValidateViewCompleteStatus(currentView:ExperienceViews) {
+    
+
     let viewComplete =false;
 
-    if(currentView==ExperienceViews.EnvironmentType)
-    {
-        if(this.currentEnvironmentType)
-        {
-            return true;
+    const currentExperienceView = Singleton.getInstance().currentExperienceView??ExperienceViews.EnvironmentType;
+    const propExperienceView = currentView;
+    
+    // Ensure they are both defined and part of the enum
+    if (currentExperienceView in ExperienceViews && propExperienceView in ExperienceViews) {
+        // Cast to numbers and compare
+        if (+currentExperienceView >= +propExperienceView) {
+            viewComplete= true;
         }
-    }
-
-    if(currentView==ExperienceViews.Environment)
-    {
-        if(this.currentEnvironment)
+        else
         {
-            return true;
-        }
-    }
-
-    if(currentView==ExperienceViews.Design)
-    {
-
-        if(this.currentDesignList )
-        {
-            if(this.currentDesignList.length>0 )
-            {
-                return true;
-            }
-           
-        }
-    }
-
-    if(currentView==ExperienceViews.Color)
-    {
-        if(this.currentColorList&& this.currentGrout)
-        {
-            return true;
-        }
-    }
-
-    if(currentView==ExperienceViews.Format)
-    {
-        if(this.currentFormat && this.currentStructure && (this.simulationArea||(this.simulationWidht && this.simulationHeight)))
-        {
-            return true
+            viewComplete= false;
         }
     }
    
- 
+ this.EvaluatePercentage();
     return viewComplete;
 
 
@@ -337,51 +362,18 @@ public ClearBundles()
     public EvaluatePercentage() {
         if (this.evaluatePercentageFunc) {
             
-            const maxPercentageValue=5;
+            let Percentage=0;
+            const MaxPercentage=5;
 
-            let currProggressDone=0;
+            if (+this.currentExperienceView!-1) 
+            {
+                Percentage=+this.currentExperienceView!-1
+            }
 
-            if(this.currentEnvironment)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentEnvironmentType)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentDesignList)
-            {
-                currProggressDone+=1;
-            }
-            if(this.currentColorList && this.currentGrout)
-            {
-                currProggressDone+=1;
-            }
+            Percentage=Percentage*100/MaxPercentage;
+           
             
-            let AreaComplete=false;
 
-            if(this.simulationArea)
-            {
-                AreaComplete=true;
-            }
-            else if(this.simulationWidht && this.simulationHeight)
-            {
-                AreaComplete=true;
-            }
-
-            if(this.currentFormat && this.currentStructure &&AreaComplete)
-            {
-                currProggressDone+=1;
-            }
-           
-           
-           
-
-            let Percentage=currProggressDone*100/maxPercentageValue;
-            if(Percentage>100)
-            {
-                Percentage=100;
-            }
             this.evaluatePercentageFunc(Percentage);
         }
     }
@@ -584,20 +576,6 @@ public addDesignType(designType: IDesignType): void {
 
     this.designTypeDataManager.addDesignType(designType);
 
-    
-
-    let environmentTypeArray = this.environmentTypeDataManager.getAllEnvironmentTypeArray();
-
-    environmentTypeArray.forEach(element => {
-        if(element.designTypesIDS.some(e => e === designType.id)) {
-            // The designType.id exists in the designTypesIDS array of the current element.
-            // Perform the necessary operations here.
-        }
-        else{
-            element.designTypes?.push(designType);
-        }
-    });
-
 }
 
 public addDesign(design: IDesign): void {
@@ -620,7 +598,6 @@ public GenerateDefaultDesignsSelected() {
     let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
     const currentDesigns = this.getDesignDataManager().getAllDesigns();
 
-   
     this.currentDesignList = []
    
 

@@ -1,5 +1,6 @@
 .design-types-selection-group {
-    gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .design-types-selection-group .btn {
@@ -7,16 +8,18 @@
     border-color: var(--color-middle);
     border-bottom: none;
     padding-top: 2px;
+
 }
 
 
-.design-types-selection-group .btn:hover {
+.design-types-selection-group label:hover {
     color: white;
-    background-color: var(--color-middle) !important;
+    background-color: var(--color-middle) !important; 
 }
 
-.design-types-selection-group .btn:checked {
-    background-color: var(--color-middle) !important;
+.design-types-selection-group input[type="radio"]:checked + label {
+    color: white;
+    background-color: var(--color-middle) !important;  
 }
 
 .design-selection-container {
@@ -31,4 +34,17 @@
     border-color: var(--color-middle) !important;
     overflow-y: auto;
     height: 500px !important;
+}
+
+@media screen and (min-width: 390px) and (max-width: 1180px) {
+    .design-thumbnails-grid {
+        grid-template-columns: repeat(4, 1fr);
+        height: 200px !important;
+    }
+}
+
+@media screen and (width: 1366px) {
+    .design-thumbnails-grid {
+        height: 430px !important;
+    }
 }

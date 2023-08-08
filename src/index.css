@@ -113,5 +113,117 @@ code {
 }
 
 .button-background:hover{
-  transform: scale(1.1);
+  background-color: #005490 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  transition: .3s all ease;
+  outline: 2px solid transparent;
+}
+
+.cursor-pointer-hover:hover {
+  outline: 2px solid var(--color-middle);
+}
+
+.item-superficie {
+  transition: .2s ease all;
+  outline: 2px solid transparent;
+}
+
+.item-superficie:hover {
+  outline: 2px solid var(--color-middle) !important;
+}
+
+.btn-corona {
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: .3s all ease;
+  border-radius: 8px;
+  height: 48px;
+  text-align: center;
+}
+
+.btn-corona-primary {
+  background-color: var(--color-middle) !important;
+  color: var(--bs-progress-bg) !important;
+  border: 2px solid var(--color-middle) !important;
+}
+
+.btn-corona-primary svg {
+  fill: var(--bs-progress-bg);
+}
+
+.btn-corona-primary:hover {
+  background-color: var(--color-primary) !important;
+  border: 2px solid var(--color-primary) !important;
+}
+
+.btn-corona-secondary {
+  border: 2px solid var(--color-middle);
+  background-color: var(--bs-progress-bg);
+  color: var(--color-middle);
+}
+
+.btn-corona-destructive {
+  border: 2px solid #F32F2F;
+  background-color: #F32F2F;
+  color: var(--bs-progress-bg);
+}
+
+.btn-corona-destructive:hover {
+  border: 2px solid #CB252F;
+  background-color: #CB252F;
+  color: var(--bs-progress-bg);
+}
+
+.btn-corona-add {
+  background-color: #11CE78 !important;
+  color: var(--bs-progress-bg) !important;
+  border: 2px solid #11CE78 !important;
+}
+
+.btn-corona-add:hover {
+  background-color: var(--color-confirm-alert-border) !important;
+  color: var(--bs-progress-bg) !important;
+  border: 2px solid var(--color-confirm-alert-border) !important;
+}
+
+.btn-corona-add:active,
+.btn-corona-add:focus {
+  background-color: #0C6F55 !important;
+  border: 2px solid #0C6F55 !important;
+  color: var(--bs-progress-bg) !important;
+}
+
+.btn-corona-icon{
+  height: 48px;
+  width: 48px;
+}
+
+.label-corona {
+  font-size: 16px;
+  font-weight: 400;
+  color: #213C65;
+}
+
+.form-check-input:hover {
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--color-middle) !important;
+  border-color: var(--color-middle) !important;
+  box-shadow: none !important;
+}
+
+.form-check-input:focus {
+  box-shadow: none !important;
+}
+
+@media screen and (max-width: 1366px) {
+  .corona-logo {
+    object-fit: contain;
+    width: 150px;
+  }
 }

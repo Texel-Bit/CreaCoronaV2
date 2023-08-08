@@ -11,4 +11,10 @@ interface User {
     officeId: number;
 }
 
+export interface IUserCustomer {
+    name: string;
+    lastName: string;
+    email: string;
+    phone: string;
+}
 export default User;

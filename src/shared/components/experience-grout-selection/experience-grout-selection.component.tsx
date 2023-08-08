@@ -21,10 +21,10 @@ export const ExperienceGroutSelection:React.FC<ExperienceGroutSelectionProps> = 
                 <h6 className="m-0 color-white fw-normal">Boquilla</h6>
             </div>
 
-            <div className="border border-1 p-1 d-flex gap-1 grouts-containter">
+            <div className="border p-2 d-flex gap-3 grouts-containter">
                 {
                     props.grouts.map(grout => {
-                        return <div className='grout-thumbnail rounded px-3' onClick={()=>Singleton.getInstance().ChangeGrout(grout)} style={{ backgroundImage: `url(${getServerImagesUrl(grout.source)})` }} />
+                        return <div className='grout-thumbnail px-3 cursor-pointer cursor-pointer-hover' onClick={()=>Singleton.getInstance().ChangeGrout(grout)} style={{ backgroundImage: `url(${getServerImagesUrl(grout.source)})` }} />
                     })
                 }
             </div>

@@ -13,11 +13,35 @@
     max-height: 380px;
 }
 
+@media screen and (width: 390px) and (height: 844px) {
+    .textures-containter-grid-content {
+        max-height: 280px;
+    }
+}
+
+@media screen and (width: 1180px) {
+    .textures-containter-grid-content {
+        max-height: 340px;
+    }
+}
+
+@media screen and (width: 1366px) {
+    .textures-containter-grid-content {
+        height: 300px;
+    }
+}
+
 .textures-containter-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     width: 100%;
     max-width: 100%;
+}
+
+@media screen and (width: 390px) and (height: 844px) {
+    .textures-containter-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 .textures-containter-grid div {

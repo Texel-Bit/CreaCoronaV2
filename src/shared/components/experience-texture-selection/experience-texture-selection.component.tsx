@@ -13,13 +13,21 @@ interface ExperienceTextureSelectionProps {
 export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProps> = ({colorArray, onColorClick}) => {
 
     useState(()=>{
-        Singleton.getInstance().colorIndex=0
-    Singleton.getInstance().ChangeSelectedColor( colorArray[0])
 
+        if(!Singleton.getInstance().currentColorList && Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            Singleton.getInstance().colorIndex=0
+            Singleton.getInstance().ChangeSelectedColor( colorArray[0])
+        }
+        else if(Singleton.getInstance().currentColorList?.length==0 && Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            Singleton.getInstance().colorIndex=0
+            Singleton.getInstance().ChangeSelectedColor( colorArray[0])
+        }
     })
     
     return (
-        <div className='h-100 mh-100 mw-100 textures-selection-container'>
+        <div className='h-md-100 mh-md-100 mw-100 textures-selection-container'>
             <div className="background-color-middle rounded-top text-center">
                 <h6 className="m-0 color-white fw-normal">
                     {
@@ -34,7 +42,7 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
             <div className="border border-1 p-2 textures-containter-grid-content">
                 <div className="textures-containter-grid gap-1">
                     {colorArray.map((color, index) => (
-                        <div key={index} style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }} onClick={(e:any)=>{
+                            <div key={index} className='cursor-pointer cursor-pointer-hover' style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }} onClick={(e:any)=>{
                             const coloractual = e.target.style.backgroundImage;
                             Singleton.getInstance().ChangeSelectedColor( color);
                             const elementSelected=document.getElementById(`${sessionStorage.getItem('BumbleId')}`)

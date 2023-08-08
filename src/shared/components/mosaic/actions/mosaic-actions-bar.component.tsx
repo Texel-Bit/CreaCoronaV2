@@ -8,7 +8,7 @@ interface MosaicActionsBarProps {
 export const MosaicActionsBar: React.FC<MosaicActionsBarProps> = (props) => {
     return(
 
-        <div className="d-flex justify-content-around">
+        <div className="action__buttons">
             <>
             {
                 props.buttons.map(actionButton => {
@@ -17,7 +17,8 @@ export const MosaicActionsBar: React.FC<MosaicActionsBarProps> = (props) => {
                         icon={actionButton.icon}
                         buttonClick={actionButton.buttonClick}
                         styleColor={actionButton.styleColor}
-                        text={actionButton.text}/>
+                        text={actionButton.text}
+                        classButton={actionButton.classButton}/>
                 })
             }
             </>

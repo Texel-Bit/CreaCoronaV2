@@ -4,7 +4,7 @@ class StructureDataManager
 {
     private structureList: IStructure[] = [];
 
-    public getStructureById(id:string)
+    public getStructureById(id:number)
     {
         return this.structureList.find(structure => structure.id === id);
     }

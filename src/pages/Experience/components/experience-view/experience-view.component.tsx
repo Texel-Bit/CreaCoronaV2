@@ -33,6 +33,7 @@ import { IFormat } from "../../../../core/models/format/format.model";
 import { IStructure } from "../../../../core/models/structure/structure.model";
 import { ExperienceFormatThumbnailProps } from "../../../../shared/components/experience-format-selection/experience-format-thumbnail/experience-format-thumbnail";
 import { StructureThumbnailProps } from "../../../../shared/components/experience-structure-selection/structure-thumbnail/structure-thumbnail.component";
+import { getDesgignWithStructure } from "../../../../core/services/structure.services";
 
 
 interface currentExperienceView
@@ -66,12 +67,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         descriptionFull:<h6>Selecciona el color de tu preferencia de acabado brillante</h6>
     });
 
+
+
     dict.set(ExperienceViews.Format, {
-        title: "DEFINE LA CANTIDAD Y COTIZA",
+        title: "Define la cantidad y cotiza",
         icon: OpenIco,
-        description: <h6>Selecciona el Formato y Estructura de tu revestimiento, ingresa las Medidas de tu espacio y Cotiza</h6>,
-        descriptionFull:<h6></h6>
-    });
+        description: <h6>Selecciona el formato y estructura de tu revestimiento, <br></br>ingresa las Medidas de tu espacio y cotiza</h6>,
+        descriptionFull:<h6></h6>    });
 
 
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
@@ -81,6 +83,7 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [mosaicGrout, setMosaicGrout] = useState("");
     const [formats, setFormats] = useState<ExperienceFormatThumbnailProps[]>();
     const [selectedFormatSize, setSelectedFormatSize] = useState(1);
+    const [selectedPerspective, setSelectedPerspective] = useState(500);
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
     
     
@@ -150,13 +153,19 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
     useEffect(() => {
+
         if(Singleton.getInstance().currentGrout)
         {
             Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
         }
 
-        let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
+
+
+        let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
+        
+        
         setDesignTypes(currentDesignTypes);
+
 
         Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
         Singleton.getInstance().updateMosaicFunc = updateMosaic;
@@ -185,8 +194,36 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
                 let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
                 setSelectedFormatSize(newSize);
-                let elementSvg = await convertHtmlToImage(element);
+                
+                let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
+                setSelectedPerspective(newPerspective);
+
+                let elementSvg=null;
+
+                
+/*
+                if(Singleton.getInstance().currentExperienceView==ExperienceViews.Format)
+                {
+                    let requestBody = {
+                        svgsContent: btoa(unescape(encodeURIComponent(element.children[1].innerHTML))),
+                        width: element.clientWidth,
+                        height: element.clientHeight
+                    };
+
+                    console.log(requestBody);
+                    elementSvg = await getDesgignWithStructure(JSON.stringify(requestBody));
+                }
+                else
+                {
+                    elementSvg = await convertHtmlToImage(element);
+                }
+*/
+                elementSvg = await convertHtmlToImage(element);
                 setCanvasImage(elementSvg ?? "");
+
+                Singleton.getInstance().mosaicImage=elementSvg;
+                
+
             }
 
         }, 500);
@@ -210,13 +247,23 @@ function MosaicGroutChanged(currrentGrout:IGrout)
     {
         if(experieceView)
         {
+            
+           
             let numericalValue: number = experieceView;
             let view: ExperienceViews = numericalValue + value;
             Singleton.getInstance().ChangeExperienceView(view);
+            if (view != ExperienceViews.Format)
+            {
+                Singleton.getInstance().currentStructure=null;
+            }
             Singleton.getInstance().UpdateViewsStatus();
 
             if (experieceView == ExperienceViews.Format)
+            {
                 Singleton.getInstance().UpdateFormats();
+            }
+           
+                
 
             SetupsTitles();
            
@@ -253,11 +300,11 @@ function SetupsTitles()
 
     return(
 
-        <div className="d-flex mh-100 overflow-hidden">
+        <div className="d-flex mh-100 flex-column flex-md-row pt-4 pt-md-0 px-2 px-md-0">
 
-            <div className="w-50 p-3 px-5 h-100 experience-behavior-container">
+            <div className="w-100 w-md-50 p-md-3 px-xl-5 h-100 experience-behavior-container pb-4 pb-md-0 pt-xl-1">
 
-                <div className="d-flex align-items-start">
+                <div className="d-flex align-items-start header-view">
                     <div className="col-2">
                         <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
                     </div>
@@ -281,23 +328,23 @@ function SetupsTitles()
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex pt-4 h-100 justify-content-between align-items-start overflow-hidden">
-                        <div className="h-100 col-6">
+                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0">
+                        <div className="h-md-100 w-100 w-md-50">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
-                        <div className="col-5 d-flex align-items-center">
+                        <div className="col-5 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    Singleton.getInstance().selectedDesignType?.id === 3 && selectedDesigns &&
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
                                             actions={false} />
                                         <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "", classButton: "btn-corona-destructive" }
                                             ]}/>
                                     </>
                                 }
@@ -310,7 +357,7 @@ function SetupsTitles()
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.id == 1 && selectedDesigns&&
                                     <MosaicComponent 
                                         mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout}/>}
                                         actions={false}/>
@@ -324,8 +371,8 @@ function SetupsTitles()
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex pt-4 h-100 justify-content-between overflow-hidden">
-                        <div className="textures-selection-column col-5 h-100">
+                    <div className="d-flex flex-column flex-md-row pt-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden gap-4 gap-md-0">
+                        <div className="textures-selection-column col-12 col-md-7 h-md-100 position-relative">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection colorArray={
                                 Singleton.getInstance().getColorDataManager().GetAllColors(
@@ -335,7 +382,7 @@ function SetupsTitles()
                         />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
-                        <div className="col-5 d-flex align-items-center">
+                        <div className="col-5 col-md-4 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
@@ -357,9 +404,9 @@ function SetupsTitles()
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
                                  <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "" },
+                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "",classButton: "btn-corona-primary" },
                                                /* { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },*/
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red" }
+                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                         }
 
@@ -376,8 +423,8 @@ function SetupsTitles()
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-1 h-100 justify-content-around overflow-hidden">
-                        <div className="col-5 d-flex">
+                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row">
+                        <div className="col-12 col-md-5 d-flex mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
@@ -405,7 +452,7 @@ function SetupsTitles()
                                 }
                             </div>
                         </div>
-                        <div className="textures-selection-column d-flex flex-column col-5 h-100">
+                        <div className="textures-selection-column d-flex flex-column col-12 col-md-6 mx-auto mx-md-0 h-md-100 pt-4 pt-md-0">
                             <ExperienceFormatSelection formats={formats ?? []} />
                             <InitQuotationForm states={Singleton.getInstance().currentStateList ?? []}/>
                         </div>
@@ -417,20 +464,70 @@ function SetupsTitles()
 
             </div>
 
-            <div className="w-50 h-100">
-                <ExperienceCanvas 
-                    backgroundImage={canvasImage}
-                    mask={canvasMask}
-                    perspective={500}
-                    perspectiveOrigin={{
-                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.x,
-                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origen.y
-                    }}
-                    rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
-                    rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
-                    rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
-                    size={selectedFormatSize}/>
+            <div className="w-100 w-md-50 h-md-100 d-grid canvas-content">
+    <ExperienceCanvas 
+        backgroundImage={canvasImage}
+        mask={canvasMask}
+        perspective={selectedPerspective}
+        perspectiveOrigin={{
+            X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
+            Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
+        }}
+        rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
+        rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
+        rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
+        size={selectedFormatSize}
+    />
+      <div className="timeline">
+
+        <div className="timeline-step">
+            <span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>
+            <div className="timeline-content timeline-content--modifier">
+                <img className="mosaicResumeImage" src={canvasImage}/>
+                <div className="timeline-colors">
+                    {
+                        Singleton.getInstance().currentDesignList &&
+                        Singleton.getInstance().currentDesignList!.map((element, index) => (
+                            <p key={index}>{element.name}</p>
+                        ))
+                    }
+                </div>
             </div>
+        </div>
+
+        {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
+            <span className="timeline-title">Colores: ({Singleton.getInstance().GetCurrenColorTypeID()==1?"Campo Lleno":"Con Diseño"})</span>
+            <div className="timeline-content timeline-content-grid">
+                {Singleton.getInstance().currentColorList!.map((color, index) => (
+                    <div key={index} className="color-item">
+                        <img src={getServerImagesUrl(color.source)} alt={color.name}/>
+                        {color.name}
+                    </div>
+                ))}
+            </div>
+        </div>}
+
+        <div className="timeline-step">
+            <span className="timeline-title">Formato:</span>
+            <div className="timeline-content">
+                {Singleton.getInstance().currentFormat?.name}
+            </div>
+        </div>
+        {Singleton.getInstance().currentStructure&&
+        <div className="timeline-step">
+            <span className="timeline-title">Estructura:</span>
+            <div className="timeline-content">
+                <img style={{maxWidth:"80px"}} src={getServerImagesUrl(Singleton.getInstance().currentStructure!?.source)} alt={Singleton.getInstance().currentStructure!.name}/>
+                {Singleton.getInstance().currentStructure!.name}
+            </div>
+                </div> }
+
+        </div>
+            
+        </div>
+
+            
+            
 
         </div>
 

@@ -1,6 +1,6 @@
 import { FormCheck } from "react-bootstrap";
 import {navbarItemsProps} from '../../../../core/models/navBarItems/service-navBar';
-import { ViewStatus } from "../../../enums/routes.enum";
+import { ExperienceViews, ViewStatus } from "../../../enums/routes.enum";
 import { useEffect, useState } from "react";
 import Singleton from "../../../../core/patterns/singleton";
 
@@ -17,6 +17,7 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
     const [ currColor, updateColor ] = useState<NavBarItemColor>();
     const [svgData, setSvgData] = useState("");
 
+
     useEffect(() => {
         fetch(props.imagen)
             .then(response => response.text())
@@ -26,23 +27,46 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
             });
     }, [props.imagen]);
 
+    const applyFillColorToSvg = (svgString:string, color:string) => {
+       
+        const svgWithFill = svgString.replace(/(<path[^>]+fill=")[^"]*"/, `$1${color}"`);
+        return svgWithFill;
+      }
+
     useEffect(() => {
         if(Singleton.getInstance().currentExperienceView==props.experienceView)
         {
             updateColor(SelectedColor)
+            loadImageData(props.imagenOn)
         }
         else if(Singleton.getInstance().ValidateViewCompleteStatus(props.experienceView))
         {
             updateColor(CompleteColor)
+            loadImageData(props.imagenOn)
         }
         else
         {
             updateColor(UnCompleteColor)
+            loadImageData(props.imagen)
+            
         }
 
     },[]);
 
-    
+    function loadImageData(currImage:string)
+    {
+        fetch(currImage)
+        .then(response => response.text())
+        .then(data => setSvgData(data))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    useEffect(() => {
+      
+        setSvgData(applyFillColorToSvg(svgData,currColor?.IconColor??UnCompleteColor.IconColor));
+    },[updateColor]);
 
     const SelectedColor: NavBarItemColor = {
         FontColor: "#213365",
@@ -69,16 +93,20 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
         if(Singleton.getInstance().currentExperienceView==props.experienceView)
         {
             updateColor(SelectedColor)
+            loadImageData(props.imagenOn)
         }
         else if(Singleton.getInstance().ValidateViewCompleteStatus(props.experienceView))
         {
             updateColor(CompleteColor)
+            loadImageData(props.imagenOn)
         }
         else
         {
             updateColor(UnCompleteColor)
+            loadImageData(props.imagen)
         }
        
+
 
     },[viewStatus]);
    
@@ -88,14 +116,17 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
         if(Singleton.getInstance().currentExperienceView==props.experienceView)
         {
             updateColor(SelectedColor)
+            loadImageData(props.imagenOn)
         }
         else if(Singleton.getInstance().ValidateViewCompleteStatus(props.experienceView))
         {
             updateColor(CompleteColor)
+            loadImageData(props.imagenOn)
         }
         else
         {
             updateColor(UnCompleteColor)
+            loadImageData(props.imagen)
         }
 
        
@@ -103,7 +134,24 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
 
     function ClickButton()
     {
-        console.log("Click Button");
+        const currentExperienceView = Singleton.getInstance().currentExperienceView??ExperienceViews.EnvironmentType;
+        const propExperienceView = props.experienceView;
+        
+        // Ensure they are both defined and part of the enum
+        if (currentExperienceView in ExperienceViews && propExperienceView in ExperienceViews) {
+            // Cast to numbers and compare
+            if (+currentExperienceView >= +propExperienceView) {
+                if(currentExperienceView!=propExperienceView)
+                {
+                    Singleton.getInstance().ChangeExperienceView(propExperienceView);
+                }
+            }
+            else
+            {
+                
+            }
+        }
+       
     }
 
     return (

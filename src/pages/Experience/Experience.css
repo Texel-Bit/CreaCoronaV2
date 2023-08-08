@@ -5,3 +5,9 @@
     height: 100%;
 }
 
+@media screen and (width: 390px) and (height: 844px) {
+    .experience-content {
+        overflow: auto;
+    }
+}
+

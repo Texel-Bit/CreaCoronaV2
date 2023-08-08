@@ -151,6 +151,7 @@
     height: 35%;
     width: 45%;
     margin: 0 auto;
+    justify-content: flex-start;
 }
 
 .unitys{

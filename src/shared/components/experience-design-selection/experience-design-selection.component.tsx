@@ -20,11 +20,11 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     
     const [selectedDesignType, setSelectedDesignType] = useState<IDesignType>();
     const [designColors, setDesignColors] = useState<IDesign[]>([]);
+    const [designLoaded, setDesignsLoaded] = useState(false);
 
 
     useEffect(()=>{
         
-
         const SelectDesignTypeAsync = async() =>
         {
 
@@ -35,19 +35,25 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
                 if(!isSameDesignType)
                 {
+                    Singleton.getInstance().getDesignDataManager().ClearDesigns();
+                    Singleton.getInstance().removeALlColors();
                     Singleton.getInstance().currentColorList=[]
                 }
+
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
                 const CurrColorsSelected = await getAllDesignByTypeId(selectedDesignType.id);
                 
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
         
-                Singleton.getInstance().getDesignDataManager().ClearDesigns();
-                Singleton.getInstance().removeALlColors();
+                if(!designLoaded)
+                {
+                    Singleton.getInstance().getDesignDataManager().ClearDesigns();
+                    Singleton.getInstance().removeALlColors();
+                }
+                
                 Singleton.getInstance().removeAllFormats();
                 
-               
 
                 let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
@@ -63,6 +69,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     Singleton.getInstance().addDesign(currDesign);
                     return currDesign;
                 });
+
 
      
                 CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {
@@ -124,9 +131,9 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-               
+            
 
-                if(Singleton.getInstance().currentDesignList)
+                if(Singleton.getInstance().currentDesignList && !designLoaded)
                 {
                     if(Singleton.getInstance().currentDesignList!?.length>0)
                     {                        
@@ -142,7 +149,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                    
                     
                 }
-                else
+                else if(!designLoaded)
                 {
                     Singleton.getInstance().GenerateDefaultDesignsSelected()
                 }
@@ -162,18 +169,25 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
         if(!Singleton.getInstance().selectedDesignType)
         {
+            console.log("Selected design type missing")
             setSelectedDesignType(props.designTypes[0]);
         }
         else
         {
             if(Singleton.getInstance().selectedDesignType)
             {
-                setSelectedDesignType(Singleton.getInstance().selectedDesignType!);
+                console.log("Selected design type is selected")
+                setDesignsLoaded(true);
             }
         }
            
 
     }, [props.designTypes]);
+
+    
+    useEffect(() => {
+        setSelectedDesignType(Singleton.getInstance().selectedDesignType!);     
+    }, [designLoaded]);
 
 
     const handleDesignTypeChange =async (_event:any, designType:IDesignType) => {
@@ -203,7 +217,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                                 onChange={(event) => handleDesignTypeChange(event, designType)}/>
                             <label
                                 key={`designTypeTagText${designType.id}`}
-                                className="btn btn-sm btn-outline-primary rounded-0 rounded-top pb-0 px-3" 
+                                className="btn-corona-secondary rounded-0 rounded-top pb-0 px-3 cursor-pointer"
+                                style={{border: '1px solid #0069B4', textAlign: 'center'}}
                                 htmlFor={designType.id.toString()}>
                                 {designType.name}
                             </label>
@@ -216,7 +231,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
                     {
                         designColors.map(design => {
-                            return <img 
+                            return <img
+                                className='cursor-pointer cursor-pointer-hover'
                                 key={`designTypeTexture${design.id}`}
                                 onClick={()=>SelectNewDesign(design)}
                                 src={getServerImagesUrl(design.source)}/>

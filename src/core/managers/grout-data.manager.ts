@@ -4,7 +4,7 @@ class GroutDataManager
 {
     private GroutList: IGrout[] = [];
 
-    public getGroutById(id:string)
+    public getGroutById(id:number)
     {
         return this.GroutList.find(Grout => Grout.id === id);
     }

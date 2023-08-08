@@ -3,6 +3,7 @@ import "./init-quotation-form.component.css";
 import { IState } from "../../../core/models/State/state.model";
 import React, { useEffect, useState } from "react";
 import { QuotationModal } from "../quotation-modal/modalCotization";
+import Singleton from "../../../core/patterns/singleton";
 
 
 interface InitQuotationFormProps {
@@ -15,23 +16,25 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
     const [openModalStatus, setOpenModalStatus] = useState(false);
     const [canOpenModalStatus, setCanOpenModalStatus] = useState(false);
     const [squareMetersSelected, setSquareMetersSelected] = useState(false);
+    const [initQuotationWidth, setInitQuotationWidth] = useState("");
+    const [initQuotationHeight, setInitQuotationHeight] = useState("");
     const [initQuotationArea, setInitQuotationArea] = useState("");
-    const [initQuotationMeters, setInitQuotationMeters] = useState("");
-    const [initQuotationSquareMeters, setInitQuotationSquareMeters] = useState("");
     const [initQuotationDepartment, setInitQuotationDepartment] = useState("");
     const [initQuotationErrorText, setInitQuotationErrorText] = useState("");
 
 
     useEffect(() => {
         validateData();
-    }, [initQuotationArea, initQuotationMeters, initQuotationSquareMeters, initQuotationDepartment, squareMetersSelected]);
+    }, [initQuotationWidth, initQuotationHeight, initQuotationArea, initQuotationDepartment, squareMetersSelected,Singleton.getInstance().currentStructure,Singleton.getInstance().currentFormat]);
 
 
     const onInitQuotationButtonClick = () => {
 
         validateData();
         setOpenModalStatus(canOpenModalStatus);
+        
     }
+
 
 
     const validateData = () => {
@@ -40,12 +43,12 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
 
         let valid = true
 
-        if (squareMetersSelected && !initQuotationSquareMeters)
+        if (squareMetersSelected && !initQuotationArea)
         {
             setInitQuotationErrorText("Ingresar el área en metros cuadrados");
             valid = false;
         }
-        else if (!initQuotationArea || !initQuotationMeters)
+        else if (!squareMetersSelected && (!initQuotationWidth || !initQuotationHeight))
         {
             setInitQuotationErrorText("Ingresar información de metros y área");
             valid = false;
@@ -55,21 +58,66 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
             setInitQuotationErrorText("Seleccionar departamento");
             valid = false;
         }
+        else if (!Singleton.getInstance().currentFormat)
+        {
+            setInitQuotationErrorText("Selecciona un formato");
+            valid = false;
+        }
+        else if (!Singleton.getInstance().currentStructure)
+        {
+            setInitQuotationErrorText("Selecciona una estructura");
+            valid = false;
+        }
 
         setCanOpenModalStatus(valid);
     }
 
+    function SetQuotationArea(area:string)
+    {
+        setInitQuotationArea(area);
+        setInitQuotationWidth("0");
+        setInitQuotationHeight("0");
+        Singleton.getInstance().quotationArea=parseInt(area);
+        Singleton.getInstance().quotationWidth=0;
+        Singleton.getInstance().quotationHeight=0;
+    }
 
-    const onInitQuotationAreaChanged = (e: React.ChangeEvent<HTMLInputElement>) => setInitQuotationArea(e.target.value);
-    const onInitQuotationMetersChanged = (e: React.ChangeEvent<HTMLInputElement>) => setInitQuotationMeters(e.target.value);
-    const onInitQuotationSquareMetersChanged = (e: React.ChangeEvent<HTMLInputElement>) => setInitQuotationSquareMeters(e.target.value);
-    const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement>) => setInitQuotationDepartment(e.target.value);
+    function SetQuotationWidth(Width:string)
+    {
+        setInitQuotationArea("0");
+        setInitQuotationWidth(Width);
+        Singleton.getInstance().quotationWidth=parseInt(Width);
+        Singleton.getInstance().quotationArea=0;
+    }
+
+    function SetQuotationHeigth(Heigth:string)
+    {
+        setInitQuotationArea("0");
+        setInitQuotationHeight(Heigth);
+        Singleton.getInstance().quotationHeight=parseInt(Heigth);
+        Singleton.getInstance().quotationArea=0;
+    }
+
+    function SetState(state:string)
+    {
+        setInitQuotationDepartment(state);
+        const item = Singleton.getInstance().currentStateList!.find(item => item.id === parseInt(state));
+        if(item)
+            Singleton.getInstance().currentState = item;
+    }
+
+    const onInitQuotationHeightChanged = (e: React.ChangeEvent<HTMLInputElement>) => SetQuotationHeigth(e.target.value);
+    const onInitQuotationWidthChanged = (e: React.ChangeEvent<HTMLInputElement>) => SetQuotationWidth(e.target.value);
+    const onInitQuotationSquareMetersChanged = (e: React.ChangeEvent<HTMLInputElement>) => SetQuotationArea(e.target.value);
+    const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement>) => SetState(e.target.value);
 
 
     return(
-        <>
-        
-            <Form className="p-3 mt-3 border rounded-2">
+        <div className="mw-100 overflow-hidden">
+            <div className="background-color-middle px-3 py-1 w-50 rounded-top">
+                <h6 className="m-0 color-white fw-normal">Medidas</h6>
+            </div>
+            <Form className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
 
                 <Form.Group controlId="optionsMeasure">
 
@@ -81,7 +129,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                         id={`inline-radio-1`}
                         defaultChecked={true}
                         onChange={(e) => e.isTrusted && setSquareMetersSelected(false)}
-                        className="fs-6 fw-bold color-middle"/>
+                        className="fs-6 color-middle"/>
 
                     <div className="d-flex gap-3">
 
@@ -89,11 +137,11 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                             <Form.Control
                                 type="number"
                                 min={1}
-                                placeholder="Metros"
+                                placeholder="Ancho"
                                 className="input-measure"
                                 name="initQuotationArea"
                                 disabled={squareMetersSelected}
-                                onChange={onInitQuotationAreaChanged}
+                                onChange={onInitQuotationHeightChanged}
                                 required/>
                         </Form.Group>
 
@@ -101,11 +149,11 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                             <Form.Control
                                 type="number"
                                 min={1}
-                                placeholder="Metros"
+                                placeholder="Alto"
                                 className="input-measure"
                                 name="initQuotationMeters"
                                 disabled={squareMetersSelected}
-                                onChange={onInitQuotationMetersChanged}
+                                onChange={onInitQuotationWidthChanged}
                                 required/>
                         </Form.Group>
                     </div>
@@ -116,12 +164,12 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
 
                     <Form.Check
                         inline
-                        label="Area en Metros Cuadrados"
+                        label="Área en Metros Cuadrados"
                         name="initQuotationFormCheck"
                         type={'radio'}
                         id={`inline-radio-2`}
                         onChange={(e) => e.isTrusted && setSquareMetersSelected(true)}
-                        className="fs-6 fw-bold color-middle mt-3"/>
+                        className="fs-6 color-middle mt-3"/>
 
                     <div className="inputs__medidas">
 
@@ -156,13 +204,14 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                         {props.states.map(state => <option value={state.id}>{state.stateName}</option>)}
                 </FormSelect>
 
-                <Button type="button"
-                        className="w-100 color-white mt-3 color-green init-quotation-button"
+                <button type="button"
+                        className="btn-corona w-100 mt-3 init-quotation-button btn-corona-add"
                         disabled={!canOpenModalStatus}
-                        onClick={onInitQuotationButtonClick}>Cotizar</Button>
+                        onClick={onInitQuotationButtonClick}>Cotizar</button>
             </Form>
 
             { openModalStatus && <QuotationModal closeModalEvent={() => setOpenModalStatus(false)}/> }
-        </>
+        </div>
     );
 }
+
