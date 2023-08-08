@@ -78,3 +78,64 @@
         width: 100% !important;
     }
 }
+
+.timeline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-right: 100px;
+}
+
+.timeline-step {
+    display: flex;
+    align-items: flex-start;  /* ensure alignment to top */
+    flex-direction: column; /* ensure horizontal layout */
+    margin-bottom: 20px;
+    gap: 5px;
+}
+
+.timeline-title {
+    flex-shrink: 0; /* ensures that title doesn't shrink */
+    font-weight: bold;
+    margin-right: 20px;
+    display: block;
+
+}
+
+.timeline-content {
+    display: flex;
+    flex-direction: column; /* stack content vertically */
+    
+}
+
+.color-item {
+    display: flex;
+    margin-top: 10px;
+    flex-direction: row; /* make it horizontal */
+    justify-content: flex-start;
+    gap: 10px; 
+}
+.color-itemMosaic {
+    display: flex;
+    margin-top: 10px;
+    flex-direction: row; /* make it horizontal */
+    justify-content: flex-start;
+    gap: 20px; 
+    
+}
+.color-itemMosaic img{
+   width: 200px;
+    
+}
+.mosaicResumeImage
+{
+    max-width: 200px;
+    border: 2px solid #213C65;
+}
+.color-item img {
+    margin-right: 5px; /* spacing between the image and its label */
+    width: 40px;
+    height: auto;
+}
+
