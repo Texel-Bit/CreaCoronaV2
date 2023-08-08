@@ -19,6 +19,18 @@
     }
 }
 
+@media screen and (width: 1180px) {
+    .textures-containter-grid-content {
+        max-height: 340px;
+    }
+}
+
+@media screen and (width: 1366px) {
+    .textures-containter-grid-content {
+        height: 300px;
+    }
+}
+
 .textures-containter-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

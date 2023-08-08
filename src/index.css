@@ -220,3 +220,10 @@ code {
 .form-check-input:focus {
   box-shadow: none !important;
 }
+
+@media screen and (max-width: 1366px) {
+  .corona-logo {
+    object-fit: contain;
+    width: 150px;
+  }
+}

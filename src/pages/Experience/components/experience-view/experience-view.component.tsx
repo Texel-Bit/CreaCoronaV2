@@ -269,7 +269,7 @@ function SetupsTitles()
 
         <div className="d-flex mh-100 flex-column flex-md-row pt-4 pt-md-0 px-2 px-md-0">
 
-            <div className="w-100 w-md-50 p-md-3 px-xl-5 h-100 experience-behavior-container pb-4 pb-md-0">
+            <div className="w-100 w-md-50 p-md-3 px-xl-5 h-100 experience-behavior-container pb-4 pb-md-0 pt-xl-1">
 
                 <div className="d-flex align-items-start header-view">
                     <div className="col-2">
@@ -295,7 +295,7 @@ function SetupsTitles()
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-0 gap-xxl-3 pb-4 pb-md-0">
+                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0">
                         <div className="h-md-100 w-100 w-md-50">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
@@ -339,7 +339,7 @@ function SetupsTitles()
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
                     <div className="d-flex flex-column flex-md-row pt-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden gap-4 gap-md-0">
-                        <div className="textures-selection-column col-12 col-md-6 h-md-100 position-relative">
+                        <div className="textures-selection-column col-12 col-md-7 h-md-100 position-relative">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection colorArray={
                                 Singleton.getInstance().getColorDataManager().GetAllColors(
@@ -349,7 +349,7 @@ function SetupsTitles()
                         />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
-                        <div className="col-5 d-flex align-items-start mx-auto mx-md-0">
+                        <div className="col-5 col-md-4 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 
@@ -449,16 +449,16 @@ function SetupsTitles()
 
         <div className="timeline-step">
             <span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>
-            <div className="timeline-content">
+            <div className="timeline-content timeline-content--modifier">
                 <img className="mosaicResumeImage" src={canvasImage}/>
-                
+                <div className="timeline-colors">
                     {
                         Singleton.getInstance().currentDesignList &&
                         Singleton.getInstance().currentDesignList!.map((element, index) => (
                             <p key={index}>{element.name}</p>
                         ))
                     }
-                    
+                </div>
             </div>
         </div>
 

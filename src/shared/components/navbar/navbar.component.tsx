@@ -62,7 +62,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
             <img
                 src={LogoCreaCorona}
-                className="d-inline-block align-top logo h-100"
+                className="d-inline-block align-top logo h-100 corona-logo"
                 alt="Crea Corona"/>
 
             <div className="d-flex gap-sm-3 gap-4 p-1">

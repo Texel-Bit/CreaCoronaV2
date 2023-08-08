@@ -49,7 +49,7 @@
 
 @media screen and (width: 1366px) {
     .textures-selection-column {
-        gap: .5rem;
+        gap: 1rem;
     }
 }
 
@@ -87,6 +87,36 @@
     padding-right: 100px;
 }
 
+@media screen and (min-width: 390px) {
+    .timeline {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding-right: 0;
+        gap: 2rem;
+    }
+}
+
+@media screen and (min-width: 1180px) {
+    .timeline {
+        height: 40vh;
+        overflow: auto;
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    .timeline {
+        height: 32vh;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .timeline {
+        height: fit-content;
+        gap: 5rem;
+    }
+}
+
 .timeline-step {
     display: flex;
     align-items: flex-start;  /* ensure alignment to top */
@@ -106,7 +136,11 @@
 .timeline-content {
     display: flex;
     flex-direction: column; /* stack content vertically */
-    
+}
+
+.timeline-content--modifier {
+    flex-direction: row;
+    gap: 1rem;
 }
 
 .color-item {

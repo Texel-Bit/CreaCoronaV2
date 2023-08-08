@@ -71,7 +71,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
             <div className="background-color-middle px-3 py-1 w-50 rounded-top">
                 <h6 className="m-0 color-white fw-normal">Medidas</h6>
             </div>
-            <Form className="p-4 pt-xl-2 border-1 experience-format-container">
+            <Form className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
 
                 <Form.Group controlId="optionsMeasure">
 
