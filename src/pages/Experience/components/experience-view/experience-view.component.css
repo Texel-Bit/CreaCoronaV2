@@ -219,7 +219,8 @@
 }
 .mosaicResumeImage
 {
-    max-width: 160px;
+    width: 160px;
+    height: 160px;
     border: 2px solid #213C65;
 }
 .color-item img {
