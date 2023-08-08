@@ -105,8 +105,8 @@
 
 @media screen and (min-width: 1366px) {
     .timeline {
-        height: 32vh;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        overflow: hidden;
     }
 }
 
@@ -128,7 +128,6 @@
 .timeline-title {
     flex-shrink: 0; /* ensures that title doesn't shrink */
     font-weight: bold;
-    margin-right: 20px;
     display: block;
     color: var(--color-middle);
 
@@ -137,6 +136,12 @@
 .timeline-content {
     display: flex;
     flex-direction: column; /* stack content vertically */
+}
+
+@media screen and (min-width: 1900px) {
+    .timeline-content-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .timeline-content--modifier {
@@ -149,7 +154,8 @@
     margin-top: 10px;
     flex-direction: row; /* make it horizontal */
     justify-content: flex-start;
-    gap: 10px; 
+    gap: 10px;
+    font-size: 12px;
 }
 .color-itemMosaic {
     display: flex;
@@ -165,12 +171,18 @@
 }
 .mosaicResumeImage
 {
-    max-width: 200px;
+    max-width: 160px;
     border: 2px solid #213C65;
 }
 .color-item img {
     margin-right: 5px; /* spacing between the image and its label */
-    width: 40px;
+    width: 30px;
     height: auto;
+}
+
+@media screen and (width:1366px) {
+    .canvas-content {
+        grid-template-rows: 350px 1fr;
+    }
 }
 

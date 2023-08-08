@@ -431,7 +431,7 @@ function SetupsTitles()
 
             </div>
 
-            <div className="w-100 w-md-50 h-md-100">
+            <div className="w-100 w-md-50 h-md-100 d-grid canvas-content">
     <ExperienceCanvas 
         backgroundImage={canvasImage}
         mask={canvasMask}
@@ -464,7 +464,7 @@ function SetupsTitles()
 
         {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
             <span className="timeline-title">Colores: ({Singleton.getInstance().GetCurrenColorTypeID()==1?"Campo Lleno":"Con Diseño"})</span>
-            <div className="timeline-content">
+            <div className="timeline-content timeline-content-grid">
                 {Singleton.getInstance().currentColorList!.map((color, index) => (
                     <div key={index} className="color-item">
                         <img src={getServerImagesUrl(color.source)} alt={color.name}/>
