@@ -33,3 +33,16 @@
     overflow-y: auto;
     height: 500px !important;
 }
+
+@media screen and (min-width: 390px) and (max-width: 1180px) {
+    .design-thumbnails-grid {
+        grid-template-columns: repeat(4, 1fr);
+        height: 200px !important;
+    }
+}
+
+@media screen and (width: 1366px) {
+    .design-thumbnails-grid {
+        height: 430px !important;
+    }
+}

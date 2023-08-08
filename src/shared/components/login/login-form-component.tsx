@@ -92,7 +92,7 @@ export const LoginForm:React.FC = () => {
 
             <div className="row">
                 <div className="col-sm-6">
-                    <div className="form-check">
+                    <div className="form-check text-center text-md-start mb-4 mb-md-0">
                         <label className="form-check-label">
                             <input
                                 type="checkbox"
@@ -102,7 +102,7 @@ export const LoginForm:React.FC = () => {
                         </label>
                     </div>
                 </div>
-                <div className="col-sm-6 mb-3 text-md-end">
+                <div className="col-sm-6 mb-3 text-md-end text-center">
                     <Link className="text-input" to="/forget-password"><i className="mdi mdi-lock"></i> ¿Olvidaste tu contraseña?</Link>
                 </div>
             </div>

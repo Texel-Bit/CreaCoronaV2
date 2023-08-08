@@ -102,9 +102,11 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
 
 
     return(
-        <>
-        
-            <Form className="p-3 mt-3 border rounded-2">
+        <div className="mw-100 overflow-hidden">
+            <div className="background-color-middle px-3 py-1 w-50 rounded-top">
+                <h6 className="m-0 color-white fw-normal">Medidas</h6>
+            </div>
+            <Form className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
 
                 <Form.Group controlId="optionsMeasure">
 
@@ -116,7 +118,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                         id={`inline-radio-1`}
                         defaultChecked={true}
                         onChange={(e) => e.isTrusted && setSquareMetersSelected(false)}
-                        className="fs-6 fw-bold color-middle"/>
+                        className="fs-6 color-middle"/>
 
                     <div className="d-flex gap-3">
 
@@ -151,12 +153,12 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
 
                     <Form.Check
                         inline
-                        label="Area en Metros Cuadrados"
+                        label="Área en Metros Cuadrados"
                         name="initQuotationFormCheck"
                         type={'radio'}
                         id={`inline-radio-2`}
                         onChange={(e) => e.isTrusted && setSquareMetersSelected(true)}
-                        className="fs-6 fw-bold color-middle mt-3"/>
+                        className="fs-6 color-middle mt-3"/>
 
                     <div className="inputs__medidas">
 
@@ -191,14 +193,14 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                         {props.states.map(state => <option value={state.id}>{state.stateName}</option>)}
                 </FormSelect>
 
-                <Button type="button"
-                        className="w-100 color-white mt-3 color-green init-quotation-button"
+                <button type="button"
+                        className="btn-corona w-100 mt-3 init-quotation-button btn-corona-add"
                         disabled={!canOpenModalStatus}
-                        onClick={onInitQuotationButtonClick}>Cotizar</Button>
+                        onClick={onInitQuotationButtonClick}>Cotizar</button>
             </Form>
 
             { openModalStatus && <QuotationModal closeModalEvent={() => setOpenModalStatus(false)}/> }
-        </>
+        </div>
     );
 }
 

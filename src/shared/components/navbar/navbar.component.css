@@ -37,6 +37,12 @@
     width: 150px;
 }
 
+@media screen and (max-width: 1366px) {
+    .navbar-item {
+        width: 120px;
+    }
+}
+
 .navbar-item svg {
     height: 34px;
     width: 34px;

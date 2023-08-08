@@ -19,7 +19,7 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
     })
     
     return (
-        <div className='h-100 mh-100 mw-100 textures-selection-container'>
+        <div className='h-md-100 mh-md-100 mw-100 textures-selection-container'>
             <div className="background-color-middle rounded-top text-center">
                 <h6 className="m-0 color-white fw-normal">
                     {
