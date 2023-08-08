@@ -28,23 +28,41 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 
                 Singleton.getInstance().getDesignDataManager().ClearDesigns();
                 
+                const designTypes=await getAllDesignType();
+                designTypes.data.forEach((element2: any) => {
+                 let currentDesignType: IDesignType = {
+                     name:element2.DesignTypeName,
+                     id:element2.idDesignType,
+                     source:element2.DesignTypeIconPath,
+                     mosaicValue:element2.MosaicType_idMosaicType==3?4:1
+                   };
+ 
+                   singleton.addDesignType(currentDesignType);
+             
+                 });
+
                 let response = await getAllEnvironmentType();
 
+                console.log(response);
                 response.data.forEach((element: any) => {
-
+                    
                     let designTypeList:number[]; 
                     let idDesignType:IDesignType[]; 
                     designTypeList=[]
                     idDesignType=[]
-             
-                    
+
+                    const designTypes= element.DesignType_EnvironmentType.map((item:any) => {
+                       
+                        return Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(item.DesignType_idDesignType);
+                    });
+
+        
 
                     const currentEnvironment: IEnvironmentType = {
                         id: element.idEnvironmentType,
                         source: element.EnvironmentTypeImage,
                         name: element.EnvironmentTypeName,
-                        designTypesIDS:element.DesignType_EnvironmentType,
-                        designTypes:idDesignType
+                        designTypes:designTypes
                     };
                     
 
@@ -54,18 +72,7 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
 
                 handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
             
-               const designTypes=await getAllDesignType();
-               designTypes.data.forEach((element2: any) => {
-                let currentDesignType: IDesignType = {
-                    name:element2.DesignTypeName,
-                    id:element2.idDesignType,
-                    source:element2.DesignTypeIconPath,
-                    mosaicValue:element2.MosaicType_idMosaicType==3?4:1
-                  };
-
-                  singleton.addDesignType(currentDesignType);
-            
-                });
+              
 
                 const states=await getAllState();
 

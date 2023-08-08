@@ -86,7 +86,15 @@ export const ExperienceColorPaletteSelection = () => {
                         setColorBundles(Singleton.getInstance().colorBundleList);
                         
                         if (Singleton.getInstance().colorBundleList) {
-                            Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
+                            if(!Singleton.getInstance().currentColorList)
+                            {
+                                Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
+
+                            }
+                            else if(Singleton.getInstance().colorBundleList!?.length<4)
+                            {
+                                Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
+                            }
                         }
 
                     } else {

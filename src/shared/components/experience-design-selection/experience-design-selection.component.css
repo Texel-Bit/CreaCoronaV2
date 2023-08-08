@@ -8,16 +8,18 @@
     border-color: var(--color-middle);
     border-bottom: none;
     padding-top: 2px;
+
 }
 
 
-.design-types-selection-group .btn:hover {
+.design-types-selection-group label:hover {
     color: white;
-    background-color: var(--color-middle) !important;
+    background-color: var(--color-middle) !important; 
 }
 
-.design-types-selection-group .btn:checked {
-    background-color: var(--color-middle) !important;
+.design-types-selection-group input[type="radio"]:checked + label {
+    color: white;
+    background-color: var(--color-middle) !important;  
 }
 
 .design-selection-container {

@@ -13,9 +13,17 @@ interface ExperienceTextureSelectionProps {
 export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProps> = ({colorArray, onColorClick}) => {
 
     useState(()=>{
-        Singleton.getInstance().colorIndex=0
-    Singleton.getInstance().ChangeSelectedColor( colorArray[0])
 
+        if(!Singleton.getInstance().currentColorList && Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            Singleton.getInstance().colorIndex=0
+            Singleton.getInstance().ChangeSelectedColor( colorArray[0])
+        }
+        else if(Singleton.getInstance().currentColorList?.length==0 && Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            Singleton.getInstance().colorIndex=0
+            Singleton.getInstance().ChangeSelectedColor( colorArray[0])
+        }
     })
     
     return (

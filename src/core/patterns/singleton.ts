@@ -576,20 +576,6 @@ public addDesignType(designType: IDesignType): void {
 
     this.designTypeDataManager.addDesignType(designType);
 
-    
-
-    let environmentTypeArray = this.environmentTypeDataManager.getAllEnvironmentTypeArray();
-
-    environmentTypeArray.forEach(element => {
-        if(element.designTypesIDS.some(e => e === designType.id)) {
-            // The designType.id exists in the designTypesIDS array of the current element.
-            // Perform the necessary operations here.
-        }
-        else{
-            element.designTypes?.push(designType);
-        }
-    });
-
 }
 
 public addDesign(design: IDesign): void {
@@ -612,7 +598,6 @@ public GenerateDefaultDesignsSelected() {
     let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
     const currentDesigns = this.getDesignDataManager().getAllDesigns();
 
-   
     this.currentDesignList = []
    
 

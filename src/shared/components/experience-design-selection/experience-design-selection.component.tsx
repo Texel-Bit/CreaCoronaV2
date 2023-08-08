@@ -20,11 +20,11 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     
     const [selectedDesignType, setSelectedDesignType] = useState<IDesignType>();
     const [designColors, setDesignColors] = useState<IDesign[]>([]);
+    const [designLoaded, setDesignsLoaded] = useState(false);
 
 
     useEffect(()=>{
         
-
         const SelectDesignTypeAsync = async() =>
         {
 
@@ -43,9 +43,13 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
         
-                Singleton.getInstance().getDesignDataManager().ClearDesigns();
-                Singleton.getInstance().removeALlColors();
-                Singleton.getInstance().removeAllFormats();
+                if(!designLoaded)
+                {
+                    Singleton.getInstance().getDesignDataManager().ClearDesigns();
+                    Singleton.getInstance().removeALlColors();
+                    Singleton.getInstance().removeAllFormats();
+                }
+                
                 
                
 
@@ -126,7 +130,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
                
 
-                if(Singleton.getInstance().currentDesignList)
+                if(Singleton.getInstance().currentDesignList && !designLoaded)
                 {
                     if(Singleton.getInstance().currentDesignList!?.length>0)
                     {                        
@@ -142,7 +146,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                    
                     
                 }
-                else
+                else if(!designLoaded)
                 {
                     Singleton.getInstance().GenerateDefaultDesignsSelected()
                 }
@@ -162,18 +166,25 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
         if(!Singleton.getInstance().selectedDesignType)
         {
+            console.log("Selected design type missing")
             setSelectedDesignType(props.designTypes[0]);
         }
         else
         {
             if(Singleton.getInstance().selectedDesignType)
             {
-                setSelectedDesignType(Singleton.getInstance().selectedDesignType!);
+                console.log("Selected design type is selected")
+                setDesignsLoaded(true);
             }
         }
            
 
     }, [props.designTypes]);
+
+    
+    useEffect(() => {
+        setSelectedDesignType(Singleton.getInstance().selectedDesignType!);     
+    }, [designLoaded]);
 
 
     const handleDesignTypeChange =async (_event:any, designType:IDesignType) => {

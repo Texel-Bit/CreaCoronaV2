@@ -33,6 +33,7 @@ import { IFormat } from "../../../../core/models/format/format.model";
 import { IStructure } from "../../../../core/models/structure/structure.model";
 import { ExperienceFormatThumbnailProps } from "../../../../shared/components/experience-format-selection/experience-format-thumbnail/experience-format-thumbnail";
 import { StructureThumbnailProps } from "../../../../shared/components/experience-structure-selection/structure-thumbnail/structure-thumbnail.component";
+import { getDesgignWithStructure } from "../../../../core/services/structure.services";
 
 
 interface currentExperienceView
@@ -160,7 +161,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
 
-        let currentDesignTypes = Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes() ?? [];
+        let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
         
         
         setDesignTypes(currentDesignTypes);
@@ -197,12 +198,32 @@ function MosaicGroutChanged(currrentGrout:IGrout)
                 let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
                 setSelectedPerspective(newPerspective);
 
-                let elementSvg = await convertHtmlToImage(element);
+                let elementSvg=null;
+
+                
+/*
+                if(Singleton.getInstance().currentExperienceView==ExperienceViews.Format)
+                {
+                    let requestBody = {
+                        svgsContent: btoa(unescape(encodeURIComponent(element.children[1].innerHTML))),
+                        width: element.clientWidth,
+                        height: element.clientHeight
+                    };
+
+                    console.log(requestBody);
+                    elementSvg = await getDesgignWithStructure(JSON.stringify(requestBody));
+                }
+                else
+                {
+                    elementSvg = await convertHtmlToImage(element);
+                }
+*/
+                elementSvg = await convertHtmlToImage(element);
                 setCanvasImage(elementSvg ?? "");
 
                 Singleton.getInstance().mosaicImage=elementSvg;
                 
-                
+
             }
 
         }, 500);
@@ -226,13 +247,23 @@ function MosaicGroutChanged(currrentGrout:IGrout)
     {
         if(experieceView)
         {
+            
+           
             let numericalValue: number = experieceView;
             let view: ExperienceViews = numericalValue + value;
             Singleton.getInstance().ChangeExperienceView(view);
+            if (view != ExperienceViews.Format)
+            {
+                Singleton.getInstance().currentStructure=null;
+            }
             Singleton.getInstance().UpdateViewsStatus();
 
             if (experieceView == ExperienceViews.Format)
+            {
                 Singleton.getInstance().UpdateFormats();
+            }
+           
+                
 
             SetupsTitles();
            
