@@ -3,6 +3,7 @@ import "./init-quotation-form.component.css";
 import { IState } from "../../../core/models/State/state.model";
 import React, { useEffect, useState } from "react";
 import { QuotationModal } from "../quotation-modal/modalCotization";
+import Singleton from "../../../core/patterns/singleton";
 
 
 interface InitQuotationFormProps {
@@ -15,16 +16,16 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
     const [openModalStatus, setOpenModalStatus] = useState(false);
     const [canOpenModalStatus, setCanOpenModalStatus] = useState(false);
     const [squareMetersSelected, setSquareMetersSelected] = useState(false);
+    const [initQuotationWidth, setInitQuotationWidth] = useState("");
+    const [initQuotationHeight, setInitQuotationHeight] = useState("");
     const [initQuotationArea, setInitQuotationArea] = useState("");
-    const [initQuotationMeters, setInitQuotationMeters] = useState("");
-    const [initQuotationSquareMeters, setInitQuotationSquareMeters] = useState("");
     const [initQuotationDepartment, setInitQuotationDepartment] = useState("");
     const [initQuotationErrorText, setInitQuotationErrorText] = useState("");
 
 
     useEffect(() => {
         validateData();
-    }, [initQuotationArea, initQuotationMeters, initQuotationSquareMeters, initQuotationDepartment, squareMetersSelected]);
+    }, [initQuotationWidth, initQuotationHeight, initQuotationArea, initQuotationDepartment, squareMetersSelected]);
 
 
     const onInitQuotationButtonClick = () => {
@@ -34,18 +35,19 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
     }
 
 
+
     const validateData = () => {
 
         setInitQuotationErrorText("");
 
         let valid = true
 
-        if (squareMetersSelected && !initQuotationSquareMeters)
+        if (squareMetersSelected && !initQuotationArea)
         {
             setInitQuotationErrorText("Ingresar el área en metros cuadrados");
             valid = false;
         }
-        else if (!initQuotationArea || !initQuotationMeters)
+        else if (!squareMetersSelected && (!initQuotationWidth || !initQuotationHeight))
         {
             setInitQuotationErrorText("Ingresar información de metros y área");
             valid = false;
@@ -59,11 +61,44 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         setCanOpenModalStatus(valid);
     }
 
+    function SetQuotationArea(area:string)
+    {
+        setInitQuotationArea(area);
+        setInitQuotationWidth("0");
+        setInitQuotationHeight("0");
+        Singleton.getInstance().quotationArea=parseInt(area);
+        Singleton.getInstance().quotationWidth=0;
+        Singleton.getInstance().quotationHeight=0;
+    }
 
-    const onInitQuotationAreaChanged = (e: React.ChangeEvent<HTMLInputElement>) => setInitQuotationArea(e.target.value);
-    const onInitQuotationMetersChanged = (e: React.ChangeEvent<HTMLInputElement>) => setInitQuotationMeters(e.target.value);
-    const onInitQuotationSquareMetersChanged = (e: React.ChangeEvent<HTMLInputElement>) => setInitQuotationSquareMeters(e.target.value);
-    const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement>) => setInitQuotationDepartment(e.target.value);
+    function SetQuotationWidth(Width:string)
+    {
+        setInitQuotationArea("0");
+        setInitQuotationWidth(Width);
+        Singleton.getInstance().quotationWidth=parseInt(Width);
+        Singleton.getInstance().quotationArea=0;
+    }
+
+    function SetQuotationHeigth(Heigth:string)
+    {
+        setInitQuotationArea("0");
+        setInitQuotationHeight(Heigth);
+        Singleton.getInstance().quotationHeight=parseInt(Heigth);
+        Singleton.getInstance().quotationArea=0;
+    }
+
+    function SetState(state:string)
+    {
+        setInitQuotationDepartment(state);
+        const item = Singleton.getInstance().currentStateList!.find(item => item.id === parseInt(state));
+        if(item)
+            Singleton.getInstance().currentState = item;
+    }
+
+    const onInitQuotationHeightChanged = (e: React.ChangeEvent<HTMLInputElement>) => SetQuotationHeigth(e.target.value);
+    const onInitQuotationWidthChanged = (e: React.ChangeEvent<HTMLInputElement>) => SetQuotationWidth(e.target.value);
+    const onInitQuotationSquareMetersChanged = (e: React.ChangeEvent<HTMLInputElement>) => SetQuotationArea(e.target.value);
+    const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement>) => SetState(e.target.value);
 
 
     return(
@@ -89,11 +124,11 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                             <Form.Control
                                 type="number"
                                 min={1}
-                                placeholder="Metros"
+                                placeholder="Ancho"
                                 className="input-measure"
                                 name="initQuotationArea"
                                 disabled={squareMetersSelected}
-                                onChange={onInitQuotationAreaChanged}
+                                onChange={onInitQuotationHeightChanged}
                                 required/>
                         </Form.Group>
 
@@ -101,11 +136,11 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                             <Form.Control
                                 type="number"
                                 min={1}
-                                placeholder="Metros"
+                                placeholder="Alto"
                                 className="input-measure"
                                 name="initQuotationMeters"
                                 disabled={squareMetersSelected}
-                                onChange={onInitQuotationMetersChanged}
+                                onChange={onInitQuotationWidthChanged}
                                 required/>
                         </Form.Group>
                     </div>

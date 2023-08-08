@@ -21,6 +21,7 @@ import { IColorBundle } from "../models/color/color-bundle.model";
 import SvgTexturizer, { TexturizeSvgOptions } from "../../shared/utilities/svg-texturizer.utility";
 import { getServerImagesUrl } from "../../shared/utilities/format-server-endpoints.utility";
 import { IState } from "../models/State/state.model";
+import { IQuotationParams } from "../models/quotation/quotation.model";
 
 class Singleton {
   private static instance: Singleton;
@@ -35,10 +36,13 @@ class Singleton {
   public currentStructure: IStructure | null = null;
   public currentGrout: IGrout | null = null;
   public currentFormat: IFormat | null = null;
-  public simulationArea:INumberData| null = null;
-  public simulationWidht:INumberData| null = null
-  public simulationHeight:INumberData| null = null
-  
+  public currentState:IState| null = null;
+  public quotationArea:number= 0;
+  public quotationWidth:number= 0;
+  public quotationHeight:number= 0;
+
+
+
   private mosaicRotations=[0,90,270,180]
 
   public selectedDesignType:IDesignType| null = null
@@ -161,7 +165,29 @@ public ChangeBrickFormat(format:IFormat)
     this.TexturizeMosaic();
 }
 
+public GetQuotationData()
+{
+    let quotationParams:IQuotationParams={
+        demo:1,
+        idFormatSize:this.currentFormat?.id||1,
+        DesignColors_has_quotation: [],
+        idFormatSizeTexture: Singleton.getInstance().currentFormat?.id||1,
+        idstate: this.currentState?.id||1,
+        quatitionArea: this.quotationArea,
+        quotationHeight: this.quotationHeight,
+        quotationProductDetails: [],
+        quotationWidth: this.quotationWidth,
+        customerName: "Manuel",
+        idbrecha: this.currentGrout?.id||1,
+        customerLastname: "Garcia",
+        customerEmail: "Manuel.garcia.jaimes@gmail.com",
+        customerPhoneNumber: "123456",
+        desingPatternImage: null,
+        simulationImage: null
+       }
 
+    return quotationParams;
+}
   public GetCurrentGrout()
   {
       if(!this.currentGrout)

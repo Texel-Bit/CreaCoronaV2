@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './modalCotization.css'
 import { FaWindowClose } from 'react-icons/fa';
-
+import Singleton from '../../../core/patterns/singleton';
+import { simulateQuotation } from '../../../core/services/quotation.service';
 
 interface QuotationModalProps {
     closeModalEvent: () => void;
@@ -10,12 +11,63 @@ interface QuotationModalProps {
 
 export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
 
+
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [telefono, setTelefono] = useState('');
     const [correo, setCorreo] = useState('');
+    const [price, setPrice] = useState("0");
+    const [units, setUnits] = useState(0);
+
+
     const formRef = useRef(null);
-  
+   
+    useEffect(() => {
+        const simulate = async () => {
+            try {
+
+                const formatter = new Intl.NumberFormat('es-CO', {
+                    style: 'currency',
+                    currency: 'COP',
+                  });
+
+             let QuotationData=Singleton.getInstance().GetQuotationData();
+                
+                
+            let response = await simulateQuotation( QuotationData);
+
+            setUnits(response.data.cantidadValdosas)
+            
+            
+              
+              const formattedValue = formatter.format(response.data.quotationPrice);
+setPrice(formattedValue)
+
+            console.log(response);
+
+                /*
+                response.data.forEach((element: any) => {
+
+                   
+                    };
+                    
+*/
+                 
+               
+               
+
+               
+            }
+            catch(error) {
+                console.log(error);
+            }
+        }
+
+        simulate();
+
+    },[]);
+
+
     const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event.preventDefault();
       console.log('Nombre:', nombre);
@@ -44,20 +96,9 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
                     </div>
                 </div>
                 {/* price */}
-                <h1 className="priceCotization">6'000.000 COP</h1>
+                <h1 className="priceCotization">{price}</h1>
                 {/* departamentList */}
-                <div className="containerDepartaments">
-                    <label className='labelDepartament' htmlFor="departamento">Departamento*</label>
-                    {/* Lista desplegable de departamentos */}
-                    <select className='selectDepartament' id="departamento" value={'j'} onChange={()=>console.log()}>
-                        <option value="">Selecciona un departamento</option>
-                        {/* {departamentos.map((dept) => (
-                        <option key={dept} value={dept}>
-                            {dept}
-                        </option>
-                        ))} */}
-                    </select>
-                </div>
+              
                 {/* Negociemos */}
                 <div className="business">
                     <h4 className="businessTitle">¡Claro que puedes negociar!</h4>
@@ -125,7 +166,7 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
                 <div className="contentDesingFinal">
                     {/* iamgen de diseño final */}
                 </div>
-                <h3 className="unitys">Unidades:xxxxx</h3>
+                <h3 className="unitys">Unidades:{units}</h3>
     
                 <div className="details">
     

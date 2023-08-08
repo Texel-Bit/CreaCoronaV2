@@ -16,14 +16,14 @@ export interface IQuotationParams {
     idFormatSizeTexture: number,
     idstate: number,
     quatitionArea: number,
-    quotationHeight: string,
+    quotationHeight: number,
     quotationProductDetails: Array<IQuotationProductDetail>,
-    quotationWidth: string,
+    quotationWidth: number,
     customerName: string,
     idbrecha: number,
     customerLastname: string,
     customerEmail: string,
     customerPhoneNumber: string,
-    desingPatternImage: BinaryType,
-    simulationImage: BinaryType
+    desingPatternImage: BinaryType|null,
+    simulationImage: BinaryType|null
 }

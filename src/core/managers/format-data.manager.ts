@@ -4,7 +4,7 @@ class FormatDataManager
 {
     private formatList: IFormat[] = [];
 
-    public getFormatById(id:string)
+    public getFormatById(id:number)
     {
         return this.formatList.find(format => format.id === id);
     }

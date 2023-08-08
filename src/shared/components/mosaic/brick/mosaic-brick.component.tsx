@@ -22,7 +22,7 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
 
         let selectedFormat = Singleton.getInstance().currentFormat;
-        let hasBoundPattern = selectedFormat == undefined || selectedFormat.id == "1";
+        let hasBoundPattern = selectedFormat == undefined || selectedFormat.id == 1;
 
         setRowsAmount(hasBoundPattern ? 6 : 4);
         setBondPattern(hasBoundPattern);
