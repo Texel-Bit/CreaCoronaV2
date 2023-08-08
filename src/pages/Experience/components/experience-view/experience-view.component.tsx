@@ -432,19 +432,69 @@ function SetupsTitles()
             </div>
 
             <div className="w-50 h-100">
-                <ExperienceCanvas 
-                    backgroundImage={canvasImage}
-                    mask={canvasMask}
-                    perspective={selectedPerspective}
-                    perspectiveOrigin={{
-                        X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
-                        Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
-                    }}
-                    rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
-                    rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
-                    rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
-                    size={selectedFormatSize}/>
+    <ExperienceCanvas 
+        backgroundImage={canvasImage}
+        mask={canvasMask}
+        perspective={selectedPerspective}
+        perspectiveOrigin={{
+            X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
+            Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
+        }}
+        rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
+        rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
+        rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
+        size={selectedFormatSize}
+    />
+      <div className="timeline">
+
+        <div className="timeline-step">
+            <span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>
+            <div className="timeline-content">
+                <img className="mosaicResumeImage" src={canvasImage}/>
+                
+                    {
+                        Singleton.getInstance().currentDesignList &&
+                        Singleton.getInstance().currentDesignList!.map((element, index) => (
+                            <p key={index}>{element.name}</p>
+                        ))
+                    }
+                    
             </div>
+        </div>
+
+        {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
+            <span className="timeline-title">Colores: ({Singleton.getInstance().GetCurrenColorTypeID()==1?"Campo Lleno":"Con Diseño"})</span>
+            <div className="timeline-content">
+                {Singleton.getInstance().currentColorList!.map((color, index) => (
+                    <div key={index} className="color-item">
+                        <img src={getServerImagesUrl(color.source)} alt={color.name}/>
+                        {color.name}
+                    </div>
+                ))}
+            </div>
+        </div>}
+
+        <div className="timeline-step">
+            <span className="timeline-title">Formato:</span>
+            <div className="timeline-content">
+                {Singleton.getInstance().currentFormat?.name}
+            </div>
+        </div>
+        {Singleton.getInstance().currentStructure&&
+        <div className="timeline-step">
+            <span className="timeline-title">Estructura:</span>
+            <div className="timeline-content">
+                <img style={{maxWidth:"80px"}} src={getServerImagesUrl(Singleton.getInstance().currentStructure!?.source)} alt={Singleton.getInstance().currentStructure!.name}/>
+                {Singleton.getInstance().currentStructure!.name}
+            </div>
+                </div> }
+
+        </div>
+            
+        </div>
+
+            
+            
 
         </div>
 
