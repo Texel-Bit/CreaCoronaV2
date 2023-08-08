@@ -1,7 +1,7 @@
 import { StructureThumbnail, StructureThumbnailProps } from "./structure-thumbnail/structure-thumbnail.component";
 import "./experience-structure-selection.css";
 import { IStructure } from "../../../core/models/structure/structure.model";
-import React from "react";
+import React, { useEffect } from "react";
 import Singleton from "../../../core/patterns/singleton";
 
 
@@ -11,6 +11,9 @@ interface ExperienceStructureSelectionProps {
 
 
 export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionProps> = (props) => {
+    
+   
+
     
     function ChangeStructure(structure: IStructure)
     {

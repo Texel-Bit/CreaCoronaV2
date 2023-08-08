@@ -25,13 +25,14 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
 
     useEffect(() => {
         validateData();
-    }, [initQuotationWidth, initQuotationHeight, initQuotationArea, initQuotationDepartment, squareMetersSelected]);
+    }, [initQuotationWidth, initQuotationHeight, initQuotationArea, initQuotationDepartment, squareMetersSelected,Singleton.getInstance().currentStructure,Singleton.getInstance().currentFormat]);
 
 
     const onInitQuotationButtonClick = () => {
 
         validateData();
         setOpenModalStatus(canOpenModalStatus);
+        
     }
 
 
@@ -55,6 +56,16 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         else if (!initQuotationDepartment)
         {
             setInitQuotationErrorText("Seleccionar departamento");
+            valid = false;
+        }
+        else if (!Singleton.getInstance().currentFormat)
+        {
+            setInitQuotationErrorText("Selecciona un formato");
+            valid = false;
+        }
+        else if (!Singleton.getInstance().currentStructure)
+        {
+            setInitQuotationErrorText("Selecciona una estructura");
             valid = false;
         }
 

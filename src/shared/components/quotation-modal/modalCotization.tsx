@@ -24,6 +24,7 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
     const [units, setUnits] = useState(0);
 
     const [calculating, setCalculate] = useState(true);
+    const [quoatiazing, setQuotazing] = useState(true);
 
 
     const formRef = useRef(null);
@@ -40,8 +41,16 @@ export const QuotationModal:React.FC<QuotationModalProps> = (props) => {
         
 
         let QuotationData = Singleton.getInstance().GetQuotationData(GetUserData(), 2); 
-        
+        setQuotazing(true);
+        setCalculate(true);
         let response = await createQuotation(QuotationData);
+        setQuotazing(false);
+        setCalculate(false);
+        if(response.status==true)
+        {
+            props.closeModalEvent();
+        }
+       
 
         console.log(Response)
         console.log("Data ", QuotationData)
@@ -286,11 +295,11 @@ setPrice(formattedValue)
                     </label>
 
                     <button className='buttonsCotizar cancelCoti' type="button" onClick={props.closeModalEvent}>
-                        Cancelar
+                        Cancelar 
                     </button>
 
                     <button className='buttonsCotizar acetpCoti' type="button" onClick={handleSubmit}>
-                        Enviar
+                        Enviar{calculating && <div className="loading-spinner"></div>}
                     </button>
               </div>
     

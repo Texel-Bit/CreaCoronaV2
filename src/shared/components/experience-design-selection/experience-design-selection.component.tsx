@@ -35,8 +35,11 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
                 if(!isSameDesignType)
                 {
+                    Singleton.getInstance().getDesignDataManager().ClearDesigns();
+                    Singleton.getInstance().removeALlColors();
                     Singleton.getInstance().currentColorList=[]
                 }
+
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
                 const CurrColorsSelected = await getAllDesignByTypeId(selectedDesignType.id);
@@ -47,11 +50,10 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 {
                     Singleton.getInstance().getDesignDataManager().ClearDesigns();
                     Singleton.getInstance().removeALlColors();
-                    Singleton.getInstance().removeAllFormats();
                 }
                 
+                Singleton.getInstance().removeAllFormats();
                 
-               console.log("Before ",Singleton.getInstance().currentDesignList);
 
                 let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
@@ -68,7 +70,6 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-                console.log("After ",Singleton.getInstance().currentDesignList);
 
      
                 CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {
@@ -130,7 +131,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-               
+            
 
                 if(Singleton.getInstance().currentDesignList && !designLoaded)
                 {

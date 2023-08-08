@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './experience-format-selection.component.css';
 import { ExperienceFormatThumbnail, ExperienceFormatThumbnailProps } from './experience-format-thumbnail/experience-format-thumbnail';
+import Singleton from '../../../core/patterns/singleton';
 
 
 interface ExperienceFormatSelectionProps {
@@ -9,6 +10,12 @@ interface ExperienceFormatSelectionProps {
 
 
 export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps> = (props) => {
+    useEffect(() => {
+        props.formats[0].onClick(props.formats[0].format);
+        Singleton.getInstance().currentFormat=props.formats[0].format;
+    }, []);
+    
+    
     return(
         <div className='mw-100 overflow-hidden'>
 
