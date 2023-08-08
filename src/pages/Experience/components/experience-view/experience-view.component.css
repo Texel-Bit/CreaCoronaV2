@@ -7,11 +7,7 @@
 
 @media screen and (width:390px) and (height: 844px) {
     .experience-behavior-container {
-        height: 1300px !important;
-    }
-
-    .experience-behavior-container--modifier {
-        height: 2100px !important;
+        height: fit-content !important;
     }
 }
 
@@ -41,7 +37,7 @@
 .textures-selection-column {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    gap: 2rem;
+    gap: 1.6rem;
 }
 
 @media screen and (width: 390px) and (height: 844px) {
@@ -51,11 +47,17 @@
     }
 }
 
+@media screen and (width: 1366px) {
+    .textures-selection-column {
+        gap: .5rem;
+    }
+}
+
 .header-view {
     display: flex;
 }
 
-@media screen and (width: 390px) and (height: 844px) {
+@media screen and (min-width: 390px) and (max-width: 1366px) {
     .header-view {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr);

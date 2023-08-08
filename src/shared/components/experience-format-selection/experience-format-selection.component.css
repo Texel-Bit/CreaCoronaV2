@@ -1,3 +1,9 @@
 .experience-format-container {
     border: 1px solid var(--color-middle);
 }
+
+@media screen and (width: 1366px) {
+    .experience-format-container {
+        padding-bottom: 10px !important;
+    }
+}
