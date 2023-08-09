@@ -373,7 +373,8 @@ const RotateMosaic = () => {
                                             actions={false}/>
                                         <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
                                             ]}/>
                                     </>
                                 }
@@ -485,7 +486,8 @@ const RotateMosaic = () => {
                                             actions={false}/>
                                         <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
                                             ]}/>
                                     </>
                                 }
