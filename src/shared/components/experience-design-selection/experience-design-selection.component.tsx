@@ -27,7 +27,6 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
         
         const SelectDesignTypeAsync = async() =>
         {
-            console.log("environment changed ",Singleton.getInstance().environmentTypeChanged)
             
             if(selectedDesignType)
             {
@@ -44,15 +43,13 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                    return;
                 }
 
-                console.log("Current design list "+Singleton.getInstance().currentDesignList);
-
+                Singleton.getInstance().removeAllFormats();
                 
                 let defaultFormatSize:IFormat;
 
                 if(Singleton.getInstance().environmentTypeChanged || !isSameDesignType)
                 {
                     Singleton.getInstance().getDesignDataManager().ClearDesigns();
-                    Singleton.getInstance().currentDesignList=[]
                     Singleton.getInstance().removeALlColors();
                     Singleton.getInstance().currentColorList=[]
                 }
@@ -148,7 +145,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     Singleton.getInstance().GenerateDefaultDesignsSelected()
                 }
                 Singleton.getInstance().environmentTypeChanged=false;
-                
+
                 if(Singleton.getInstance().currentDesignList && !designLoaded)
                 {
                     if(Singleton.getInstance().currentDesignList!?.length>0)

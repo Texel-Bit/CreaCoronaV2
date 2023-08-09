@@ -94,7 +94,7 @@ updateViewStatusFunc: Array<() => void> = [];
   public ChangeChessMode()
   {
     this.chessMode=!this.chessMode;
-    console.log("Change Chess mode ",this.chessMode);
+
     this.TexturizeMosaic();
   }
 
@@ -166,6 +166,7 @@ public SelectStructure(structure:IStructure)
 
 public ChangeBrickFormat(format:IFormat)
 {
+    console.log(this.currentDesignList);
     if(this.currentDesignList)
         this.currentDesignList[0].source=format.source
 
@@ -239,7 +240,7 @@ public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
   
 public RotateCurrentMosaicObject() {
     this.mosaicRotations[this.currentMosaicIndexSelected]+=90;
-    console.log(this.mosaicRotations);
+
     this.TexturizeMosaic();
 }
   
@@ -298,7 +299,7 @@ public RotateCurrentMosaicObject() {
     if (currentDesigns && currentDesigns.length > 0) {
         // Check if the design is already in the list
 
-        if(currentDesigns[0].fullField!==design.fullField)
+        if(currentDesigns[0].fullField!==design.fullField ||currentDesigns[0].designType?.id!=design.designType?.id)
         {
             this.currentColorList=[]
             this.currentDesignList=[]
@@ -393,7 +394,7 @@ public ClearBundles()
 
     public async TexturizeMosaic()
     {
-        console.log("is chess mode ",this.chessMode)
+
         if (!this.currentDesignList)
             return;
 
@@ -415,8 +416,6 @@ public ClearBundles()
             return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
         });
       
-        console.log(TexturizedOptions);
-        console.log(TexturizedReversedOptions);
 
         let TexturizedDesigns: HTMLElement[] = [];
         
@@ -428,13 +427,11 @@ public ClearBundles()
             
             if(this.chessMode && (index == 1 || index == 2))
             {
-                console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), TexturizedOptions);
 
                 TexturizedTempOptions=TexturizedReversedOptions;
             }
             
             let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedTempOptions);
-            console.log("TERMINA TEXTURIZACIÓN");
 
             
             if(this.selectedDesignType?.id == 2)
@@ -505,7 +502,6 @@ public ClearBundles()
               }
           }
 
-          console.log("Indexes ",this.colorIndex);
         if(this.GetCurrenColorTypeID()==1)
         {
             index=0;

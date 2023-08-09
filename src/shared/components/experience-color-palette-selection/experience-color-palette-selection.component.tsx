@@ -9,14 +9,12 @@ import { getServerImagesUrl } from '../../utilities/format-server-endpoints.util
 
 export const ExperienceColorPaletteSelection = () => {
 
-    console.log("Pallete selection ");
     
     const [colorsBundle, setColorBundles] = useState<IColorBundle[] | null >();
 
     let initFristLoad = true
     useEffect(() => {
 
-        console.log( colorsBundle ,"Bundleeees ");
         if(initFristLoad){
             initFristLoad=!initFristLoad;
             colorsBundle?.map((element,index)=>{
@@ -44,7 +42,6 @@ export const ExperienceColorPaletteSelection = () => {
                         Singleton.getInstance().currentEnvironmentType 
                     ) {
                         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
-                        console.log(Singleton.getInstance().selectedDesignType?.id,"  design type id!! ");
 
                         const CurrColorsSelected = await getAllDesignColorsBundle(
                             Singleton.getInstance().selectedDesignType?.id||1,
@@ -53,7 +50,6 @@ export const ExperienceColorPaletteSelection = () => {
                         );
                         
 
-                        console.log("Curr color bundles ");
 
                         CurrColorsSelected.data.forEach((element: {idDesignColorBundle:any,DesignColorBundleName:any, DesignColorInBundle: any[]; }) => {
 
@@ -115,7 +111,6 @@ export const ExperienceColorPaletteSelection = () => {
     };
 
     const hiddenListColores = () =>{
-        console.log('hiddeit')
         document.querySelector('.optionsColorsList')?.classList.add('hiddenList')
     }
 

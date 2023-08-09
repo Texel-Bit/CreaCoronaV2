@@ -49,8 +49,6 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
       props.closeModalEvent();
     }
 
-    console.log(Response);
-    console.log("Data ", QuotationData);
   };
 
   useEffect(() => {
@@ -97,10 +95,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    console.log("Nombre:", nombre);
-    console.log("Apellido:", apellido);
-    console.log("Teléfono:", telefono);
-    console.log("Correo:", correo);
+
 
     SendQuotation();
   };
