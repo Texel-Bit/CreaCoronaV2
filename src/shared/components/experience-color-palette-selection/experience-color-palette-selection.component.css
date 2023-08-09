@@ -59,6 +59,8 @@
 @media screen and (width:1366px) {
     .optionsColorsList {
         top: 12%;
+        height: 320px;
+        overflow: auto;
     }
 }
 
