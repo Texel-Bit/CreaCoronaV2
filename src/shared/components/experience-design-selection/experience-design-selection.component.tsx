@@ -27,35 +27,47 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
         
         const SelectDesignTypeAsync = async() =>
         {
-
+            console.log("environment changed ",Singleton.getInstance().environmentTypeChanged)
+            
             if(selectedDesignType)
             {
+                
                 const isSameDesignType=Singleton.getInstance().selectedDesignType === selectedDesignType
+                
+
+                if(!Singleton.getInstance().environmentTypeChanged && isSameDesignType)
+                {
+                   setDesignColors(Singleton.getInstance().getDesignDataManager().getAllDesigns());
+                   Singleton.getInstance().TexturizeMosaic();
+                   
+                  
+                   return;
+                }
+
+                console.log("Current design list "+Singleton.getInstance().currentDesignList);
+
+                
                 let defaultFormatSize:IFormat;
 
-                if(!isSameDesignType)
+                if(Singleton.getInstance().environmentTypeChanged || !isSameDesignType)
                 {
                     Singleton.getInstance().getDesignDataManager().ClearDesigns();
+                    Singleton.getInstance().currentDesignList=[]
                     Singleton.getInstance().removeALlColors();
                     Singleton.getInstance().currentColorList=[]
                 }
+                
+               
 
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
-                const CurrColorsSelected = await getAllDesignByTypeId(selectedDesignType.id);
+                const ColorList = await getAllDesignByTypeId(selectedDesignType.id);
                 
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
         
-                if(!designLoaded)
-                {
-                    Singleton.getInstance().getDesignDataManager().ClearDesigns();
-                    Singleton.getInstance().removeALlColors();
-                }
-                
-                Singleton.getInstance().removeAllFormats();
-                
 
-                let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
+
+                let currenDesignColors:IDesign[] = ColorList.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
                     let currDesign: IDesign = {
@@ -72,7 +84,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
 
      
-                CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {
+                ColorList.data.DesignTypeFormatSize.map((element: any) => {
                     
 
                     let FormatSizetexture = element.FormatSizeTexture.map((structure: any) => {
@@ -115,7 +127,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
                
 
-                let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
+                let currentColors = ColorList.data.DesignColors.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
                     let currDesign: IColor = {
@@ -131,8 +143,12 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     return currDesign;
                 });
 
-            
-
+                if(Singleton.getInstance().environmentTypeChanged )
+                {
+                    Singleton.getInstance().GenerateDefaultDesignsSelected()
+                }
+                Singleton.getInstance().environmentTypeChanged=false;
+                
                 if(Singleton.getInstance().currentDesignList && !designLoaded)
                 {
                     if(Singleton.getInstance().currentDesignList!?.length>0)
@@ -157,7 +173,9 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 
                 
                 setDesignColors(currenDesignColors);
+               
             }
+            
         }
         
         SelectDesignTypeAsync();
@@ -169,14 +187,12 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
         if(!Singleton.getInstance().selectedDesignType)
         {
-            console.log("Selected design type missing")
             setSelectedDesignType(props.designTypes[0]);
         }
         else
         {
             if(Singleton.getInstance().selectedDesignType)
             {
-                console.log("Selected design type is selected")
                 setDesignsLoaded(true);
             }
         }

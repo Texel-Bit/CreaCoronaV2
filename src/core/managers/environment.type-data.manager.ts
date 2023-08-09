@@ -2,7 +2,7 @@ import { IEnvironmentType } from "../models/EnvironmentType/environment-type.mod
 
 class EnvironmentTypeDataManager
 {
-    private environmentTypeList: IEnvironmentType[] = [];
+    public environmentTypeList: IEnvironmentType[] = [];
 
     public getEnvironmentTypeById(id:number)
     {

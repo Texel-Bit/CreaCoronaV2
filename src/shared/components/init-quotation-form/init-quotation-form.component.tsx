@@ -192,8 +192,16 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                 </Form.Group>
 
                 <div> {initQuotationErrorText && <p className="text-danger">{initQuotationErrorText}</p>} </div>
-                <hr />
 
+
+              
+            </Form>
+            
+            <div style={{marginTop:"10px"}} className="background-color-middle px-3 py-1 w-50 rounded-top">
+                <h6 className="m-0 color-white fw-normal">Departamento</h6>
+            </div>
+            <Form className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
+           
                 <FormSelect
                     className="mt-2 z-3"
                     title="Departamento"
@@ -208,10 +216,11 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                         className="btn-corona w-100 mt-3 init-quotation-button btn-corona-add"
                         disabled={!canOpenModalStatus}
                         onClick={onInitQuotationButtonClick}>Cotizar</button>
-            </Form>
-
+                        </Form>
             { openModalStatus && <QuotationModal closeModalEvent={() => setOpenModalStatus(false)}/> }
         </div>
+
+        
     );
 }
 

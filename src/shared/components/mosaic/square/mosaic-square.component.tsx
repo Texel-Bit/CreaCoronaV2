@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './mosaic-square.component.css'
+import SvgTexturizer from "../../../utilities/svg-texturizer.utility";
 
 
 interface ExperienceMosaicSquareProps
@@ -14,9 +15,14 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
     const [groutImageCss, setGroutImageCss] = useState("");
 
     useEffect(() => {
+
+        props.squares.forEach((element)=>
+        {
+            console.log(element.outerHTML)
+        })
         if (props.grout)
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
-    }, [props]);
+    }, [props.grout,props.squares]);
 
     return(
         <div id="mosaic-element" className='mosaic-square w-100'>
@@ -37,6 +43,9 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                 props.squares.map((square, index) => 
                     <div key={`mosaic-square-key${index}`} className="img-container" dangerouslySetInnerHTML={{ __html: square.outerHTML }}></div>)
             }
+
+
+
 
         </div>
     );

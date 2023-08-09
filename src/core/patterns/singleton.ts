@@ -46,7 +46,7 @@ class Singleton {
   public mosaicImage:any;
   public simulationImage:any;
 
-
+  public SelectedMosaicsSVG:HTMLElement[]=[];
 
   private mosaicRotations=[0,90,270,180]
 
@@ -56,6 +56,7 @@ class Singleton {
   
   public chessMode:boolean| null = null;
 
+  public environmentTypeChanged:boolean=true;
 
   public currentExperienceView:ExperienceViews| null = ExperienceViews.EnvironmentType;
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
@@ -93,6 +94,7 @@ updateViewStatusFunc: Array<() => void> = [];
   public ChangeChessMode()
   {
     this.chessMode=!this.chessMode;
+    console.log("Change Chess mode ",this.chessMode);
     this.TexturizeMosaic();
   }
 
@@ -244,6 +246,17 @@ public RotateCurrentMosaicObject() {
 
 
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
+    if(this.currentEnvironmentType)
+    {
+        if(this.currentEnvironmentType.id!=environmentType.id)
+        {
+            this.environmentTypeChanged=true;
+        }
+        else
+        {
+            this.environmentTypeChanged=false;
+        }
+    }
     this.currentEnvironmentType=environmentType;
     this.EvaluatePercentage();
   }
@@ -378,8 +391,9 @@ public ClearBundles()
         }
     }
 
-    private async TexturizeMosaic()
+    public async TexturizeMosaic()
     {
+        console.log("is chess mode ",this.chessMode)
         if (!this.currentDesignList)
             return;
 
@@ -397,16 +411,29 @@ public ClearBundles()
             return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
         });
 
+        let TexturizedReversedOptions = newColorTemp.reverse().map((color, index) => {
+            return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
+        });
       
+        console.log(TexturizedOptions);
+        console.log(TexturizedReversedOptions);
+
         let TexturizedDesigns: HTMLElement[] = [];
         
         for (let index = 0; index < this.currentDesignList.length; index++) {
 
            
-           
+            let TexturizedTempOptions=TexturizedOptions
 
-            console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), TexturizedOptions);
-            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedOptions);
+            
+            if(this.chessMode && (index == 1 || index == 2))
+            {
+                console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), TexturizedOptions);
+
+                TexturizedTempOptions=TexturizedReversedOptions;
+            }
+            
+            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedTempOptions);
             console.log("TERMINA TEXTURIZACIÓN");
 
             
@@ -428,31 +455,11 @@ public ClearBundles()
             TexturizedDesigns.push(texturizedDesign);
         }
 
-        console.log("RESULTADO TEXTURIZACIÓN => ", TexturizedDesigns);
+
         if (this.updateMosaicFunc)
                 this.updateMosaicFunc(TexturizedDesigns);
 
-        // let TexturizedDesignsPromises = this.currentDesignList.map(async (design, index) => {
-
-        //     let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
-        //         ? TexturizedOptions : TexturizedOptionsInverted;
-
-        //     console.log(index, selectedTexturizedOptions);
-        //     let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), selectedTexturizedOptions);
-
-        //     if(this.currentStructure)
-        //         texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
-
-        //     if (this.selectedDesignType?.id == 2)
-        //         texturizer.addBisels(texturizedDesign);
-
-        //     return texturizedDesign;
-        // });
-
-        // const TexturizedDesigns = await Promise.all(TexturizedDesignsPromises);
-
-        // if (this.updateMosaicFunc)
-        //   
+      
     }
     
 

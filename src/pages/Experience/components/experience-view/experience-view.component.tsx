@@ -285,6 +285,11 @@ function SetupsTitles()
             setDescription(dict.get(experieceView)?.description??<></>)
         }
     }
+    else if(experieceView==ExperienceViews.Format)
+    {
+        setDescription(dict.get(experieceView)?.description??<></>)
+        
+    }
 }
 
 
@@ -422,6 +427,7 @@ const RotateMosaic = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: ChangeChessMode, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
                                                 { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                     </>
