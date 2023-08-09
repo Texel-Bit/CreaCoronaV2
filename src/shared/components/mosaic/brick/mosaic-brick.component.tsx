@@ -5,21 +5,27 @@ import Singleton from "../../../../core/patterns/singleton";
 interface ExperienceMosaicBricksProps
 {
     brick:HTMLElement;
-    grout: string
+    grout: string,
+    rotated: boolean
 }
 
 
 export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
 
-
-    const [groutImageCss, setGroutImageCss] = useState("");
     const [bondPattern, setBondPattern] = useState(true);
     const [rowsAmount, setRowsAmount] = useState(0);
-
+    const [bricksStyle, setBricksStyle] = useState("");
 
     useEffect(() => {
-        if (props.grout)
-            setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
+        
+        let newBricksStyle = props.grout ? `background-image: url(${props.grout});` : "";
+
+        if (props.rotated)
+            newBricksStyle += "transform: rotate(90deg)";
+        else
+            newBricksStyle += "";
+            console.log("BRICKS STYLE => ", newBricksStyle, props);
+        setBricksStyle(newBricksStyle);
 
         let selectedFormat = Singleton.getInstance().currentFormat;
         let hasBoundPattern = selectedFormat == undefined || selectedFormat.id == 1;
@@ -40,7 +46,7 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                         gap: .4rem;
                         padding: .2rem;
                         overflow: hidden;
-                        ${groutImageCss}
+                        ${bricksStyle}
                     }
                 
                     .brick-row {
