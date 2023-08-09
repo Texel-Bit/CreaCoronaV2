@@ -9,7 +9,7 @@ interface MosaicComponenProps {
 export const MosaicComponent: React.FC<MosaicComponenProps> = (props) => {
 
     return(
-        <div className='mosaic-component position-relative'>
+        <div id="mosaic-component" className='mosaic-component position-relative'>
             {props.mosaic}
             {props.actions && <MosaicActionsMask />}
         </div>

@@ -107,14 +107,18 @@ export const MosaicActionsMask = () => {
         <div className="position-absolute w-100 h-100 mosaic-actions-mask gap-1 p-1">
 
             {
-                itemsCongig.map(itemConf => <>
-                    <div className={`mosaic-actions-mask-item cursor-pointer cursor-pointer-hover ${itemConf.selected ? 'selected' : ''}`} 
-                         onClick={() => onActionItemClick(itemConf.index)}>
-                        <button onClick={()=>SwapVertical(itemConf.index)}><SwapVertIcon /></button>
-                        <button onClick={RotateObject}><RefreshIcon  /></button>
-                        <button onClick={()=>SwapHorizontal(itemConf.index)}><SwapHorizIcon /></button>
-                    </div>
-                </>)
+                itemsCongig.map((itemConf, index) => 
+                    <>
+                        <div className={`mosaic-actions-mask-item cursor-pointer cursor-pointer-hover ${itemConf.selected ? 'selected' : ''}`}
+                             onClick={() => onActionItemClick(itemConf.index)}>
+
+                            <button onClick={()=>SwapVertical(itemConf.index)}><SwapVertIcon /></button>
+                            <button onClick={RotateObject}><RefreshIcon  /></button>
+                            <button onClick={()=>SwapHorizontal(itemConf.index)}><SwapHorizIcon /></button>
+
+                        </div>
+                    </>
+                )
             }
 
         </div>
