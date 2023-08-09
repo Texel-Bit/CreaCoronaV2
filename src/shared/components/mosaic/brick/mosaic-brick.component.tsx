@@ -30,7 +30,7 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
         let selectedFormat = Singleton.getInstance().currentFormat;
         let hasBoundPattern = selectedFormat == undefined || selectedFormat.id == 1;
 
-        setRowsAmount(hasBoundPattern && !props.rotated ? 6 : 4);
+        setRowsAmount(hasBoundPattern ? 6 : 4);
         setBondPattern(hasBoundPattern);
     }, [props]);
 
