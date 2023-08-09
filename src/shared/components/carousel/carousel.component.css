@@ -5,9 +5,15 @@
     justify-content: space-between;
 }
 
-@media screen and (min-width: 1180px) and (max-width: 1366px) {
+@media screen and (min-width: 1180px) {
     .carousel-content {
         height: 310px;
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    .carousel-content {
+        height: 315px;
     }
 }
 
