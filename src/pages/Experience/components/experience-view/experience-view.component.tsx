@@ -387,7 +387,7 @@ const RotateMosaic = () => {
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
                     <div className="d-flex flex-column flex-md-row pt-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden gap-4 gap-md-0">
-                        <div className="textures-selection-column col-12 col-md-7 h-md-100 position-relative">
+                        <div className="textures-selection-column col-12 col-md-7 col-xl-6 h-md-100 position-relative">
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             <ExperienceTextureSelection colorArray={
                                 Singleton.getInstance().getColorDataManager().GetAllColors(
@@ -397,7 +397,7 @@ const RotateMosaic = () => {
                         />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
-                        <div className="col-5 col-md-4 d-flex align-items-start mx-auto mx-md-0">
+                        <div className="col-5 col-md-4 col-xl-5 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
                                     Singleton.getInstance().selectedDesignType?.id === 3 && 

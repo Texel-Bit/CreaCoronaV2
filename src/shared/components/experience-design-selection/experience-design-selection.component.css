@@ -45,6 +45,7 @@
 
 @media screen and (width: 1366px) {
     .design-thumbnails-grid {
-        height: 430px !important;
+        height: 330px !important;
+        grid-template-columns: repeat(4, 1fr);
     }
 }
