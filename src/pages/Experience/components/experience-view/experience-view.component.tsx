@@ -25,6 +25,7 @@ import { IDesign } from "../../../../core/models/design/design.model";
 import { ExperienceCanvas } from "../../../../shared/components/experience-canvas/experience-canvas.component";
 import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/mosaic-actions-mask/mosaic-actions-mask.component";
 import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
+import { RxRotateCounterClockwise } from "react-icons/rx";
 import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
 import { idText, isStringLiteral } from "typescript";
@@ -34,6 +35,7 @@ import { IStructure } from "../../../../core/models/structure/structure.model";
 import { ExperienceFormatThumbnailProps } from "../../../../shared/components/experience-format-selection/experience-format-thumbnail/experience-format-thumbnail";
 import { StructureThumbnailProps } from "../../../../shared/components/experience-structure-selection/structure-thumbnail/structure-thumbnail.component";
 import { getDesgignWithStructure } from "../../../../core/services/structure.services";
+import { PreviewModal, PreviewModalProps } from "../../../../shared/components/preview-modal/preview-modal.component";
 
 
 interface currentExperienceView
@@ -85,6 +87,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [selectedFormatSize, setSelectedFormatSize] = useState(1);
     const [selectedPerspective, setSelectedPerspective] = useState(500);
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
+    const [previewModalStatus, setPreviewModalStatus] = useState(false);
+    const [bricksRotated, setBricksRotated] = useState(false);
     
     
     const [title, setTitle] = useState("");
@@ -94,9 +98,9 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [colorType, setColorType] = useState(1);
 
 
-    useEffect(() => {
-       updateCanvas();
-    }, [mosaicGrout]);
+useEffect(() => {
+    updateCanvas();
+}, [mosaicGrout, selectedDesigns, bricksRotated]);
 
 
 function ChangeChessMode()
@@ -145,39 +149,33 @@ function MosaicGroutChanged(currrentGrout:IGrout)
     setMosaicGrout(getServerImagesUrl(currrentGrout.source))
 }
 
+
+useEffect(() => {
+
+    if(Singleton.getInstance().currentGrout)
+    {
+        Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
+    }
+
+
+
+    let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
     
-
-    useEffect(() => {
-
-    }, [colorType]);
+    
+    setDesignTypes(currentDesignTypes);
 
 
-    useEffect(() => {
+    Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
+    Singleton.getInstance().updateMosaicFunc = updateMosaic;
+    Singleton.getInstance().updateFormatsFunc = UpdateFormats;
+    Singleton.getInstance().updateStructuresFunc = UpdateStructures;
 
-        if(Singleton.getInstance().currentGrout)
-        {
-            Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
-        }
-
-
-
-        let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
-        
-        
-        setDesignTypes(currentDesignTypes);
-
-
-        Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
-        Singleton.getInstance().updateMosaicFunc = updateMosaic;
-        Singleton.getInstance().updateFormatsFunc = UpdateFormats;
-        Singleton.getInstance().updateStructuresFunc = UpdateStructures;
-
-        if (Singleton.getInstance().currentEnvironment != null)
-        {
-            let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
-            setCanvasMask(maskImage);
-        }
-    }, []);
+    if (Singleton.getInstance().currentEnvironment != null)
+    {
+        let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
+        setCanvasMask(maskImage);
+    }
+}, []);
 
 
 
@@ -200,7 +198,6 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
                 let elementSvg=null;
 
-                
 /*
                 if(Singleton.getInstance().currentExperienceView==ExperienceViews.Format)
                 {
@@ -220,10 +217,7 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 */
                 elementSvg = await convertHtmlToImage(element);
                 setCanvasImage(elementSvg ?? "");
-
-                Singleton.getInstance().mosaicImage=elementSvg;
-                
-
+                Singleton.getInstance().mosaicImage = elementSvg;
             }
 
         }, 500);
@@ -236,11 +230,6 @@ function MosaicGroutChanged(currrentGrout:IGrout)
         setColorType(colorTypeId);
         setSelectedDesigns(mosaicElements)
     }
-    
-
-    useEffect(()=>{
-       updateCanvas();
-    },[selectedDesigns])
 
     
     function ChangeView(experieceView: ExperienceViews | null, value:number)
@@ -298,6 +287,20 @@ function SetupsTitles()
     }
 }
 
+
+const PreviewMosaic = () => {
+    setPreviewModalStatus(true);
+}
+
+const closeMoasicModal = () => {
+    setPreviewModalStatus(false);
+}
+
+const RotateMosaic = () => {
+    setBricksRotated(!bricksRotated);
+}
+
+
     return(
 
         <div className="d-flex mh-100 flex-column flex-md-row pt-4 pt-md-0 px-2 px-md-0">
@@ -343,7 +346,7 @@ function SetupsTitles()
                                             actions={false} />
                                         <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
                                                 { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "", classButton: "btn-corona-destructive" }
                                             ]}/>
                                     </>
@@ -351,16 +354,28 @@ function SetupsTitles()
                                 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
-                                    <MosaicComponent
-                                        mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
-                                        actions={true}/>
+                                    <>
+                                        <MosaicComponent
+                                            mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
+                                            actions={true}/>
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
+                                    </>
                                 }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && selectedDesigns&&
-                                    <MosaicComponent 
-                                        mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout}/>}
-                                        actions={false}/>
+                                    <>
+                                        <MosaicComponent 
+                                            mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/> }
+                                            actions={false}/>
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
+                                    </>
                                 }
                             </div>
                         </div>
@@ -390,31 +405,39 @@ function SetupsTitles()
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
                                             actions={false} />
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
                                     </>
                                 }
                                 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
-                                    <MosaicComponent
-                                        mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
-                                        actions={true}/>
-
-                                }
-                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
-                                 <MosaicActionsBar 
+                                    <>
+                                        <MosaicComponent
+                                            mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
+                                            actions={true}/>
+                                        <MosaicActionsBar 
                                             buttons={[
-                                                { buttonClick: () => {}, icon: FaSearchPlus, text: "Vista Previa", styleColor: "",classButton: "btn-corona-primary" },
-                                               /* { buttonClick: () => {ChangeChessMode()}, icon: FaTrashAlt, text: "Modo Ajedrez", styleColor: "red" },*/
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
                                                 { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
-                                        }
+                                    </>
+                                }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
-                                    <MosaicComponent 
-                                        mosaic={<MosaicBrick brick={selectedDesigns![0]?? null} grout={mosaicGrout}/>}
-                                        actions={false}/>
+                                    <>
+                                        <MosaicComponent 
+                                            mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
+                                            actions={false}/>
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
+                                    </>
                                 }
                             </div>
                         </div>
@@ -434,21 +457,37 @@ function SetupsTitles()
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
                                             actions={false} />
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
                                     </>
                                 }
                                 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 2 && 
-                                    <MosaicComponent
-                                        mosaic={<MosaicSquare squares={selectedDesigns??[]} grout={mosaicGrout}/>}
-                                        actions={true}/>
+                                    <>
+                                        <MosaicComponent
+                                            mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
+                                            actions={true}/>
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
+                                    </>
                                 }
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.id == 1 && 
-                                    <MosaicComponent 
-                                        mosaic={<MosaicBrick brick={selectedDesigns![0]?? null} grout={mosaicGrout}/>}
-                                        actions={false}/>
+                                    <>
+                                        <MosaicComponent 
+                                            mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
+                                            actions={false}/>
+                                        <MosaicActionsBar 
+                                            buttons={[
+                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                                            ]}/>
+                                    </>
                                 }
                             </div>
                         </div>
@@ -525,9 +564,8 @@ function SetupsTitles()
         </div>
             
         </div>
-
             
-            
+            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMoasicModal}/>
 
         </div>
 
