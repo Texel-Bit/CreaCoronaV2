@@ -450,7 +450,7 @@ const RotateMosaic = () => {
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row">
+                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row cotizacion-view">
                         <div className="col-12 col-md-5 d-flex mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}

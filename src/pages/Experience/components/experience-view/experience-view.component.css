@@ -40,7 +40,7 @@
     gap: 1.6rem;
 }
 
-@media screen and (width: 390px) and (height: 844px) {
+@media screen and (width: 390px) {
     .textures-selection-column {
         display: flex !important;
         flex-direction: column !important;
@@ -50,6 +50,19 @@
 @media screen and (width: 1366px) {
     .textures-selection-column {
         gap: 1rem;
+    }
+
+    .cotizacion-view {
+        height: 50vh !important;
+        overflow: auto !important;
+    }
+
+    .cotizacion-view > div:first-of-type {
+        height: 470px !important;
+    }
+
+    .cotizacion-view > div:last-of-type {
+        height: 560px !important;
     }
 }
 

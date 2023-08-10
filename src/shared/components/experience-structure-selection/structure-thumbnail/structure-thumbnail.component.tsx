@@ -12,7 +12,7 @@ export interface StructureThumbnailProps {
 export const StructureThumbnail:React.FC<StructureThumbnailProps> = (props) => {
 
     return(
-        <div className="structure-thumbnail text-center" onClick={() => props.onClick(props.structure)}>
+        <div className="structure-thumbnail text-center btn button p-1 border rounded" onClick={() => props.onClick(props.structure)}>
             <div className="rounded m-auto" style={{ backgroundImage: `url(${getServerImagesUrl(props.structure.source)})` }}/>
             <small>{props.structure.name}</small>
         </div>
