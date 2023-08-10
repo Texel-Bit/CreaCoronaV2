@@ -32,8 +32,8 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
                 <h6 className="m-0 color-white fw-normal">
                     {
                         colorArray[0].isFullField
-                        ? <>Campo lleno</>
-                        : <>Con Diseño</>
+                        ? <>{Singleton.getInstance().selectedDesignType?.name} Campo lleno</>
+                        : <>{Singleton.getInstance().selectedDesignType?.name} Con Diseño</>
                     }
                 
                 </h6>
