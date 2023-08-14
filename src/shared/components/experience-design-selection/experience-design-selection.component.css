@@ -46,7 +46,7 @@
     }
 }
 
-@media screen and (width: 1366px) {
+@media screen and (min-width: 1366px) and (max-width: 1600px) {
     .design-thumbnails-grid {
         height: 330px !important;
         grid-template-columns: repeat(4, 1fr);

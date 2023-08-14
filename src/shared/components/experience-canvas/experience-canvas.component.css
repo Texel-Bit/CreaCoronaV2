@@ -5,7 +5,7 @@
     padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
 }
 
-@media screen and (width: 1366px) {
+@media screen and (min-width: 1366px) and (max-width: 1600px) {
     .aspect-ratio-16-9 {
         padding-bottom: 0;
     }

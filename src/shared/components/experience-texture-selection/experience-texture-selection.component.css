@@ -13,19 +13,19 @@
     max-height: 380px;
 }
 
-@media screen and (width: 390px) and (height: 844px) {
+@media screen and (min-width: 390px) {
     .textures-containter-grid-content {
         max-height: 280px;
     }
 }
 
-@media screen and (width: 1180px) {
+@media screen and (min-width: 1180px) {
     .textures-containter-grid-content {
         max-height: 340px;
     }
 }
 
-@media screen and (width: 1366px) {
+@media screen and (min-width: 1366px) and (max-width:1600px) {
     .textures-containter-grid-content {
         height: 200px;
     }
@@ -38,7 +38,7 @@
     max-width: 100%;
 }
 
-@media screen and (width: 390px) and (height: 844px) {
+@media screen and (min-width: 390px) and (max-width: 1366px) {
     .textures-containter-grid {
         grid-template-columns: repeat(4, 1fr);
     }
