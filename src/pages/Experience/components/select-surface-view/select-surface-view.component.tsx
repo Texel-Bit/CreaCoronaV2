@@ -26,21 +26,25 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
         const getEnvironmentTypes = async () => {
             try {
                 
-                Singleton.getInstance().getDesignDataManager().ClearDesigns();
+               if(Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes().length==0)
+               {
+                    const designTypes=await getAllDesignType();
+                    designTypes.data.forEach((element2: any) => {
+                    let currentDesignType: IDesignType = {
+                        name:element2.DesignTypeName,
+                        id:element2.idDesignType,
+                        source:element2.DesignTypeIconPath,
+                        mosaicValue:element2.MosaicType_idMosaicType==3?4:1
+                    };
+    
+                    singleton.addDesignType(currentDesignType);
                 
-                const designTypes=await getAllDesignType();
-                designTypes.data.forEach((element2: any) => {
-                 let currentDesignType: IDesignType = {
-                     name:element2.DesignTypeName,
-                     id:element2.idDesignType,
-                     source:element2.DesignTypeIconPath,
-                     mosaicValue:element2.MosaicType_idMosaicType==3?4:1
-                   };
- 
-                   singleton.addDesignType(currentDesignType);
-             
-                 });
+                    });
+               }
 
+
+               if(Singleton.getInstance().getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().length===0)
+               {
                 let response = await getAllEnvironmentType();
 
                 console.log(response);
@@ -69,41 +73,49 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                     singleton.addEnvironmentType(currentEnvironment);
                
                 });
+               }
 
                 handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
             
               
+                if(Singleton.getInstance().currentStateList!.length==0)
+                {
+                    const states=await getAllState();
 
-                const states=await getAllState();
+                            
 
+                    states.data.forEach((element2: any) => {
+                    let currentState: IState = {
+                        stateName:element2.stateName,
+                        id:element2.idstate,
+                        
+                    };
+                    
+                    if ( singleton.currentStateList && ! singleton.currentStateList.some(item => item.id === currentState.id)) {
+                        singleton.currentStateList?.push(currentState)
+                    }
+
+                    });
+                }
                
 
-                states.data.forEach((element2: any) => {
-                 let currentState: IState = {
-                     stateName:element2.stateName,
-                     id:element2.idstate,
-                    
-                   };
-                   
-                   if ( singleton.currentStateList && ! singleton.currentStateList.some(item => item.id === currentState.id)) {
-                    singleton.currentStateList?.push(currentState)
-                  }
+                if(Singleton.getInstance().getgroutDataManager().getAllGrouts().length==0)
+                {
+                    const grouts=await getAllGrouts();
 
-                 });
-
+                    grouts.data.forEach((grout: any) => {
+                     let currentDesignType: IGrout = {
+                         name:grout.brechaName,                     
+                         id:grout.idbrecha,                     
+                         source:grout.brechaColorPath                     
+                       };
+     
+                       singleton.addGrout(currentDesignType);
+                 
+                     });
+                }
   
-                const grouts=await getAllGrouts();
-
-                grouts.data.forEach((grout: any) => {
-                 let currentDesignType: IGrout = {
-                     name:grout.brechaName,                     
-                     id:grout.idbrecha,                     
-                     source:grout.brechaColorPath                     
-                   };
- 
-                   singleton.addGrout(currentDesignType);
-             
-                 });
+               
             }
             catch(error) {
                 console.log(error);

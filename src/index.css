@@ -144,6 +144,10 @@ code {
   text-align: center;
 }
 
+.btn-corona:hover {
+  cursor: pointer;
+}
+
 .btn-corona-primary {
   background-color: var(--color-middle) !important;
   color: var(--bs-progress-bg) !important;

@@ -23,41 +23,54 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     const [designLoaded, setDesignsLoaded] = useState(false);
 
 
-    useEffect(()=>{
-        
-        const SelectDesignTypeAsync = async() =>
-        {
+    useEffect(() => {
 
-            if(selectedDesignType)
-            {
-                const isSameDesignType=Singleton.getInstance().selectedDesignType === selectedDesignType
-                let defaultFormatSize:IFormat;
-
-                if(!isSameDesignType)
-                {
+        console.log("useEffect triggered with selectedDesignType:", selectedDesignType);
+    
+        const SelectDesignTypeAsync = async() => {
+            
+            if (selectedDesignType) {
+                
+                console.log("Inside selectedDesignType check...");
+    
+                const isSameDesignType = Singleton.getInstance().selectedDesignType === selectedDesignType;
+               
+    
+                if (!Singleton.getInstance().environmentTypeChanged && isSameDesignType) {
+                    console.log("Inside environmentTypeChanged & isSameDesignType check...");
+                    
+                    setDesignColors(Singleton.getInstance().getDesignDataManager().getAllDesigns());
+                    Singleton.getInstance().TexturizeMosaic();
+                    console.log("TexturizeMosaic called");
+                    
+                    return;
+                }
+    
+                console.log("Removing all formats...");
+                Singleton.getInstance().removeAllFormats();
+    
+                let defaultFormatSize: IFormat;
+    
+                if (Singleton.getInstance().environmentTypeChanged || !isSameDesignType) {
+                    console.log("Environment type changed or not same design type...");
+                    
                     Singleton.getInstance().getDesignDataManager().ClearDesigns();
                     Singleton.getInstance().removeALlColors();
-                    Singleton.getInstance().currentColorList=[]
+                    setDesignsLoaded(false);
+                    Singleton.getInstance().currentColorList = [];
+                    console.log("Designs cleared and currentColorList reset");
                 }
-
+    
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
-                const CurrColorsSelected = await getAllDesignByTypeId(selectedDesignType.id);
-                
+                console.log("Fetching colors by design type ID...");
+                const ColorList = await getAllDesignByTypeId(selectedDesignType.id);
+                console.log("Fetched ColorList:", ColorList);
+    
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
-        
-                if(!designLoaded)
-                {
-                    Singleton.getInstance().getDesignDataManager().ClearDesigns();
-                    Singleton.getInstance().removeALlColors();
-                }
-                
-                Singleton.getInstance().removeAllFormats();
-                
-
-                let currenDesignColors:IDesign[] = CurrColorsSelected.data.Design.map((element: any) => {
+    
+                let currenDesignColors:IDesign[] = ColorList.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
-                    
                     let currDesign: IDesign = {
                         id: element.idDesign,
                         source: element.DesignImagePath,
@@ -65,21 +78,16 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         designType: designType ? designType : defaultDesignType,
                         fullField:element.DesignColorType_idDesignColorType==1?true:false
                     };
-                    
                     Singleton.getInstance().addDesign(currDesign);
                     return currDesign;
                 });
-
-
-     
-                CurrColorsSelected.data.DesignTypeFormatSize.map((element: any) => {
-                    
-
+                console.log("Current design colors:", currenDesignColors);
+    
+                ColorList.data.DesignTypeFormatSize.map((element: any) => {
                     let FormatSizetexture = element.FormatSizeTexture.map((structure: any) => {
                         let colorTypes = structure.DesignColorType_has_FormatSizeTexture.map((colorType: any) => {
                             return colorType.DesignColorType_idDesignColorType;
                         });
-                    
                         
                         let currStructure: IStructure = {
                             id: structure.idFormatSizeTexture,
@@ -87,24 +95,20 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                             source: structure.FormatSizeTextureMaskPath,
                             designColorType: colorTypes
                         };
-                    
                         return currStructure;
                     });
-
-                    
-                    
+    
                     let currFormat: IFormat = {
-                       id:element.idDesignTypeFormatSize,
-                       name:element.DesignTypeFormatSizeName,
-                       source:element.DesignTypeFormatSizeDefaultImagePath,
-                       width:element.DesignTypeFormatSizeWidht,
-                       height:element.DesignTypeFormatSizeHeight,
-                       scale:element.DesignTypeFormatSizeMosaicScale                       ,
-                       formats:FormatSizetexture
+                        id:element.idDesignTypeFormatSize,
+                        name:element.DesignTypeFormatSizeName,
+                        source:element.DesignTypeFormatSizeDefaultImagePath,
+                        width:element.DesignTypeFormatSizeWidht,
+                        height:element.DesignTypeFormatSizeHeight,
+                        scale:element.DesignTypeFormatSizeMosaicScale,
+                        formats:FormatSizetexture
                     };
-
-                    if(!defaultFormatSize)
-                    {
+    
+                    if(!defaultFormatSize) {
                         defaultFormatSize=currFormat;
                         Singleton.getInstance().SelectFormat(defaultFormatSize);
                     }
@@ -112,71 +116,65 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     Singleton.getInstance().addFormat(currFormat);
                     return currFormat;
                 });
-
-               
-
-                let currentColors = CurrColorsSelected.data.DesignColors.map((element: any) => {
+    
+                let currentColors = ColorList.data.DesignColors.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
                     let currDesign: IColor = {
                        id:element.idDesignColors,
-                       name:element.DesignColorName                       ,
+                       name:element.DesignColorName,
                        source:element.DesignColorPath,
                        isFullField:element.DesignColorType_idDesignColorType==1?true:false,
-                       design :designType ? designType : defaultDesignType,
+                       design:designType ? designType : defaultDesignType,
                     };
-                    
                     
                     Singleton.getInstance().addColor(currDesign);
                     return currDesign;
                 });
-
-            
-
-                if(Singleton.getInstance().currentDesignList && !designLoaded)
-                {
-                    if(Singleton.getInstance().currentDesignList!?.length>0)
-                    {                        
-                        if(!isSameDesignType)
-                        {
-                          Singleton.getInstance().GenerateDefaultDesignsSelected()
+    
+                if(Singleton.getInstance().environmentTypeChanged || !isSameDesignType ) {
+                    console.log("Environment type changed, generating default designs...");
+                    Singleton.getInstance().GenerateDefaultDesignsSelected();
+                }
+                
+                Singleton.getInstance().environmentTypeChanged=false;
+    
+                if(Singleton.getInstance().currentDesignList && !designLoaded) {
+                    if(Singleton.getInstance().currentDesignList!.length > 0) {                        
+                        if(!isSameDesignType) {
+                            console.log("Not the same design type, generating default designs...");
+                            Singleton.getInstance().GenerateDefaultDesignsSelected();
                         }
+                    } else {
+                        console.log("No current design list, generating default designs...");
+                        Singleton.getInstance().GenerateDefaultDesignsSelected();
                     }
-                    else
-                    {
-                        Singleton.getInstance().GenerateDefaultDesignsSelected()
-                    }
-                   
-                    
+                } else if(!designLoaded) {
+                    console.log("Designs not loaded, generating default designs...");
+                    Singleton.getInstance().GenerateDefaultDesignsSelected();
                 }
-                else if(!designLoaded)
-                {
-                    Singleton.getInstance().GenerateDefaultDesignsSelected()
-                }
-
-                
-                
+    
                 setDesignColors(currenDesignColors);
+                console.log("Design colors set");
             }
         }
         
         SelectDesignTypeAsync();
-
-    },[selectedDesignType]);
+    
+    }, [selectedDesignType]);
+    
 
 
     useEffect(() => {
 
         if(!Singleton.getInstance().selectedDesignType)
         {
-            console.log("Selected design type missing")
             setSelectedDesignType(props.designTypes[0]);
         }
         else
         {
             if(Singleton.getInstance().selectedDesignType)
             {
-                console.log("Selected design type is selected")
                 setDesignsLoaded(true);
             }
         }

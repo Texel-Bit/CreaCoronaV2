@@ -49,25 +49,30 @@ class SvgTexturizer {
 
 
     // Function to apply texture to the SVG
-public texturize = async (id: number, svgUrl: string, options: TexturizeSvgOptions[]) => {
-    const svgElement = await this._buildSvgElement(svgUrl);
-
-    options.forEach((option) => {
-        if (option.layerId != "" ) {
-            console.log("RECORRIENDO TEXTURIZADOR => ", option);
-            let patternId = this._addSvgPattern(svgElement, option);
-            let currentLayer = svgElement.querySelector(`#${option.layerId}`);
-
-            if (currentLayer) {
-                currentLayer.setAttribute('class', '');
-                currentLayer.setAttribute('fill', `url(#${patternId})`);
+    public texturize = async (id: number, svgUrl: string, options: TexturizeSvgOptions[]): Promise<HTMLElement> => {
+        // Assuming this method returns an SVGElement
+        const originalSvgElement: HTMLElement = await this._buildSvgElement(svgUrl);
+        
+        // Create a deep clone of the SVGElement
+        const clonedSvgElement: HTMLElement = originalSvgElement.cloneNode(true) as HTMLElement;
+    
+        options.forEach((option) => {
+            if (option.layerId !== "") {
+                let patternId = this._addSvgPattern(clonedSvgElement, option,id); // Ensure you pass the cloned element here
+                let currentLayer = clonedSvgElement.querySelector(`#${option.layerId}`);
+    
+                if (currentLayer) {
+                    currentLayer.setAttribute('class', '');
+                    currentLayer.setAttribute('fill', `url(#${patternId})`);
+                }
             }
-        }
-    });
+        });
+    
+        clonedSvgElement.setAttribute("id", id.toString());
 
-    svgElement.setAttribute("id", id.toString());
-    return svgElement;
-}
+        return clonedSvgElement;
+    }
+    
 
 // Function to apply rotation to the SVG layers
 
@@ -319,12 +324,12 @@ public rotateSvg = (svgElement: HTMLElement, rotation: number): SVGSVGElement =>
     }
 
 
-    private _addSvgPattern = (svgElement: HTMLElement, patternSettings: TexturizeSvgOptions): string => {
+    private _addSvgPattern = (svgElement: HTMLElement, patternSettings: TexturizeSvgOptions,id:number): string => {
         const patternElement = document.createElementNS(this.SVG_NAMESPACE, 'pattern');
         const tileSize = 100 / patternSettings.tile;
         let svgImageElement = this._getTextureImageElement(patternSettings);
 
-        const patternId = `p_${patternSettings.layerId}`;
+        const patternId = `p_${id}_${patternSettings.layerId}`;
         patternElement.setAttribute('id', patternId);
         patternElement.setAttribute('patternUnits', 'userSpaceOnUse');
         patternElement.setAttribute('width', `${tileSize}%`);

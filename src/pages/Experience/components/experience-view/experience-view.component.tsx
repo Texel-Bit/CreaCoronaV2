@@ -252,8 +252,6 @@ useEffect(() => {
                 Singleton.getInstance().UpdateFormats();
             }
            
-                
-
             SetupsTitles();
            
         }
@@ -284,6 +282,11 @@ function SetupsTitles()
         else{
             setDescription(dict.get(experieceView)?.description??<></>)
         }
+    }
+    else if(experieceView==ExperienceViews.Format)
+    {
+        setDescription(dict.get(experieceView)?.description??<></>)
+        
     }
 }
 
@@ -347,7 +350,6 @@ const RotateMosaic = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "", classButton: "btn-corona-destructive" }
                                             ]}/>
                                     </>
                                 }
@@ -422,7 +424,8 @@ const RotateMosaic = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: () => {}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
+                                                { buttonClick: ChangeChessMode, icon: FaSearchPlus, text: "Modo Ajedrez", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: () => {Singleton.getInstance().currentColorList=[];Singleton.getInstance().TexturizeMosaic()}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                     </>
                                 }
@@ -447,7 +450,7 @@ const RotateMosaic = () => {
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row">
+                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row cotizacion-view">
                         <div className="col-12 col-md-5 d-flex mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}
@@ -558,7 +561,7 @@ const RotateMosaic = () => {
         <div className="timeline-step">
             <span className="timeline-title">Estructura:</span>
             <div className="timeline-content">
-                <img style={{maxWidth:"80px"}} src={getServerImagesUrl(Singleton.getInstance().currentStructure!?.source)} alt={Singleton.getInstance().currentStructure!.name}/>
+                <img className="timeline-ImageContent" style={{maxWidth:"80px"}} src={getServerImagesUrl(Singleton.getInstance().currentStructure!?.source)} alt={Singleton.getInstance().currentStructure!.name}/>
                 {Singleton.getInstance().currentStructure!.name}
             </div>
                 </div> }

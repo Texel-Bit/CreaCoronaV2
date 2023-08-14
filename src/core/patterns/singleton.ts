@@ -46,7 +46,7 @@ class Singleton {
   public mosaicImage:any;
   public simulationImage:any;
 
-
+  public SelectedMosaicsSVG:HTMLElement[]=[];
 
   private mosaicRotations=[0,90,270,180]
 
@@ -56,6 +56,7 @@ class Singleton {
   
   public chessMode:boolean| null = null;
 
+  public environmentTypeChanged:boolean=true;
 
   public currentExperienceView:ExperienceViews| null = ExperienceViews.EnvironmentType;
 setContentFunc: ((view: ExperienceViews) => void) | null = null;
@@ -93,6 +94,7 @@ updateViewStatusFunc: Array<() => void> = [];
   public ChangeChessMode()
   {
     this.chessMode=!this.chessMode;
+
     this.TexturizeMosaic();
   }
 
@@ -164,6 +166,7 @@ public SelectStructure(structure:IStructure)
 
 public ChangeBrickFormat(format:IFormat)
 {
+    console.log(this.currentDesignList);
     if(this.currentDesignList)
         this.currentDesignList[0].source=format.source
 
@@ -237,13 +240,24 @@ public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
   
 public RotateCurrentMosaicObject() {
     this.mosaicRotations[this.currentMosaicIndexSelected]+=90;
-    console.log(this.mosaicRotations);
+
     this.TexturizeMosaic();
 }
   
 
 
   public SelectEnvironmentType(environmentType:IEnvironmentType) {
+    if(this.currentEnvironmentType)
+    {
+        if(this.currentEnvironmentType.id!=environmentType.id)
+        {
+            this.environmentTypeChanged=true;
+        }
+        else
+        {
+            this.environmentTypeChanged=false;
+        }
+    }
     this.currentEnvironmentType=environmentType;
     this.EvaluatePercentage();
   }
@@ -285,7 +299,7 @@ public RotateCurrentMosaicObject() {
     if (currentDesigns && currentDesigns.length > 0) {
         // Check if the design is already in the list
 
-        if(currentDesigns[0].fullField!==design.fullField)
+        if(currentDesigns[0].fullField!==design.fullField ||currentDesigns[0].designType?.id!=design.designType?.id)
         {
             this.currentColorList=[]
             this.currentDesignList=[]
@@ -378,8 +392,9 @@ public ClearBundles()
         }
     }
 
-    private async TexturizeMosaic()
+    public async TexturizeMosaic()
     {
+
         if (!this.currentDesignList)
             return;
 
@@ -397,17 +412,26 @@ public ClearBundles()
             return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
         });
 
+        let TexturizedReversedOptions = newColorTemp.reverse().map((color, index) => {
+            return { layerId: `layer${index}`, textureUrl: getServerImagesUrl(color.source), tile: 1 };
+        });
       
+
         let TexturizedDesigns: HTMLElement[] = [];
         
         for (let index = 0; index < this.currentDesignList.length; index++) {
 
            
-           
+            let TexturizedTempOptions=TexturizedOptions
 
-            console.log("VALIDACION MODO AJEDRES => ", "Index:", index, " - MODO AJEDRES => ", this.chessMode && (index == 1 || index == 2), TexturizedOptions);
-            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedOptions);
-            console.log("TERMINA TEXTURIZACIÓN");
+            
+            if(this.chessMode && (index == 1 || index == 2))
+            {
+
+                TexturizedTempOptions=TexturizedReversedOptions;
+            }
+            
+            let texturizedDesign = await texturizer.texturize(index, getServerImagesUrl(this.currentDesignList[index].source), TexturizedTempOptions);
 
             
             if(this.selectedDesignType?.id == 2)
@@ -428,31 +452,11 @@ public ClearBundles()
             TexturizedDesigns.push(texturizedDesign);
         }
 
-        console.log("RESULTADO TEXTURIZACIÓN => ", TexturizedDesigns);
+
         if (this.updateMosaicFunc)
                 this.updateMosaicFunc(TexturizedDesigns);
 
-        // let TexturizedDesignsPromises = this.currentDesignList.map(async (design, index) => {
-
-        //     let selectedTexturizedOptions = this.chessMode && (index == 1 || index == 2)
-        //         ? TexturizedOptions : TexturizedOptionsInverted;
-
-        //     console.log(index, selectedTexturizedOptions);
-        //     let texturizedDesign = await texturizer.texturize(getServerImagesUrl(design.source), selectedTexturizedOptions);
-
-        //     if(this.currentStructure)
-        //         texturizer.addFilter(texturizedDesign, getServerImagesUrl(this.currentStructure.source));
-
-        //     if (this.selectedDesignType?.id == 2)
-        //         texturizer.addBisels(texturizedDesign);
-
-        //     return texturizedDesign;
-        // });
-
-        // const TexturizedDesigns = await Promise.all(TexturizedDesignsPromises);
-
-        // if (this.updateMosaicFunc)
-        //   
+      
     }
     
 
@@ -498,7 +502,6 @@ public ClearBundles()
               }
           }
 
-          console.log("Indexes ",this.colorIndex);
         if(this.GetCurrenColorTypeID()==1)
         {
             index=0;

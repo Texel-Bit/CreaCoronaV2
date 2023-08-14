@@ -42,7 +42,6 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
                     // Adding the environment to Singleton's EnvironmentDataManager
                     singleton.getEnvironmentDataManager().addEnvironment(currentEnvironment);
                 } else {
-                    console.log(`No EnvironmentType found for id ${element.EnvironmentType_idEnvironmentType}`);
                 }
             });
 
