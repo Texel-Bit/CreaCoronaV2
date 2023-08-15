@@ -182,7 +182,7 @@ useEffect(() => {
     const updateCanvas =  () => {
         setTimeout(async() => {            
 
-            let element = document.getElementById("mosaic-element");
+            let element = document.getElementById("mosaic-element") as HTMLElement;
 
             if (element)
             {
@@ -196,26 +196,30 @@ useEffect(() => {
                 let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
                 setSelectedPerspective(newPerspective);
 
-                let elementSvg=null;
+                let elementSvg = null;
 
-/*
-                if(Singleton.getInstance().currentExperienceView==ExperienceViews.Format)
+                if
+                (
+                    Singleton.getInstance().currentExperienceView == ExperienceViews.Format
+                    && Singleton.getInstance().selectedDesignType?.id != 3 // SOLO PARA LOS HEXAGONOS NO PASA POR SERVER
+                )
                 {
                     let requestBody = {
-                        svgsContent: btoa(unescape(encodeURIComponent(element.children[1].innerHTML))),
+                        svgsContent: btoa(element?.outerHTML ?? ""),
                         width: element.clientWidth,
                         height: element.clientHeight
                     };
 
-                    console.log(requestBody);
-                    elementSvg = await getDesgignWithStructure(JSON.stringify(requestBody));
+                    let response = await getDesgignWithStructure(requestBody);
+
+                    if (response.status)
+                        elementSvg = response.data;
                 }
                 else
                 {
                     elementSvg = await convertHtmlToImage(element);
                 }
-*/
-                elementSvg = await convertHtmlToImage(element);
+
                 setCanvasImage(elementSvg ?? "");
                 Singleton.getInstance().mosaicImage = elementSvg;
             }
