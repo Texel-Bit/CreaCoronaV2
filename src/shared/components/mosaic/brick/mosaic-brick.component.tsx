@@ -43,8 +43,8 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                     .mosaic-brick {
                         display: flex;
                         flex-direction: column;
-                        gap: .4rem;
-                        padding: .2rem;
+                        gap: .2rem;
+                        padding: .1rem;
                         overflow: hidden;
                         ${bricksStyle}
                     }
@@ -52,14 +52,14 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                     .brick-row {
                         display: grid;
                         grid-template-columns: repeat(2, 1fr);
-                        gap: .4rem;
+                        gap: .2rem;
                     }
 
                     .brick-row-offset {
                         width: 150%;
                         display: grid;
                         grid-template-columns: repeat(3, 1fr);
-                        gap: .4rem;
+                        gap: .2rem;
                         margin-left: -25%;
                     }
                 `}
