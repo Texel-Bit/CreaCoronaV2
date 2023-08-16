@@ -64,7 +64,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
                 console.log("Fetching colors by design type ID...");
-                const ColorList = await getAllDesignByTypeId(selectedDesignType.id);
+                const ColorList = await getAllDesignByTypeId(selectedDesignType.id,Singleton.getInstance().currentEnvironmentType?.id||0);
                 console.log("Fetched ColorList:", ColorList);
     
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };

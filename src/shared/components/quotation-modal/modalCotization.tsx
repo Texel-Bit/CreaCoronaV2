@@ -40,6 +40,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
       GetUserData(),
       2
     );
+    console.log(QuotationData)
     setQuotazing(true);
     setCalculate(true);
     let response = await createQuotation(QuotationData);
@@ -66,7 +67,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
         );
 
         let response = await simulateQuotation(QuotationData);
-
+        console.log(QuotationData);
         setCalculate(false);
         setUnits(response.data.cantidadValdosas);
 
@@ -134,11 +135,8 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
 
             {/* Negociemos */}
             <div className="business">
-              <h4 className="businessTitle">¡Claro que puedes negociar!</h4>
-              <p className="businessParagraph">
-                Ingresa tus datos y uno de nuestros asesores le contactará para
-                que puedas acceder a descuentos y promociones
-              </p>
+              <h4 className="businessTitle">Ingresa tus datos y uno de nuestros asesores te contactará</h4>
+              
             </div>
             {/* formularios */}
             <div>
@@ -199,6 +197,27 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                     required
                   />
                 </div>
+                <label className="aceptConditions">
+              <input
+                className="checkBoxCotization"
+                type="checkbox"
+                // checked={aceptaCondiciones}
+                // onChange={(e) => setAceptaCondiciones(e.target.checked)}
+                required
+              />
+              Acepto Terminos y condiciones
+            </label>
+
+            <label className="aceptConditions">
+              <input
+                className="checkBoxCotization"
+                type="checkbox"
+                // checked={aceptaCondiciones}
+                // onChange={(e) => setAceptaCondiciones(e.target.checked)}
+                required
+              />
+              Acepto Tratamiento de datos
+            </label>
               </form>
             </div>
             {/* fin */}
@@ -276,6 +295,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
               {Singleton.getInstance().currentStructure && (
                 <div className="timeline-step-mosaic">
                   <span className="timeline-title ">Estructura:</span>
+                  
                   <div className="timeline-content-quotation ">
                     <img
                       style={{ maxWidth: "40px", border: "2px solid #213C65" }}
@@ -292,18 +312,11 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
           </div>
         </div>
 
+
         <div className="bottomContent">
+          
           <div className="bottomItem">
-            <label className="aceptConditions">
-              <input
-                className="checkBoxCotization"
-                type="checkbox"
-                // checked={aceptaCondiciones}
-                // onChange={(e) => setAceptaCondiciones(e.target.checked)}
-                required
-              />
-              Acepta todas las condiciones
-            </label>
+           
 
             <button
               className="buttonsCotizar btn-corona btn-corona-destructive"
@@ -315,16 +328,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
           </div>
 
           <div className="bottomItem">
-            <label className="aceptConditions">
-              <input
-                className="checkBoxCotization"
-                type="checkbox"
-                // checked={aceptaCondiciones}
-                // onChange={(e) => setAceptaCondiciones(e.target.checked)}
-                required
-              />
-              Acepta todas las condiciones
-            </label>
+
 
             <button
               className="buttonsCotizar btn-corona btn-corona-add"

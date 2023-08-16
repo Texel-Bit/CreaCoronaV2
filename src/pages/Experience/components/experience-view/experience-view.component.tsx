@@ -24,7 +24,7 @@ import { IDesignType } from "../../../../core/models/designType/design-type.mode
 import { IDesign } from "../../../../core/models/design/design.model";
 import { ExperienceCanvas } from "../../../../shared/components/experience-canvas/experience-canvas.component";
 import { MosaicActionsMask } from "../../../../shared/components/mosaic/actions/mosaic-actions-mask/mosaic-actions-mask.component";
-import { FaSearchPlus, FaTrashAlt } from "react-icons/fa";
+import { FaSearchPlus, FaTrashAlt,FaDelicious } from "react-icons/fa";
 import { RxRotateCounterClockwise } from "react-icons/rx";
 import { getServerImagesUrl } from "../../../../shared/utilities/format-server-endpoints.utility";
 import { convertHtmlToImage } from "../../../../shared/utilities/html-to-image.utility";
@@ -48,7 +48,8 @@ interface contentData
     title:string;
     icon:string;
     description:ReactElement,
-    descriptionFull:ReactElement
+    descriptionFullColor:ReactElement
+    descriptionSingleMosaic:ReactElement
 }
 
 export const ExperienceView:React.FC<currentExperienceView>=(props) => {
@@ -59,14 +60,16 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         title: "Diseña el revestimiento",
         icon: CozyIco,
         description: <h6>Selecciona hasta <b className="color-middle">4 opciónes</b> de grafica</h6>,
-        descriptionFull:<h6>Seleccionaste una opción para revestimiento sin grafica</h6>
+        descriptionFullColor:<h6>Seleccionaste una opción para revestimiento sin grafica</h6>,
+        descriptionSingleMosaic: <h6>Selecciona <b className="color-middle">1 opción</b> de grafica</h6>,
     });
     
     dict.set(ExperienceViews.Color, {
         title: "Agrega color a tu diseño",
         icon: PalletIco,
         description: <h6>Selecciona hasta 5 colores distintos para aplicarle a tu diseño</h6>,
-        descriptionFull:<h6>Selecciona el color de tu preferencia de acabado brillante</h6>
+        descriptionFullColor:<h6>Selecciona el color de tu preferencia de acabado brillante</h6>,
+        descriptionSingleMosaic: <h6>Selecciona hasta <b className="color-middle">4 opciónes</b> de grafica</h6>,
     });
 
 
@@ -75,7 +78,8 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
         title: "Define la cantidad y cotiza",
         icon: OpenIco,
         description: <h6>Selecciona el formato y estructura de tu revestimiento, <br></br>ingresa las Medidas de tu espacio y cotiza</h6>,
-        descriptionFull:<h6></h6>    });
+        descriptionFullColor:<h6></h6>,
+        descriptionSingleMosaic: <h6>Selecciona hasta <b className="color-middle">4 opciónes</b> de grafica</h6>,    });
 
 
     const [designTypes, setDesignTypes] = useState<IDesignType[]>([]);
@@ -197,6 +201,13 @@ useEffect(() => {
                 setSelectedPerspective(newPerspective);
 
                 let elementSvg = null;
+                if
+                (
+                    Singleton.getInstance().currentExperienceView !== ExperienceViews.Format
+                )
+                {
+                    Singleton.getInstance().currentStructure=null;
+                }
 
                 if
                 (
@@ -269,9 +280,13 @@ function SetupsTitles()
 
     if(experieceView==ExperienceViews.Design)
     {
-        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
+        if(Singleton.getInstance().selectedDesignType?.mosaicValue==1 && Singleton.getInstance().GetCurrenColorTypeID()!=1)
         {
-            setDescription(dict.get(experieceView)?.descriptionFull??<></>)
+            setDescription(dict.get(experieceView)?.descriptionSingleMosaic??<></>)
+        }
+        else if(Singleton.getInstance().GetCurrenColorTypeID()==1)
+        {
+            setDescription(dict.get(experieceView)?.descriptionFullColor??<></>)
         }
         else{
             setDescription(dict.get(experieceView)?.description??<></>)
@@ -281,7 +296,7 @@ function SetupsTitles()
     {
         if(Singleton.getInstance().GetCurrenColorTypeID()==1)
         {
-            setDescription(dict.get(experieceView)?.descriptionFull??<></>)
+            setDescription(dict.get(experieceView)?.descriptionFullColor??<></>)
         }
         else{
             setDescription(dict.get(experieceView)?.description??<></>)
@@ -428,7 +443,7 @@ const RotateMosaic = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: ChangeChessMode, icon: FaSearchPlus, text: "Modo Ajedrez", styleColor: "", classButton: "btn-corona-primary" },
+                                                { buttonClick: ChangeChessMode, icon: FaDelicious, text: "Modo Ajedrez", styleColor: "", classButton: "btn-corona-primary" },
                                                 { buttonClick: () => {Singleton.getInstance().currentColorList=[];Singleton.getInstance().TexturizeMosaic()}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                     </>
@@ -564,6 +579,7 @@ const RotateMosaic = () => {
         {Singleton.getInstance().currentStructure&&
         <div className="timeline-step">
             <span className="timeline-title">Estructura:</span>
+           
             <div className="timeline-content">
                 <img className="timeline-ImageContent" style={{maxWidth:"80px"}} src={getServerImagesUrl(Singleton.getInstance().currentStructure!?.source)} alt={Singleton.getInstance().currentStructure!.name}/>
                 {Singleton.getInstance().currentStructure!.name}

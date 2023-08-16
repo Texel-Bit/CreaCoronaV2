@@ -5,8 +5,8 @@ export const getAllDesignType = () =>
     getRequest("desingType/getAllDesignType");
 
 
-export const getAllDesignByTypeId = (desingTypeId: number) =>
-    postRequest("desingType/getAllDesignTypeTest", { idDesignType: desingTypeId });
+export const getAllDesignByTypeId = (desingTypeId: number,idEnvironmentTypeId:number) =>
+    postRequest("desingType/getAllDesignTypeTest", { idDesignType: desingTypeId,idEnvironmentType:idEnvironmentTypeId });
 
 
 export const getDesignColorsByType = (designTypeId: number, environmentTypeId: number) => {

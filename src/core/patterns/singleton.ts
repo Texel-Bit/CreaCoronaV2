@@ -197,6 +197,12 @@ public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
         });
     }
 
+    console.log(this.quotationWidth);
+    if(!this.currentGrout)
+    {
+        this.currentGrout=this.getgroutDataManager().getAllGrouts()[0]??null;
+    }
+
     let quotationParams:IQuotationParams={
         demo:demo,
         idFormatSize:this.currentFormat?.id||1,
@@ -462,7 +468,7 @@ public ClearBundles()
 
     public InitializeColors(colors:IColor[])
     {
-
+        console.log(colors)
         this.currentColorList=[]
         this.currentColorList=colors;
 
@@ -616,7 +622,7 @@ public GenerateDefaultDesignsSelected() {
         {
             for (let i = 0; i < maxDesignSelected; i++) {
                 if (currentDesigns[i]) {
-                    this.currentDesignList.push(currentDesigns[i]);
+                    this.currentDesignList.push(currentDesigns[0]);
                 } else {
                     break; // exit the loop if there are no more designs
                 }

@@ -8,4 +8,5 @@ export interface IEnvironment {
     name:string
     environmentType:IEnvironmentType
     environmentAngle:any
+    environmentIcon:string
 }
