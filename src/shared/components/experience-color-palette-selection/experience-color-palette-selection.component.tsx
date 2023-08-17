@@ -12,11 +12,24 @@ export const ExperienceColorPaletteSelection = () => {
     
     const [colorsBundle, setColorBundles] = useState<IColorBundle[] | null >();
 
-    let initFristLoad = true
+  
     useEffect(() => {
 
-        if(initFristLoad){
-            initFristLoad=!initFristLoad;
+        console.log("Loading bundle list ");
+        if (Singleton.getInstance().colorBundleList) {
+            if(Singleton.getInstance().currentColorList?.length==0)
+            {
+                Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
+
+            }
+            else if(Singleton.getInstance().colorBundleList!?.length<4)
+            {
+                Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
+            }
+        }
+
+        if(Singleton.getInstance().currentColorList?.length==0)
+        {
             colorsBundle?.map((element,index)=>{
                 if(index==0){
                     element.colorList.map((color,i)=>{
@@ -24,9 +37,20 @@ export const ExperienceColorPaletteSelection = () => {
                         if(node)node.style.backgroundImage=`url(https://corona.texelbit.com:9445/${color.source})`;
                     })
                 };
-               
+                
             })
         }
+        else
+        {
+            Singleton.getInstance().currentColorList?.map((element,index)=>{
+                const node:any = document.getElementById(`circle-option${index+1}`);
+                        if(node)node.style.backgroundImage=`url(https://corona.texelbit.com:9445/${element.source})`;
+                
+            })
+        }
+
+       
+        
 
     },[colorsBundle]);
     
@@ -81,17 +105,7 @@ export const ExperienceColorPaletteSelection = () => {
 
                         setColorBundles(Singleton.getInstance().colorBundleList);
                         
-                        if (Singleton.getInstance().colorBundleList) {
-                            if(!Singleton.getInstance().currentColorList)
-                            {
-                                Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
-
-                            }
-                            else if(Singleton.getInstance().colorBundleList!?.length<4)
-                            {
-                                Singleton.getInstance().InitializeColors(Singleton.getInstance().colorBundleList![0].colorList || []);
-                            }
-                        }
+                       
 
                         
 

@@ -341,7 +341,7 @@ const RotateMosaic = () => {
                             icon={dict.get(props.currentView ?? ExperienceViews.Design)?.icon ?? ""}
                         />
                     </div>
-                  
+
 
                     <div className="col-2 text-end">
                     {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">Siguiente →</button>}
@@ -443,7 +443,7 @@ const RotateMosaic = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: ChangeChessMode, icon: FaDelicious, text: "Modo Ajedrez", styleColor: "", classButton: "btn-corona-primary" },
+                                                ...(Singleton.getInstance().GetCurrenColorTypeID() == 2 ? [{ buttonClick: ChangeChessMode, icon: FaDelicious, text: "Modo Ajedrez", styleColor: "", classButton: "btn-corona-primary" }] : []),
                                                 { buttonClick: () => {Singleton.getInstance().currentColorList=[];Singleton.getInstance().TexturizeMosaic()}, icon: FaTrashAlt, text: "Eliminar", styleColor: "red",classButton: "btn-corona-destructive"  }
                                             ]}/>
                                     </>
@@ -544,9 +544,9 @@ const RotateMosaic = () => {
       <div className="timeline">
 
         <div className="timeline-step">
-            <span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>
+            {Singleton.getInstance().currentDesignList!?.length>0&&<span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>}
             <div className="timeline-content timeline-content--modifier">
-                <img className="mosaicResumeImage" src={canvasImage}/>
+            {Singleton.getInstance().currentDesignList!?.length>0&&<img className="mosaicResumeImage" src={canvasImage}/>}
                 <div className="timeline-colors">
                     {
                         Singleton.getInstance().currentDesignList &&
@@ -559,7 +559,7 @@ const RotateMosaic = () => {
         </div>
 
         {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
-            <span className="timeline-title">Colores: ({Singleton.getInstance().GetCurrenColorTypeID()==1?"Campo Lleno":"Con Diseño"})</span>
+            <span className="timeline-title">Colores: </span>
             <div className="timeline-content timeline-content-grid">
                 {Singleton.getInstance().currentColorList!.map((color, index) => (
                     <div key={index} className="color-item">
@@ -571,7 +571,7 @@ const RotateMosaic = () => {
         </div>}
 
         <div className="timeline-step">
-            <span className="timeline-title">Formato:</span>
+        {Singleton.getInstance().currentFormat?.name&&<span className="timeline-title">Formato:</span>}
             <div className="timeline-content">
                 {Singleton.getInstance().currentFormat?.name}
             </div>

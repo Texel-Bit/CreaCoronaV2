@@ -16,10 +16,7 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
 
     useEffect(() => {
 
-        props.squares.forEach((element)=>
-        {
-            console.log(element.outerHTML)
-        })
+       
         if (props.grout)
             setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
     }, [props.grout,props.squares]);

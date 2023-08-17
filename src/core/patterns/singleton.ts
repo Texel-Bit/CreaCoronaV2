@@ -303,44 +303,60 @@ public RotateCurrentMosaicObject() {
     const currentDesigns = this.GetSelectedDesigns();
 
     if (currentDesigns && currentDesigns.length > 0) {
+    
         // Check if the design is already in the list
-
-        if(currentDesigns[0].fullField!==design.fullField ||currentDesigns[0].designType?.id!=design.designType?.id)
-        {
-            this.currentColorList=[]
-            this.currentDesignList=[]
+        if(currentDesigns[0].fullField!==design.fullField || currentDesigns[0].designType?.id != design.designType?.id) {
+            this.mosaicRotations=[0,90,270,180]
+            this.currentColorList=[];
+            this.currentDesignList=[];
+            
             let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
             for (let i = 0; i < maxDesignSelected; i++) {
                 this.currentDesignList.push(design);
             }
-
+    
             this.TexturizeMosaic();
-            
         }
-        else if(this.currentMosaicIndexSelected>= 0 &&this.currentDesignList){
+        else if(this.currentMosaicIndexSelected >= 0 && this.currentDesignList) {
+            
             this.currentDesignList[this.currentMosaicIndexSelected] = design;
             this.TexturizeMosaic();
         }
-        else
-        {
-            if(this.selectedDesignType?.mosaicValue==1)
-            {
-                this.currentDesignList=[]
+        else if(design.fullField == false && this.currentMosaicIndexSelected == -1) {
+            
+            this.mosaicRotations=[0,90,270,180]
+            this.currentColorList=[];
+            this.currentDesignList=[];
+            
+            let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
+            for (let i = 0; i < maxDesignSelected; i++) {
+                this.currentDesignList.push(design);
+            }
+    
+            this.TexturizeMosaic();
+        }
+        else {
+    
+            if(this.selectedDesignType?.mosaicValue == 1) {
+                console.log("mosaicValue is 1.");
+                
+                this.currentDesignList=[];
                 this.currentDesignList.push(design);
                 this.TexturizeMosaic();
             }
-        }
-       
+        }  
     } else  {
-        this.currentDesignList=[]
+        this.mosaicRotations=[0,90,270,180]    
+        this.currentDesignList=[];
         let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
-        
+    
         for (let i = 0; i < maxDesignSelected; i++) {
             this.currentDesignList.push(design);
         }
-
+    
         this.TexturizeMosaic();
     }
+    
 }
 
 
