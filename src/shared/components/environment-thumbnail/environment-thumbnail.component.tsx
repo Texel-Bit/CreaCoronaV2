@@ -1,4 +1,5 @@
 import icon from "../../../assets/icons/background_grid_small.png";
+import icon2 from "../../../assets/icons/background_replace.png";
 import './environment-thumbnail.component.css';
 
 
@@ -24,7 +25,7 @@ export const EnvironmentThumbnail:React.FC<EnvironmentThumbnailProps> = (props) 
             </div>
 
             <div className='p-md-3 d-flex align-items-center justify-content-center gap-3'>
-                <img src={icon} alt="navbar icon" height={35} />
+                <img src={props.name=="Piso"?icon:icon2} alt="navbar icon" height={35} />
                 <label className="color-primary fw-bold color-middle">{props.name}</label>
             </div>
         </div>

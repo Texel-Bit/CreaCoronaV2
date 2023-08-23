@@ -21,6 +21,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
     const [initQuotationArea, setInitQuotationArea] = useState("");
     const [initQuotationDepartment, setInitQuotationDepartment] = useState("");
     const [initQuotationErrorText, setInitQuotationErrorText] = useState("");
+    const [showStructureMessage, setStructureMessage] = useState(false);
 
 
     useEffect(() => {
@@ -42,7 +43,8 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         setInitQuotationErrorText("");
 
         let valid = true
-
+        setStructureMessage(false);
+        
         if (squareMetersSelected && !initQuotationArea)
         {
             setInitQuotationErrorText("Ingresar el área en metros cuadrados");
@@ -50,7 +52,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         }
         else if (!squareMetersSelected && (!initQuotationWidth || !initQuotationHeight))
         {
-            setInitQuotationErrorText("Ingresar información de metros y área");
+            setInitQuotationErrorText("Ingresar información de metros o área");
             valid = false;
         }
         else if (!initQuotationDepartment)
@@ -65,6 +67,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         }
         else if (!Singleton.getInstance().currentStructure)
         {
+            setStructureMessage(true);
             setInitQuotationErrorText("Selecciona una estructura");
             valid = false;
         }
@@ -77,7 +80,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         setInitQuotationArea(area);
         setInitQuotationWidth("0");
         setInitQuotationHeight("0");
-        Singleton.getInstance().quotationArea=parseInt(area);
+        Singleton.getInstance().quotationArea=parseFloat(area);
         Singleton.getInstance().quotationWidth=0;
         Singleton.getInstance().quotationHeight=0;
     }
@@ -86,7 +89,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
     {
         setInitQuotationArea("0");
         setInitQuotationWidth(Width);
-        Singleton.getInstance().quotationWidth=parseInt(Width);
+        Singleton.getInstance().quotationWidth=parseFloat(Width);
         Singleton.getInstance().quotationArea=0;
     }
 
@@ -94,7 +97,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
     {
         setInitQuotationArea("0");
         setInitQuotationHeight(Heigth);
-        Singleton.getInstance().quotationHeight=parseInt(Heigth);
+        Singleton.getInstance().quotationHeight=parseFloat(Heigth);
         Singleton.getInstance().quotationArea=0;
     }
 

@@ -197,6 +197,12 @@ public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
         });
     }
 
+    console.log(this.quotationWidth);
+    if(!this.currentGrout)
+    {
+        this.currentGrout=this.getgroutDataManager().getAllGrouts()[0]??null;
+    }
+
     let quotationParams:IQuotationParams={
         demo:demo,
         idFormatSize:this.currentFormat?.id||1,
@@ -297,44 +303,60 @@ public RotateCurrentMosaicObject() {
     const currentDesigns = this.GetSelectedDesigns();
 
     if (currentDesigns && currentDesigns.length > 0) {
+    
         // Check if the design is already in the list
-
-        if(currentDesigns[0].fullField!==design.fullField ||currentDesigns[0].designType?.id!=design.designType?.id)
-        {
-            this.currentColorList=[]
-            this.currentDesignList=[]
+        if(currentDesigns[0].fullField!==design.fullField || currentDesigns[0].designType?.id != design.designType?.id) {
+            this.mosaicRotations=[0,90,270,180]
+            this.currentColorList=[];
+            this.currentDesignList=[];
+            
             let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
             for (let i = 0; i < maxDesignSelected; i++) {
                 this.currentDesignList.push(design);
             }
-
+    
             this.TexturizeMosaic();
-            
         }
-        else if(this.currentMosaicIndexSelected>= 0 &&this.currentDesignList){
+        else if(this.currentMosaicIndexSelected >= 0 && this.currentDesignList) {
+            
             this.currentDesignList[this.currentMosaicIndexSelected] = design;
             this.TexturizeMosaic();
         }
-        else
-        {
-            if(this.selectedDesignType?.mosaicValue==1)
-            {
-                this.currentDesignList=[]
+        else if(design.fullField == false && this.currentMosaicIndexSelected == -1) {
+            
+            this.mosaicRotations=[0,90,270,180]
+            this.currentColorList=[];
+            this.currentDesignList=[];
+            
+            let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
+            for (let i = 0; i < maxDesignSelected; i++) {
+                this.currentDesignList.push(design);
+            }
+    
+            this.TexturizeMosaic();
+        }
+        else {
+    
+            if(this.selectedDesignType?.mosaicValue == 1) {
+                console.log("mosaicValue is 1.");
+                
+                this.currentDesignList=[];
                 this.currentDesignList.push(design);
                 this.TexturizeMosaic();
             }
-        }
-       
+        }  
     } else  {
-        this.currentDesignList=[]
+        this.mosaicRotations=[0,90,270,180]    
+        this.currentDesignList=[];
         let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
-        
+    
         for (let i = 0; i < maxDesignSelected; i++) {
             this.currentDesignList.push(design);
         }
-
+    
         this.TexturizeMosaic();
     }
+    
 }
 
 
@@ -462,7 +484,7 @@ public ClearBundles()
 
     public InitializeColors(colors:IColor[])
     {
-
+        console.log(colors)
         this.currentColorList=[]
         this.currentColorList=colors;
 
@@ -616,7 +638,7 @@ public GenerateDefaultDesignsSelected() {
         {
             for (let i = 0; i < maxDesignSelected; i++) {
                 if (currentDesigns[i]) {
-                    this.currentDesignList.push(currentDesigns[i]);
+                    this.currentDesignList.push(currentDesigns[0]);
                 } else {
                     break; // exit the loop if there are no more designs
                 }

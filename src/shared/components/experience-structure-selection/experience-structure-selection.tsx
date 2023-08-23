@@ -24,11 +24,11 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
         <div className='mw-100 overflow-hidden'>
 
             <div className="background-color-middle px-3 py-1 w-50 rounded-top">
-                <h6 className="m-0 color-white fw-normal">Estructura</h6>
+                <h6 className="m-0 color-white fw-normal">Estructura</h6>           
             </div>
-
+          
             <div className="p-2 d-flex justify-content-around structure-selection-content">
-                
+            <div>  
                 {
                     props.structures.map(struct => {
                         return <StructureThumbnail 
@@ -37,9 +37,9 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
                                 onClick={ChangeStructure}/>
                     })
                 }
-
+{!Singleton.getInstance().currentStructure&& <p className="text-danger">Seleccione una estructura</p> }
             </div>
-
+            </div>
         </div>
     );
 }

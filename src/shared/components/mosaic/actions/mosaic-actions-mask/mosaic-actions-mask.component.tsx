@@ -40,11 +40,15 @@ export const MosaicActionsMask = () => {
 
     const onActionItemClick = (index: number) => {
 
-        Singleton.getInstance().ChangeMosaicIndex(index);
+        let currentIndex=index;
+       
         if (index == selectedIndex)
-            setSelectedIndex(-1);
-        else
-            setSelectedIndex(index);
+        {
+            currentIndex=-1;
+        }
+        Singleton.getInstance().ChangeMosaicIndex(currentIndex);
+        setSelectedIndex(currentIndex);
+            
     }
 
 
@@ -106,7 +110,7 @@ export const MosaicActionsMask = () => {
     return (
         <div className="position-absolute w-100 h-100 mosaic-actions-mask gap-1 p-1">
 
-            {
+            {Singleton.getInstance().GetCurrenColorTypeID()==2&&
                 itemsCongig.map((itemConf, index) => 
                     <>
                         <div className={`mosaic-actions-mask-item cursor-pointer cursor-pointer-hover ${itemConf.selected ? 'selected' : ''}`}

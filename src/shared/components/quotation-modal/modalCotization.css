@@ -241,6 +241,6 @@ background-color: var(--color-primary); /* color del pulgar al pasar el cursor s
 
 .buttonsCotizar{
     max-width: 300px;
-    min-width: 120px;
+    min-width: 200px;
     width: 100%;
 }

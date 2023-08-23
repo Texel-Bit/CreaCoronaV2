@@ -12,6 +12,8 @@ import {IDesignType} from "../../../../core/models/designType/design-type.model"
 import { IGrout } from "../../../../core/models/grout/grout.model";
 import { getAllState } from "../../../../core/services/localization.service";
 import { IState } from "../../../../core/models/State/state.model";
+import * as Icons from "react-icons/gi";
+
 
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
