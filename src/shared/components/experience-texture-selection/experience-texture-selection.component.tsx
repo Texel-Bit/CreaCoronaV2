@@ -14,6 +14,8 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
 
     useState(()=>{
 
+        Singleton.getInstance().ChangeStructure(null);
+        
         if(Singleton.getInstance().currentColorList!?.length==0 && Singleton.getInstance().GetCurrenColorTypeID()==1)
         {
             Singleton.getInstance().colorIndex=0

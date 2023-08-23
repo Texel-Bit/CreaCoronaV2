@@ -81,10 +81,17 @@
     margin-bottom: 1rem;
 }
 
-.titleImage{
+.titleImage {
+    margin-top: 10px;
+    font-size: 40px; /* Adjust this value to make the icon bigger or smaller */
     width: 20%;
+    color: var(--color-middle);
     margin-right: 2%;
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
+
 
 .titleText{width: 75%; }
 

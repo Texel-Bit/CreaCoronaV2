@@ -200,6 +200,13 @@ code {
   color: var(--bs-progress-bg) !important;
 }
 
+.btn-corona-add:disabled {
+  background-color: var(--color-second) !important;
+  border: 2px solid var(--color-second) !important;
+  color: var(--bs-progress-bg) !important;
+}
+
+
 .btn-corona-icon{
   height: 48px;
   width: 48px;

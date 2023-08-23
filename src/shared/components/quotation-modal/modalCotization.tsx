@@ -10,6 +10,7 @@ import { getServerImagesUrl } from "../../utilities/format-server-endpoints.util
 import { IUserCustomer } from "../../../core/models/user/user.model";
 import { Mail } from "@material-ui/icons";
 import { convertHtmlToImage } from "../../utilities/html-to-image.utility";
+import {FaWallet} from "react-icons/fa";
 
 interface QuotationModalProps {
   closeModalEvent: () => void;
@@ -118,7 +119,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
 
             {/* Titles&Image */}
             <div className="titlesContainer">
-              <img className="titleImage"></img>
+              <FaWallet className="titleImage" />
               <div className="titleText">
                 <h2 className="titleCotizacion">Cotización</h2>
                 <p className="paragraphCotizacion">
@@ -289,7 +290,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                   ? Singleton.getInstance().quotationWidth *
                     Singleton.getInstance().quotationHeight
                   : Singleton.getInstance().quotationArea}{" "}
-                M<sup>2</sup>
+                m<sup style={{fontSize: "10px", verticalAlign: "top",marginTop:"10px"}}>2</sup>
               </div>
 
               {Singleton.getInstance().currentStructure && (

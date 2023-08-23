@@ -5,14 +5,42 @@ import Singleton from '../../../core/patterns/singleton';
 
 
 interface ExperienceFormatSelectionProps {
-    formats: ExperienceFormatThumbnailProps[];
+    formats: ExperienceFormatThumbnailProps[]|[];
 }
 
 
 export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps> = (props) => {
     useEffect(() => {
-        props.formats[0].onClick(props.formats[0].format);
-        Singleton.getInstance().currentFormat=props.formats[0].format;
+
+        let formatSelected=null;
+
+        if(Singleton.getInstance().currentFormat)
+        {
+            const foundFormat = props.formats?.find(format => format.format.id === Singleton.getInstance().currentFormat?.id);
+
+            if (foundFormat) 
+            {
+                formatSelected=foundFormat.format;
+                foundFormat.onClick(formatSelected);
+            }
+            else
+            {
+                formatSelected=props.formats[0].format;
+                props.formats[0].onClick(props.formats[0].format);
+            }
+
+            
+        }
+        else
+        {
+            formatSelected=props.formats[0].format;
+            props.formats[0].onClick(props.formats[0].format);
+        }
+        
+        Singleton.getInstance().currentFormat=formatSelected;
+        
+        console.log("Changing Format ",formatSelected)
+
     }, []);
     
     
