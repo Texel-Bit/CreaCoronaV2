@@ -97,12 +97,13 @@
     flex-direction: row;
     justify-content: space-between;
     margin-top: 20px;
+    margin-right: 10px;
     padding-right: 100px;
 }
 
 @media screen and (min-width: 390px) {
     .timeline {
-        display: grid;
+
         grid-template-columns: repeat(2, 1fr);
         padding-right: 0;
         gap: 2rem;
@@ -185,7 +186,12 @@
     border-radius: 10px;
     overflow: hidden;
 }
-
+.timeline-content-colors {
+    display: flex;
+    flex-direction: row; /* stack content vertically */
+    gap: 5px;
+    flex-wrap: wrap;  /* Enable wrapping */
+}
 
 .timeline-content-quotation {
     display: flex;
@@ -203,13 +209,25 @@
 }
 
 .color-item {
+    position: relative; /* Make sure this is being applied */
     display: flex;
-    margin-top: 10px;
-    flex-direction: row; /* make it horizontal */
+    flex-direction: row;
     justify-content: flex-start;
     gap: 10px;
-    font-size: 12px;
-}
+    font-size: 10px;
+
+  }
+.color-label {
+    position: absolute;
+    bottom: 0;
+    top:70%;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    color: black;
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+  }
 .color-item-Quotation {
     display: flex;
     margin-top: 10px;
@@ -262,8 +280,8 @@
 }
 
 .color-item img {
-    margin-right: 5px; /* spacing between the image and its label */
-    width: 30px;
+    margin-right: 0px; /* spacing between the image and its label */
+    width: 60px;
     height: auto;
 }
 

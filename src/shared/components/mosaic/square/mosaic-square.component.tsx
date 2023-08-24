@@ -28,10 +28,10 @@ export const MosaicSquare:React.FC<ExperienceMosaicSquareProps> = (props) => {
                 {
                     `.mosaic-square {
                         display: grid;
-                        gap: .14rem;
+                        gap: .28rem;
                         grid-template-rows: repeat(2, 1fr);
                         grid-template-columns: repeat(2, 1fr);
-                        padding: .07rem;
+                        padding: .14rem;
                         ${groutImageCss}
                     }`
                 }

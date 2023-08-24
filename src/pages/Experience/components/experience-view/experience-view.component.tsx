@@ -560,12 +560,15 @@ const RotateMosaic = () => {
 
         {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
             <span className="timeline-title">Colores: </span>
-            <div className="timeline-content timeline-content-grid">
+            <div className="timeline-content-colors">
                 {Singleton.getInstance().currentColorList!.map((color, index) => (
-                    <div key={index} className="color-item">
-                        <img src={getServerImagesUrl(color.source)} alt={color.name}/>
-                        {color.name}
-                    </div>
+                  <div key={index} className="color-item">
+                  <img src={getServerImagesUrl(color.source)} alt={color.name}/>
+                  <div className="color-label">
+                    {color.name}
+                  </div>
+                </div>
+                  
                 ))}
             </div>
         </div>}

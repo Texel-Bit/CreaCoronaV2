@@ -81,9 +81,11 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     Singleton.getInstance().addDesign(currDesign);
                     return currDesign;
                 });
-                console.log("Current design colors:", currenDesignColors);
+                
     
                 ColorList.data.DesignTypeFormatSize.map((element: any) => {
+                    console.log("Current design Element:", element);
+                   
                     let FormatSizetexture = element.FormatSizeTexture.map((structure: any) => {
                         let colorTypes = structure.DesignColorType_has_FormatSizeTexture.map((colorType: any) => {
                             return colorType.DesignColorType_idDesignColorType;
@@ -108,12 +110,17 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         formats:FormatSizetexture
                     };
     
-                    if(!defaultFormatSize) {
-                        defaultFormatSize=currFormat;
-                        Singleton.getInstance().SelectFormat(defaultFormatSize);
+                    if(element.DesignTypeFormatSize_has_EnvironmentType.length>0)
+                    {
+                        if(!defaultFormatSize) {
+                            defaultFormatSize=currFormat;
+                            Singleton.getInstance().SelectFormat(defaultFormatSize);
+                        }
+                       
+                        Singleton.getInstance().addFormat(currFormat);
                     }
+
                    
-                    Singleton.getInstance().addFormat(currFormat);
                     return currFormat;
                 });
     
