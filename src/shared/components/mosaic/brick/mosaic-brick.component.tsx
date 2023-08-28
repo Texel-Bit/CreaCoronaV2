@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Singleton from "../../../../core/patterns/singleton";
 
 
@@ -10,21 +10,21 @@ interface ExperienceMosaicBricksProps
 }
 
 
-export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
+export const MosaicBrick: React.FC<ExperienceMosaicBricksProps> = (props) => {
 
     const [bondPattern, setBondPattern] = useState(true);
     const [rowsAmount, setRowsAmount] = useState(0);
     const [bricksStyle, setBricksStyle] = useState("");
 
+
     useEffect(() => {
-        
         let newBricksStyle = props.grout ? `background-image: url(${props.grout});` : "";
 
         if (props.rotated)
-            newBricksStyle += "transform: rotate(90deg)";
+            newBricksStyle += "transform: rotateZ(90deg)";
         else
             newBricksStyle += "";
-            console.log("BRICKS STYLE => ", newBricksStyle, props);
+
         setBricksStyle(newBricksStyle);
 
         let selectedFormat = Singleton.getInstance().currentFormat;
@@ -36,16 +36,18 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
 
 
     return(
-        <div id="mosaic-element" className="mosaic-brick w-100">
+        <div id="mosaic-element" className="mosaic-brick">
 
             <style>
                 {`
                     .mosaic-brick {
+                        width: 100%;
+                        overflow: hidden;
                         display: flex;
                         flex-direction: column;
                         gap: .2rem;
                         padding: .1rem;
-                        overflow: hidden;
+                        transition: transform 0.3s ease;
                         ${bricksStyle}
                     }
                 
@@ -64,7 +66,6 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                     }
                 `}
             </style>
-
             {
                 Array.from({ length: rowsAmount }).map((_, index) => {
 
@@ -77,6 +78,7 @@ export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
                     </div>
                 })
             }
+            
         </div>
     );
 }
