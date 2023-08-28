@@ -202,6 +202,8 @@ useEffect(() => {
 
         let response = await getDesgignWithStructure(requestBody);
 
+        console.log(response);
+        
         if (response.status)
             return response.data as string;
 

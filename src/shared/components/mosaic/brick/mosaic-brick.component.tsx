@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Singleton from "../../../../core/patterns/singleton";
 
 
@@ -10,21 +10,22 @@ interface ExperienceMosaicBricksProps
 }
 
 
-export const MosaicBrick: React.FC<ExperienceMosaicBricksProps> = (props) => {
+export const MosaicBrick:React.FC<ExperienceMosaicBricksProps> = (props) => {
 
     const [bondPattern, setBondPattern] = useState(true);
     const [rowsAmount, setRowsAmount] = useState(0);
     const [bricksStyle, setBricksStyle] = useState("");
 
-
     useEffect(() => {
+        
+     
         let newBricksStyle = props.grout ? `background-image: url(${props.grout});` : "";
 
         if (props.rotated)
-            newBricksStyle += "transform: rotateZ(90deg)";
+            newBricksStyle += "transform: rotate(90deg)";
         else
             newBricksStyle += "";
-
+            console.log("BRICKS STYLE => ", newBricksStyle, props);
         setBricksStyle(newBricksStyle);
 
         let selectedFormat = Singleton.getInstance().currentFormat;
@@ -36,36 +37,35 @@ export const MosaicBrick: React.FC<ExperienceMosaicBricksProps> = (props) => {
 
 
     return(
-        <div id="mosaic-element" className="mosaic-brick">
+        <div id="mosaic-element" className="mosaic-brick w-100">
 
             <style>
                 {`
                     .mosaic-brick {
-                        width: 100%;
-                        overflow: hidden;
                         display: flex;
                         flex-direction: column;
-                        gap: .2rem;
+                        gap: .3rem;
                         padding: .1rem;
-                        transition: transform 0.3s ease;
+                        overflow: hidden;
                         ${bricksStyle}
                     }
                 
                     .brick-row {
                         display: grid;
                         grid-template-columns: repeat(2, 1fr);
-                        gap: .2rem;
+                        gap: .3rem;
                     }
 
                     .brick-row-offset {
                         width: 150%;
                         display: grid;
                         grid-template-columns: repeat(3, 1fr);
-                        gap: .2rem;
+                        gap: .3rem;
                         margin-left: -25%;
                     }
                 `}
             </style>
+
             {
                 Array.from({ length: rowsAmount }).map((_, index) => {
 
@@ -78,7 +78,6 @@ export const MosaicBrick: React.FC<ExperienceMosaicBricksProps> = (props) => {
                     </div>
                 })
             }
-            
         </div>
     );
 }
