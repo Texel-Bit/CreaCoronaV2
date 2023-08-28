@@ -161,13 +161,9 @@ useEffect(() => {
         Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
     }
 
-
-
     let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
     
-    
     setDesignTypes(currentDesignTypes);
-
 
     Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
     Singleton.getInstance().updateMosaicFunc = updateMosaic;
@@ -182,60 +178,61 @@ useEffect(() => {
 }, []);
 
 
+    const defineCanvasSize = () => {
+        let formatWidth = Singleton.getInstance().currentFormat?.width ?? 1;
+        let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
+        let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
 
-    const updateCanvas =  () => {
-        setTimeout(async() => {            
+        let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
+        setSelectedFormatSize(newSize);
+    }
 
-            let element = document.getElementById("mosaic-element") as HTMLElement;
+    const defineCanvasPerspective = () => {
+        let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
+        setSelectedPerspective(newPerspective);
+    }
 
-            if (element)
-            {
-                let formatWidth = Singleton.getInstance().currentFormat?.width ?? 1;
-                let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
-                let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
+    const getDesignByServer = async (element: HTMLElement) => {
 
-                let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
-                setSelectedFormatSize(newSize);
-                
-                let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
-                setSelectedPerspective(newPerspective);
+        let requestBody = {
+            svgsContent: btoa(element?.outerHTML ?? ""),
+            width: element.clientWidth,
+            height: element.clientHeight
+        };
 
-                let elementSvg = null;
-                if
-                (
-                    Singleton.getInstance().currentExperienceView !== ExperienceViews.Format
-                )
-                {
-                    Singleton.getInstance().currentStructure=null;
-                }
+        let response = await getDesgignWithStructure(requestBody);
 
-                if
-                (
-                    Singleton.getInstance().currentExperienceView == ExperienceViews.Format
-                    && Singleton.getInstance().selectedDesignType?.id != 3 // SOLO PARA LOS HEXAGONOS NO PASA POR SERVER
-                )
-                {
-                    let requestBody = {
-                        svgsContent: btoa(element?.outerHTML ?? ""),
-                        width: element.clientWidth,
-                        height: element.clientHeight
-                    };
+        if (response.status)
+            return response.data as string;
 
-                    let response = await getDesgignWithStructure(requestBody);
+        return "";
+    }
 
-                    if (response.status)
-                        elementSvg = response.data;
-                }
-                else
-                {
-                    elementSvg = await convertHtmlToImage(element);
-                }
 
-                setCanvasImage(elementSvg ?? "");
-                Singleton.getInstance().mosaicImage = elementSvg;
-            }
+    const updateCanvas = async () => {
 
-        }, 500);
+        let element = document.getElementById("mosaic-element") as HTMLElement;
+
+        if (!element)
+            return;
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        if (Singleton.getInstance().currentExperienceView !== ExperienceViews.Format)
+            Singleton.getInstance().currentStructure = null;
+
+        defineCanvasSize();
+        defineCanvasPerspective();
+
+        let elementSvg: string = "";
+
+        if (Singleton.getInstance().currentExperienceView == ExperienceViews.Format && Singleton.getInstance().selectedDesignType?.id != 3 /*SOLO HEXAGONOS NO PASAN POR SERVER*/)
+            elementSvg = await getDesignByServer(element);
+        else
+            elementSvg = await convertHtmlToImage(element);
+
+        setCanvasImage(elementSvg ?? "");
+        Singleton.getInstance().mosaicImage = elementSvg;
 
         SetupsTitles();
     }
@@ -251,8 +248,6 @@ useEffect(() => {
     {
         if(experieceView)
         {
-            
-           
             let numericalValue: number = experieceView;
             let view: ExperienceViews = numericalValue + value;
             Singleton.getInstance().ChangeExperienceView(view);
@@ -268,7 +263,6 @@ useEffect(() => {
             }
            
             SetupsTitles();
-           
         }
     }
 
