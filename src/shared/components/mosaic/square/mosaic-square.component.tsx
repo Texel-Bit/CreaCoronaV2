@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import './mosaic-square.component.css'
 import SvgTexturizer from "../../../utilities/svg-texturizer.utility";
 
 

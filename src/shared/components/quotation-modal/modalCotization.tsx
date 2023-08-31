@@ -23,6 +23,9 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
   const [correo, setCorreo] = useState("");
   const [price, setPrice] = useState("0");
   const [units, setUnits] = useState(0);
+  const [aceptaCondiciones, setAceptaCondiciones] = useState(false);
+ const [aceptaTratamientoDatos, setAceptaTratamientoDatos] = useState(false);
+
 
   const [calculating, setCalculate] = useState(true);
   const [quoatiazing, setQuotazing] = useState(true);
@@ -199,26 +202,27 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                   />
                 </div>
                 <label className="aceptConditions">
-              <input
-                className="checkBoxCotization"
-                type="checkbox"
-                // checked={aceptaCondiciones}
-                // onChange={(e) => setAceptaCondiciones(e.target.checked)}
-                required
-              />
-              Acepto Terminos y condiciones
-            </label>
+  <input
+    className="checkBoxCotization"
+    type="checkbox"
+    checked={aceptaCondiciones}
+    onChange={(e) => setAceptaCondiciones(e.target.checked)}
+    required
+  />
+  Acepto Terminos y condiciones
+</label>
 
-            <label className="aceptConditions">
-              <input
-                className="checkBoxCotization"
-                type="checkbox"
-                // checked={aceptaCondiciones}
-                // onChange={(e) => setAceptaCondiciones(e.target.checked)}
-                required
-              />
-              Acepto Tratamiento de datos
-            </label>
+<label className="aceptConditions">
+  <input
+    className="checkBoxCotization"
+    type="checkbox"
+    checked={aceptaTratamientoDatos}
+    onChange={(e) => setAceptaTratamientoDatos(e.target.checked)}
+    required
+  />
+  Acepto Tratamiento de datos
+</label>
+
               </form>
             </div>
             {/* fin */}
@@ -331,13 +335,22 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
           <div className="bottomItem">
 
 
-            <button
-              className="buttonsCotizar btn-corona btn-corona-add"
-              type="button"
-              onClick={handleSubmit}
-            >
-              Enviar{calculating && <div className="loading-spinner"></div>}
-            </button>
+          <button
+  className="buttonsCotizar btn-corona btn-corona-add"
+  type="button"
+  onClick={handleSubmit}
+  disabled={
+    calculating||
+    !aceptaCondiciones ||
+    !aceptaTratamientoDatos ||
+    !nombre ||
+    !apellido ||
+    !telefono ||
+    !correo
+  }
+>
+  Enviar{calculating && <div className="loading-spinner"></div>}
+</button>
           </div>
         </div>
       </div>

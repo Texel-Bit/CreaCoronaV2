@@ -145,6 +145,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                                 name="initQuotationArea"
                                 disabled={squareMetersSelected}
                                 onChange={onInitQuotationHeightChanged}
+                                style={{ appearance: "none" }}  
                                 required/>
                         </Form.Group>
 
@@ -182,7 +183,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
                                 type="number"
                                 min={1}
                                 placeholder="Metros cuadrados"
-                                className="input-measure-area"
+                                className="input-measure"
                                 disabled={!squareMetersSelected}
                                 name="initQuotationSquareMeters"
                                 required

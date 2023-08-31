@@ -20,7 +20,7 @@ interface ExperienceCanvasProps {
 
 export const ExperienceCanvas:React.FC<ExperienceCanvasProps> = (props) => {
 
-
+    console.log(props)
     return(
         <div id="Simulation-Canvas" className="aspect-ratio-16-9 overflow-hidden" style={{
             perspective: `${props.perspective}px`,

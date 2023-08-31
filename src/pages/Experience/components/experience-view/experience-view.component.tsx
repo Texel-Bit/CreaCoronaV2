@@ -183,7 +183,10 @@ useEffect(() => {
         let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
         let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
 
-        let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
+        console.log(Singleton.getInstance().currentFormat," img size ",imageSize,Singleton.getInstance().currentFormat?.scale)
+        let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + parseFloat(Singleton.getInstance().currentFormat?.scale.toString()||"1")) * imageSize;
+        console.log("New Size ",newSize)
+
         setSelectedFormatSize(newSize);
     }
 
