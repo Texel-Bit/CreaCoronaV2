@@ -36,7 +36,7 @@ import { ExperienceFormatThumbnailProps } from "../../../../shared/components/ex
 import { StructureThumbnailProps } from "../../../../shared/components/experience-structure-selection/structure-thumbnail/structure-thumbnail.component";
 import { getDesgignWithStructure } from "../../../../core/services/structure.services";
 import { PreviewModal, PreviewModalProps } from "../../../../shared/components/preview-modal/preview-modal.component";
-
+import * as lzString from 'lz-string';
 
 interface currentExperienceView
 {
@@ -55,6 +55,7 @@ interface contentData
 export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     
     let dict = new Map<ExperienceViews, contentData>();
+    const currentEnvironmentAngle = Singleton.getInstance().currentEnvironment?.environmentAngle;
 
     dict.set(ExperienceViews.Design, {
         title: "Diseña el revestimiento",
@@ -155,92 +156,146 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 
 
 useEffect(() => {
+    try {
+        // Get Singleton instance for easier access
+        const instance = Singleton.getInstance();
 
-    if(Singleton.getInstance().currentGrout)
-    {
-        Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
-    }
+        // Update grout if it exists
+        if (instance.currentGrout) {
+            instance.ChangeGrout(instance.currentGrout);
+        }
 
-    let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
-    
-    setDesignTypes(currentDesignTypes);
+        // Update design types
+        const currentDesignTypes = instance.currentEnvironmentType?.designTypes ?? [];
+        setDesignTypes(currentDesignTypes);
 
-    Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
-    Singleton.getInstance().updateMosaicFunc = updateMosaic;
-    Singleton.getInstance().updateFormatsFunc = UpdateFormats;
-    Singleton.getInstance().updateStructuresFunc = UpdateStructures;
+        // Assign update functions
+        instance.updateMosaicGroutFunc = MosaicGroutChanged;
+        instance.updateMosaicFunc = updateMosaic;
+        instance.updateFormatsFunc = UpdateFormats;
+        instance.updateStructuresFunc = UpdateStructures;
 
-    if (Singleton.getInstance().currentEnvironment != null)
-    {
-        let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
-        setCanvasMask(maskImage);
+        // Update canvas mask if environment exists
+        if (instance.currentEnvironment) {
+            const maskImage = getServerImagesUrl(instance.currentEnvironment?.maskImage ?? "");
+            setCanvasMask(maskImage);
+        }
+    } catch (error) {
+        // Log any errors that occur during execution
+        console.error("Error in useEffect:", error);
     }
 }, []);
 
 
-    const defineCanvasSize = () => {
-        let formatWidth = Singleton.getInstance().currentFormat?.width ?? 1;
-        let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
-        let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
 
-        console.log(Singleton.getInstance().currentFormat," img size ",imageSize,Singleton.getInstance().currentFormat?.scale)
-        let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + parseFloat(Singleton.getInstance().currentFormat?.scale.toString()||"1")) * imageSize;
-        console.log("New Size ",newSize)
-
-        setSelectedFormatSize(newSize);
+const defineCanvasSize = () => {
+    try {
+      // Destructure for easier access
+      const { currentFormat, currentEnvironment } = Singleton.getInstance();
+  
+      // Use nullish coalescing to provide default values
+      const formatWidth = currentFormat?.width ?? 1;
+      const formatHeight = currentFormat?.height ?? 1;
+      const formatScale = parseFloat(currentFormat?.scale?.toString() ?? "1");
+  
+      // Calculate image size using Pythagorean theorem
+      const imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
+  
+      // Log current format and image size for debugging
+      console.log(currentFormat, " img size ", imageSize, currentFormat?.scale);
+  
+      // Calculate new size
+      const environmentSize = currentEnvironment?.environmentAngle.size ?? 0;
+      const newSize = (environmentSize + formatScale) * imageSize;
+  
+      // Log new size for debugging
+      console.log("New Size ", newSize);
+  
+      // Set the new size
+      setSelectedFormatSize(newSize);
+    } catch (error) {
+      // Log any errors
+      console.error("Error defining canvas size:", error);
     }
+  };
+  
 
     const defineCanvasPerspective = () => {
         let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
         setSelectedPerspective(newPerspective);
     }
 
-    const getDesignByServer = async (element: HTMLElement) => {
+    const getDesignByServer = async (element: HTMLElement): Promise<string> => {
+        try {
 
-        let requestBody = {
-            svgsContent: btoa(element?.outerHTML ?? ""),
+            const compressedSvg = lzString.compressToBase64(element.outerHTML);
+          // Prepare the request body
+          const requestBody = {
+            svgsContent: compressedSvg, // No need for nullish coalescing since 'element' is defined
             width: element.clientWidth,
-            height: element.clientHeight
-        };
-
-        let response = await getDesgignWithStructure(requestBody);
-
-        console.log(response);
-        
-        if (response.status)
-            return response.data as string;
-
-        return "";
-    }
-
+            height: element.clientHeight,
+          };
+      
+          // Make the API call
+          const response = await getDesgignWithStructure(requestBody);
+      
+          // Destructure the response object
+          const { status, data } = response;
+      
+          // Log the complete response for debugging
+          console.log(response);
+      
+          // Return the data if the request was successful
+          if (status) {
+            return data as string;
+          }
+      
+          // Return an empty string if the request was not successful
+          return '';
+        } catch (error) {
+          // Log any errors
+          console.error('Error fetching design:', error);
+      
+          // Return an empty string in case of an error
+          return '';
+        }
+      };
+      
 
     const updateCanvas = async () => {
 
+        const singleton = Singleton.getInstance();
         let element = document.getElementById("mosaic-element") as HTMLElement;
-
-        if (!element)
-            return;
-
+    
+        if (!element) return;
+    
+        if (singleton.currentExperienceView !== ExperienceViews.Format) {
+            singleton.currentStructure = null;
+        }
+    
         await new Promise(resolve => setTimeout(resolve, 500));
-
-        if (Singleton.getInstance().currentExperienceView !== ExperienceViews.Format)
-            Singleton.getInstance().currentStructure = null;
-
+    
+        // Checking once and storing to avoid multiple calls to getInstance
+        const currentExperienceView = singleton.currentExperienceView;
+        const selectedDesignTypeId = singleton.selectedDesignType?.id;
+    
         defineCanvasSize();
         defineCanvasPerspective();
-
+    
         let elementSvg: string = "";
-
-        if (Singleton.getInstance().currentExperienceView == ExperienceViews.Format && Singleton.getInstance().selectedDesignType?.id != 3 /*SOLO HEXAGONOS NO PASAN POR SERVER*/)
+    
+        if (currentExperienceView === ExperienceViews.Format && selectedDesignTypeId !== 3) {
             elementSvg = await getDesignByServer(element);
-        else
+        } else {
             elementSvg = await convertHtmlToImage(element);
-
+        }
+    
         setCanvasImage(elementSvg ?? "");
-        Singleton.getInstance().mosaicImage = elementSvg;
-
+        singleton.mosaicImage = elementSvg;
+    
         SetupsTitles();
     }
+    
 
     function updateMosaic(mosaicElements:HTMLElement[]) {
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
@@ -249,77 +304,77 @@ useEffect(() => {
     }
 
     
-    function ChangeView(experieceView: ExperienceViews | null, value:number)
-    {
-        if(experieceView)
-        {
-            let numericalValue: number = experieceView;
-            let view: ExperienceViews = numericalValue + value;
-            Singleton.getInstance().ChangeExperienceView(view);
-            if (view != ExperienceViews.Format)
-            {
-                Singleton.getInstance().currentStructure=null;
+    function ChangeView(experienceView: ExperienceViews | null, value: number) {
+        // Early return if experienceView is null
+        if (!experienceView) return;
+    
+        const singleton = Singleton.getInstance();
+    
+        // Calculate the new view based on the current one and the passed value
+        const newView: ExperienceViews = experienceView + value;
+    
+        // Update the experience view in the Singleton instance
+        singleton.ChangeExperienceView(newView);
+    
+        // Clear the current structure if the new view is not "Format"
+        if (newView !== ExperienceViews.Format) {
+            singleton.currentStructure = null;
+        }
+    
+        // Update the views status in the Singleton instance
+        singleton.UpdateViewsStatus();
+    
+        // Special handling for the "Format" view
+        if (experienceView === ExperienceViews.Format) {
+            singleton.UpdateFormats();
+        }
+    
+        // Update the titles (assuming this function sets up titles based on the new view)
+        SetupsTitles();
+    }
+    
+
+    function SetupsTitles() {
+        const singleton = Singleton.getInstance();
+        const experienceView = singleton.currentExperienceView ?? ExperienceViews.Environment;
+        const dictEntry = dict.get(experienceView);
+      
+        setTitle(dictEntry?.title ?? "");
+      
+        const descriptionKey = (() => {
+          const currentColorTypeID = singleton.GetCurrenColorTypeID();
+          if (experienceView === ExperienceViews.Design) {
+            if (singleton.selectedDesignType?.mosaicId === 1 && currentColorTypeID !== 1) {
+              return 'descriptionSingleMosaic';
             }
-            Singleton.getInstance().UpdateViewsStatus();
-
-            if (experieceView == ExperienceViews.Format)
-            {
-                Singleton.getInstance().UpdateFormats();
-            }
-           
-            SetupsTitles();
-        }
-    }
-
-function SetupsTitles()
-{
-   const experieceView=Singleton.getInstance().currentExperienceView??ExperienceViews.Environment;
-
-    setTitle(dict.get(experieceView)?.title??"")
-
-    if(experieceView==ExperienceViews.Design)
-    {
-        if(Singleton.getInstance().selectedDesignType?.mosaicValue==1 && Singleton.getInstance().GetCurrenColorTypeID()!=1)
+            return currentColorTypeID === 1 ? 'descriptionFullColor' : 'description';
+          }
+      
+          if (experienceView === ExperienceViews.Color) {
+            return currentColorTypeID === 1 ? 'descriptionFullColor' : 'description';
+          }
+      
+          if (experienceView === ExperienceViews.Format) {
+            return 'description';
+          }
+      
+          return null;
+        })();
+      
+        if(descriptionKey)
         {
-            setDescription(dict.get(experieceView)?.descriptionSingleMosaic??<></>)
-        }
-        else if(Singleton.getInstance().GetCurrenColorTypeID()==1)
-        {
-            setDescription(dict.get(experieceView)?.descriptionFullColor??<></>)
-        }
-        else{
-            setDescription(dict.get(experieceView)?.description??<></>)
-        }
-    }
-    else if(experieceView==ExperienceViews.Color)
-    {
-        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
-        {
-            setDescription(dict.get(experieceView)?.descriptionFullColor??<></>)
-        }
-        else{
-            setDescription(dict.get(experieceView)?.description??<></>)
-        }
-    }
-    else if(experieceView==ExperienceViews.Format)
-    {
-        setDescription(dict.get(experieceView)?.description??<></>)
-        
-    }
-}
+            setDescription(dictEntry?.[descriptionKey] ?? <></>);
 
+        }
+      }
+      
+      const PreviewMosaic = () => setPreviewModalStatus(true);
+      
+      const closeMosaicModal = () => setPreviewModalStatus(false);
+      
+      const RotateMosaic = () => setBricksRotated(prev => !prev);
+      
 
-const PreviewMosaic = () => {
-    setPreviewModalStatus(true);
-}
-
-const closeMoasicModal = () => {
-    setPreviewModalStatus(false);
-}
-
-const RotateMosaic = () => {
-    setBricksRotated(!bricksRotated);
-}
 
 
     return(
@@ -360,7 +415,7 @@ const RotateMosaic = () => {
                         <div className="col-5 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && selectedDesigns &&
+                                    Singleton.getInstance().selectedDesignType?.mosaicId === 4 && selectedDesigns &&
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
@@ -373,7 +428,7 @@ const RotateMosaic = () => {
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
@@ -386,7 +441,7 @@ const RotateMosaic = () => {
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && selectedDesigns&&
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 1 && selectedDesigns&&
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/> }
@@ -417,11 +472,13 @@ const RotateMosaic = () => {
                             } 
                         />
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
+                        <p className="text-muted small mt-1">Las fotografías de productos y ambientes son ilustrativas, algunos atributos de color y textura pueden variar de acuerdo a la resolución de tu pantalla y diferir de la realidad.</p>
+
                         </div>
                         <div className="col-5 col-md-4 col-xl-5 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
@@ -434,7 +491,7 @@ const RotateMosaic = () => {
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
@@ -449,7 +506,7 @@ const RotateMosaic = () => {
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 1 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
@@ -462,7 +519,9 @@ const RotateMosaic = () => {
                                     </>
                                 }
                             </div>
+                        
                         </div>
+                   
                     </div> 
                 }
 
@@ -474,7 +533,7 @@ const RotateMosaic = () => {
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
@@ -487,7 +546,7 @@ const RotateMosaic = () => {
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
@@ -500,7 +559,7 @@ const RotateMosaic = () => {
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 1 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
@@ -532,12 +591,12 @@ const RotateMosaic = () => {
         mask={canvasMask}
         perspective={selectedPerspective}
         perspectiveOrigin={{
-            X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
-            Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
+            X: currentEnvironmentAngle?.origin.x || 0,  // Provide fallback values
+            Y: currentEnvironmentAngle?.origin.y || 0
         }}
-        rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
-        rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
-        rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
+        rotationX={currentEnvironmentAngle?.rotatex || 0}
+        rotationY={currentEnvironmentAngle?.rotatey || 0}
+        rotationZ={currentEnvironmentAngle?.rotatez || 0}
         size={selectedFormatSize}
     />
       <div className="timeline">
@@ -592,7 +651,7 @@ const RotateMosaic = () => {
             
         </div>
             
-            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMoasicModal}/>
+            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMosaicModal}/>
 
         </div>
 

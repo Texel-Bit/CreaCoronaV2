@@ -4,7 +4,7 @@ import {modalVideo} from './complementos/modalVideo.js'
 
 export const VideoTutorialCaption:React.FC = () => {
     return(
-        <div className="video-caption-container p-5 d-flex flex-column flex-xxl-row gap-3 align-items-center">
+        <div className="video-caption-container p-5 d-flex flex-column flex-xxl-row gap-1 align-items-center">
             <div>
                 <h1 className="fw-bold">Hola Bienvenido a Crea Corona</h1>
                 <label>

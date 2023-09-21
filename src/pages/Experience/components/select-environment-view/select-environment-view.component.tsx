@@ -54,13 +54,13 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
     function handlerResponse(datos:[]){setRes(datos)}
 
     return(
-        <div className="h-100 d-flex flex-column oveflow-auto flex-md-row">
+        <div className="h-10 d-flex flex-column flex-md-row vw-10 ">
             
-            <div className="h-100 px-md-5 px-4 environment-text-container">
+            <div className="h-1 px-md-1 px-1 environment-text-container " style={{flex: 1}}>
                 <TextCaption/>
             </div>
 
-            <div className="px-md-5 py-4 py-md-0 d-flex align-items-center">
+            <div className="px-md-5 py-2 py-md-1 d-flex align-items-center" style={{flex: 2}}>
 
                 <div className="w-100">
 

@@ -139,7 +139,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
 
             {/* Negociemos */}
             <div className="business">
-              <h4 className="businessTitle">Ingresa tus datos y uno de nuestros asesores te contactará</h4>
+              <h4 className="businessTitle">Ingresa tus datos</h4>
               
             </div>
             {/* formularios */}
@@ -209,8 +209,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
     onChange={(e) => setAceptaCondiciones(e.target.checked)}
     required
   />
-  Acepto Terminos y condiciones
-</label>
+  Acepto <a href="https://corona.co/terminos-condiciones" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a></label>
 
 <label className="aceptConditions">
   <input
@@ -220,8 +219,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
     onChange={(e) => setAceptaTratamientoDatos(e.target.checked)}
     required
   />
-  Acepto Tratamiento de datos
-</label>
+Acepto <a href="https://corona.co/medias/Politica-Tratamiento-de-Datos-Personales-V6-1.pdf?context=bWFzdGVyfGRvY3VtZW50c3wyNjE3OTd8YXBwbGljYXRpb24vcGRmfGFERTVMMmhtTVM4NU1UUTFOVFU0TkRBeE1EVTBMMUJ2YkdsMGFXTmhMVlJ5WVhSaGJXbGxiblJ2TFdSbExVUmhkRzl6TFZCbGNuTnZibUZzWlhNdFZqWXRNUzV3WkdZfDY1OTFhOGQzNTY1ZDNhZDMzOGFkZmE1ZjE3NjYzNzI3OGM2ZjE2MmM4MDY5ODZlMmEzYjVjYTBjOGQ5MmE4MjY" target="_blank" rel="noopener noreferrer">Tratamiento de Datos</a></label>
 
               </form>
             </div>
@@ -302,13 +300,13 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                   <span className="timeline-title ">Estructura:</span>
                   
                   <div className="timeline-content-quotation ">
-                    <img
+                    {/* <img
                       style={{ maxWidth: "40px", border: "2px solid #213C65" }}
                       src={getServerImagesUrl(
                         Singleton.getInstance().currentStructure!?.source
                       )}
                       alt={Singleton.getInstance().currentStructure!.name}
-                    />
+                    /> */}
                     {Singleton.getInstance().currentStructure!.name}
                   </div>
                 </div>

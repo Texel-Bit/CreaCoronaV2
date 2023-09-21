@@ -13,10 +13,12 @@ import { IGrout } from "../../../../core/models/grout/grout.model";
 import { getAllState } from "../../../../core/services/localization.service";
 import { IState } from "../../../../core/models/State/state.model";
 import * as Icons from "react-icons/gi";
+import Tooltip from "../../../../shared/components/Tooltip/Tooltip";
 
 
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
+
 
     const singleton = Singleton.getInstance();
     
@@ -32,13 +34,14 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                {
                     const designTypes=await getAllDesignType();
                     designTypes.data.forEach((element2: any) => {
+                    console.log(element2)
                     let currentDesignType: IDesignType = {
                         name:element2.DesignTypeName,
                         id:element2.idDesignType,
                         source:element2.DesignTypeIconPath,
-                        mosaicValue:element2.MosaicType_idMosaicType==3?4:1
+                        mosaicValue:element2.MosaicType.MosaicTypeValue,
+                        mosaicId:element2.MosaicType_idMosaicType
                     };
-    
                     singleton.addDesignType(currentDesignType);
                 
                     });
@@ -131,19 +134,20 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}
         
     return(
-        <div className="h-100 d-flex flex-column flex-md-row vw-100 overflow-auto">
+        <div className="h-1 d-flex flex-column flex-md-row vw-1 overflow-auto">
             
-            <div className="h-100 px-md-5 py-4 video-tutorial-container">
+            <div className="video-tutorial-container  " style={{flex: 1}}>
                 <VideoTutorialCaption/>
             </div>
 
-            <div className="px-md-5 px-2 pt-4">
+
+            <div className="px-md-100 px-5 pt-6 " style={{flex: 2}}>
                 <div className="d-flex align-items-center w-100 h-100">
                     <div className="w-100">
                 <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-middle fw-bold">
                 Selecciona la superficie en la que aplicarás tu diseño
     </h4>
-    <div className="d-flex gap-4 w-100 justify-content-around pb-4 pb-md-0">
+    <div className="d-flex gap-1 w-100 justify-content-around pb-4 pb-md-0" >
         {
             singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
                 return <EnvironmentThumbnail
@@ -156,6 +160,7 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                         (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment)
                     ]}/>
         })}
+
     </div>  
 
 </div> 

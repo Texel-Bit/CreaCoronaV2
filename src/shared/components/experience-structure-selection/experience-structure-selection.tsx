@@ -20,7 +20,8 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
         {
            ChangeStructure(props.structures[0].structure);
         }
-       
+        
+        console.log(Singleton.getInstance().currentFormat)
         
     }, [Singleton.getInstance().currentFormat]);
 

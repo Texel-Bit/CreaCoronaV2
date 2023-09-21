@@ -1,0 +1,19 @@
+/* styles.css or tooltip.css */
+.tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-content {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);  
+}
+
+div:hover > .tooltip-content {  
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);  
+}
+
+

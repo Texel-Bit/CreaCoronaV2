@@ -2,6 +2,7 @@
     background-image: url(../../../../assets/image/home_corona.png);
     background-size: cover;
     display: flex;
+    flex: 2;
     align-items: center;
     justify-content: center;
 }

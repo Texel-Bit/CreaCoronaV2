@@ -127,6 +127,7 @@ code {
 }
 
 .item-superficie {
+  position: relative;
   transition: .2s ease all;
   outline: 2px solid transparent;
 }
