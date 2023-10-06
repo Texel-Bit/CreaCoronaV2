@@ -34,6 +34,7 @@ export const InitQuotationForm: React.FC<InitQuotationFormProps> = (props) => {
         if (props.states && props.states.length > 0) {
             setIsDisabled(false); // Enable the select when the states are loaded.
             setSelectedState(props.states[0].id.toString()); // Select the first state when the states are loaded.
+            SetState(props.states[0].id.toString())
         }
     }, [props.states]);
 
@@ -137,7 +138,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
             <div className="background-color-middle px-3 py-1 w-50 rounded-top">
                 <h6 className="m-0 color-white fw-normal">Medidas</h6>
             </div>
-            <Form className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
+            <Form className="p-2 p-md-3 pt-xl-2 border-1 experience-format-container">
 
             <Form.Group controlId="measurementType">
                     <Form.Select onChange={onMeasurementTypeChanged} value={measurementType}>
@@ -187,11 +188,21 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
 
               
             </Form>
-            
-            <div style={{marginTop:"10px"}} className="background-color-middle px-3 py-1 w-50 rounded-top">
+            <div style={{marginTop:"10px"}} >
+            <button type="button"
+                        className="btn-corona w-100 mt-3 init-quotation-button btn-corona-add"
+                        disabled={!canOpenModalStatus}
+                        onClick={onInitQuotationButtonClick}>Cotizar</button>
+
+
+            </div>
+  
+
+            <div style={{marginTop:"10px",display:'none'}} className="background-color-middle px-3 py-1 w-50 rounded-top">
                 <h6 className="m-0 color-white fw-normal">Departamento</h6>
             </div>
-            <Form className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
+
+            <Form style={{display:'none'}} className="p-4 p-md-3 pt-xl-2 border-1 experience-format-container">
            
             <FormSelect
             className="mt-2 z-3"
@@ -205,10 +216,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
             <option value="">Seleccionar departamento</option>
             {props.states.map(state => <option key={state.id} value={state.id}>{state.stateName}</option>)}
         </FormSelect>
-                <button type="button"
-                        className="btn-corona w-100 mt-3 init-quotation-button btn-corona-add"
-                        disabled={!canOpenModalStatus}
-                        onClick={onInitQuotationButtonClick}>Cotizar</button>
+               
                         </Form>
             { openModalStatus && <QuotationModal closeModalEvent={() => setOpenModalStatus(false)}/> }
         </div>

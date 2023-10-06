@@ -10,6 +10,7 @@ import { MosaicHexagon } from "../../../../shared/components/mosaic/hexagon/mosa
 import { MosaicComponent } from "../../../../shared/components/mosaic/mosaic.component";
 import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic-square.component";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
+import {ColorIndexSelection} from "../ColorIndexSelection/colorIndexSelection.component"
 import './experience-view.component.css';
 import { ReactElement, useEffect, useState } from 'react';
 
@@ -37,6 +38,10 @@ import { StructureThumbnailProps } from "../../../../shared/components/experienc
 import { getDesgignWithStructure } from "../../../../core/services/structure.services";
 import { PreviewModal, PreviewModalProps } from "../../../../shared/components/preview-modal/preview-modal.component";
 import * as lzString from 'lz-string';
+import TooltipMudi from "../../../../shared/components/TooltipMudi/TooltipMudi";
+import FullFieldColorStyle from "../../ExperienceStyles/FullFieldColorStyle";
+import WithDesignColorStyle from "../../ExperienceStyles/WithDesignColorStyle";
+
 
 interface currentExperienceView
 {
@@ -94,8 +99,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
     const [previewModalStatus, setPreviewModalStatus] = useState(false);
     const [bricksRotated, setBricksRotated] = useState(false);
+    const [colorSelectionLoaded, setColorSelectionLoaded] = useState(false);
+
+    const [colorSelectionStyle, setColorSelectionStyle] = useState(new FullFieldColorStyle());
     
     
+    
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState<ReactElement>();
     
@@ -106,6 +116,13 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 useEffect(() => {
     updateCanvas();
 }, [mosaicGrout, selectedDesigns, bricksRotated]);
+
+
+useEffect(() => {
+    
+    setColorSelectionStyle(colorType==1?new FullFieldColorStyle():new WithDesignColorStyle());
+
+}, [colorType]);
 
 
 function ChangeChessMode()
@@ -132,7 +149,8 @@ function UpdateFormats(currrentFormats:IFormat[])
 {
     let formatsCollection = currrentFormats.map(format => ({
         format,
-        onClick: SelectFormat
+        onClick: SelectFormat,
+        isSelected:false
     }));
 
     setFormats(formatsCollection);
@@ -153,6 +171,14 @@ function MosaicGroutChanged(currrentGrout:IGrout)
 {
     setMosaicGrout(getServerImagesUrl(currrentGrout.source))
 }
+
+function ChangeColorIndex(currentIndex:number)
+{
+    const componentName="color-option"+currentIndex;
+    Singleton.getInstance().colorIndex=currentIndex;
+    console.log(componentName) 
+}
+
 
 
 useEffect(() => {
@@ -184,9 +210,32 @@ useEffect(() => {
         // Log any errors that occur during execution
         console.error("Error in useEffect:", error);
     }
+
+ 
+
 }, []);
 
 
+useEffect(()=>{
+    console.log("Color selelction changed")
+    if(colorSelectionLoaded)
+    {
+        var contenedor = document.getElementById("FullMosaicComponent");
+
+        var div2 = document.getElementById("action__buttons");
+        
+        var nuevoDiv = document.getElementById("ColorIndexSelection");
+        
+        if(contenedor && nuevoDiv)
+        {
+            contenedor.insertBefore(nuevoDiv, div2);
+        
+        }  
+        console.log("Loaded colors finish")
+    }
+
+
+},[colorSelectionLoaded])
 
 const defineCanvasSize = () => {
     try {
@@ -368,6 +417,8 @@ const defineCanvasSize = () => {
         }
       }
       
+     
+
       const PreviewMosaic = () => setPreviewModalStatus(true);
       
       const closeMosaicModal = () => setPreviewModalStatus(false);
@@ -379,16 +430,16 @@ const defineCanvasSize = () => {
 
     return(
 
-        <div className="d-flex mh-100 flex-column flex-md-row pt-4 pt-md-0 px-2 px-md-0">
+        <div className="ExperienceParentContent">
 
-            <div className="w-100 w-md-50 p-md-3 px-xl-5 h-100 experience-behavior-container pb-4 pb-md-0 pt-xl-1">
+            <div className="experience-behavior-container">
 
-                <div className="d-flex align-items-start header-view">
-                    <div className="col-2">
+                <div className="d-flex align-items-start header-view" style={{position: "relative"}} >
+                    <div className="col-2" style={{marginLeft: "35%",marginTop: "2%", position: "absolute"}}>
                         <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
                     </div>
                     
-                    <div className="col-8">
+                    <div className="col-8" style={{left: "45%",marginTop: "2%", position: "absolute"}}>
                         <ExperienceSteepTitle 
                             title={title}
                             description={description ?? <></>}
@@ -398,7 +449,7 @@ const defineCanvasSize = () => {
 
 
                     <div className="col-2 text-end">
-                    {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">Siguiente →</button>}
+                    {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button" style={{right: "-20%",marginTop: "2%", position: "absolute"}}>Siguiente →</button>}
                     </div>
                 </div>
 
@@ -407,7 +458,7 @@ const defineCanvasSize = () => {
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0">
+                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0" style={{padding:"0px 20px",marginTop:"7%"}}>
                         <div className="h-md-100 w-100 w-md-50">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
@@ -462,27 +513,35 @@ const defineCanvasSize = () => {
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex flex-column flex-md-row pt-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden gap-4 gap-md-0">
-                        <div className="textures-selection-column col-12 col-md-7 col-xl-6 h-md-100 position-relative">
+                    <div className="experienceContainer" style={{justifyContent: colorSelectionStyle.experienceContainerJustifyContent}}>
+                        
+                        <div className="pallete-Colors-Selection-column  position-relative"  style={{display: colorSelectionStyle.palleteColorSelectionDisplay}} >
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
-                            <ExperienceTextureSelection colorArray={
-                                Singleton.getInstance().getColorDataManager().GetAllColors(
-                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
-                                )
-                            } 
-                        />
-                        <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
-                        <p className="text-muted small mt-1">Las fotografías de productos y ambientes son ilustrativas, algunos atributos de color y textura pueden variar de acuerdo a la resolución de tu pantalla y diferir de la realidad.</p>
-
+                            
+                        {/* <p className="text-muted small mt-1">Las fotografías de productos y ambientes son ilustrativas, algunos atributos de color y textura pueden variar de acuerdo a la resolución de tu pantalla y diferir de la realidad.</p> */}
                         </div>
-                        <div className="col-5 col-md-4 col-xl-5 d-flex align-items-start mx-auto mx-md-0">
-                            <div className="d-flex flex-column gap-3 w-100 position-relative">
+
+                        <div className="FullMosaicComponentParent" style={{marginTop:"7%"}}>
+
+
+
+                      
+                            <div className="" id="FullMosaicComponent">
+                            <h3 className="color-middle fw-bold" style={{zIndex: 20,top: "-10%"}}>Tu Obra de Arte</h3>
+
                                 {
                                     Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
                                             actions={false} />
+
+{colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold" style={{zIndex: 20,top: "-10%"}}>Colores Seleccionados</h3>
+                            </TooltipMudi>}
+
+                                    {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
+
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
@@ -496,6 +555,11 @@ const defineCanvasSize = () => {
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
                                             actions={true}/>
+                                            {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold" style={{zIndex: 20,marginTop: "10%"}}>Colores Seleccionados</h3>
+                            </TooltipMudi>}
+                                    {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
+
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
@@ -511,6 +575,10 @@ const defineCanvasSize = () => {
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
                                             actions={false}/>
+                                                  {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold" style={{zIndex: 20,position: "absolute",top: "-10%"}}>Colores Seleccionados</h3>
+                            </TooltipMudi>}                         {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
+
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
@@ -518,17 +586,46 @@ const defineCanvasSize = () => {
                                             ]}/>
                                     </>
                                 }
+
+
+
+
+
+
                             </div>
                         
                         </div>
-                   
+
+                        
+
+                       
+                        <div className="textures-selection-column col-1 col-md-1 col-xl-6 h-md-100 position-relative" style={{marginTop:"7%"}}>
+                            
+                        {<TooltipMudi content='Podras cambiar el color seleccionado' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold" style={{zIndex: 20,top: "-10%"}}>Elige tu color</h3>
+                            </TooltipMudi>}
+
+                            <ExperienceTextureSelection colorArray={
+                                Singleton.getInstance().getColorDataManager().GetAllColors(
+                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
+                                )
+                            } 
+                        />
+                         {<TooltipMudi content='No olvides escoger tu boquilla' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold" style={{zIndex: 20,marginTop: "4%"}}>Elije tu boquilla</h3>
+                            </TooltipMudi>}
+                        <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
+                        </div>
+
+
                     </div> 
                 }
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row cotizacion-view">
-                        <div className="col-12 col-md-5 d-flex mx-auto mx-md-0">
+                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row cotizacion-view" style={{marginTop:"7%",marginLeft:"7%",marginRight:"7%"}}>
+                                  
+                        <div className="col-12 col-md-5 d-flex mx-auto mx-md-0" style={{marginLeft:"10%"}}>
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
@@ -585,7 +682,7 @@ const defineCanvasSize = () => {
 
             </div>
 
-            <div className="w-100 w-md-50 h-md-100 d-grid canvas-content">
+            <div   className="canvas-content">
     <ExperienceCanvas 
         backgroundImage={canvasImage}
         mask={canvasMask}
@@ -599,7 +696,7 @@ const defineCanvasSize = () => {
         rotationZ={currentEnvironmentAngle?.rotatez || 0}
         size={selectedFormatSize}
     />
-      <div className="timeline">
+      < div style={{display:"none"}} className="timeline">
 
         <div className="timeline-step">
             {Singleton.getInstance().currentDesignList!?.length>0&&<span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>}

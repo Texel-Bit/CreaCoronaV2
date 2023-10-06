@@ -9,7 +9,7 @@ import Singleton from '../../../../core/patterns/singleton'
 import { IEnvironment } from "../../../../core/models/environment/environment.model";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 import { Console } from "console";
-
+import background from "../../../../assets/image/Background.png"
 interface enviroment{}
 export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
 
@@ -54,66 +54,37 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
     function handlerResponse(datos:[]){setRes(datos)}
 
     return(
-        <div className="h-10 d-flex flex-column flex-md-row vw-10 ">
-            
-            <div className="h-1 px-md-1 px-1 environment-text-container " style={{flex: 1}}>
-                <TextCaption/>
-            </div>
+<div style={{ 
 
-            <div className="px-md-5 py-2 py-md-1 d-flex align-items-center" style={{flex: 2}}>
+  backgroundSize: 'cover',
+  width: '100vw', // or another value that suits your design
+  height: '100vh', // or another value that suits your design
+}}>
 
-                <div className="w-100">
+<div className="d-flex flex-column align-items-center" style={{gap: '20px'}}>
 
-                    <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%', color: 'var(--color-middle)'}} className="mb-2 pb-5 text-center fw-bold">
-                        Selecciona el ambiente en el que aplicarás tu diseño
-                    </h4>
+    <h4 style={{fontFamily: 'Inter', fontSize: "2rem", color: 'var(--color-middle)'}} className="mb-2 pt-5 pb-1 text-center fw-bold">
+        Selecciona el ambiente en el que aplicarás tu diseño
+    </h4>
 
-                    {/* <div>
+    <div className="w-100">
+        <CoronaCarousel thumbnails={
+            Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((environment: IEnvironment)=>{
+                return {
+                    id: parseInt(environment.id),
+                    image: environment.source,
+                    name: environment.name,
+                    onEvents: [
+                        (e) => Singleton.getInstance().SelectEnvironment(environment),
+                        (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design)
+                    ]
+                }
+            })
+        }/>
+    </div>
+</div>
+</div>
 
-                        <ReactCarousel interval={null} wrap={false} indicators={false} >
-                            { 
-                                Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((i:IEnvironment)=>{
-                                    if(i.environmentType.id==Singleton.getInstance().currentEnvironmentType?.id){
-                                        return <ReactCarousel.Item>
-                                                <div className="environment-item">
-                                                    <EnvironmentThumbnail
-                                                        name={i.name}
-                                                        image={i.source}
-                                                        id={parseInt(i.id)}
-                                                        onEvents={[
-                                                            (e) => Singleton.getInstance().SelectEnvironment(i),
-                                                            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design),
-                                                        ]}/>
-                                                </div>
-                                            </ReactCarousel.Item> 
-
-                                    }
-                                })
-                            }                                                      
-                        </ReactCarousel>
-                        
-                    </div> */}
-
-                    <div>
-                            <CoronaCarousel thumbnails={
-                                Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((environment: IEnvironment)=>{
-                                    return {
-                                        id: parseInt(environment.id),
-                                        image: environment.source,
-                                        name: environment.name,
-                                        onEvents: [
-                                            (e) => Singleton.getInstance().SelectEnvironment(environment),
-                                            (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Design)
-                                        ]
-                                    }
-                                })
-                            }/>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
     );
 }
 

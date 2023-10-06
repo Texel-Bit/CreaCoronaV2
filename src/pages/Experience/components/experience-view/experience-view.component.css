@@ -1,8 +1,9 @@
 .experience-behavior-container {
     display: grid;
     grid-template-rows: auto 1fr;
-    overflow: hidden;
+    /* overflow: hidden; */
     height: fit-content !important;
+    width: 60%;
 }
 
 @media screen and (min-width:390px) and (max-width: 1366px) {
@@ -11,6 +12,11 @@
     }
 }
 
+.ExperienceParentContent
+{
+    width: 100%;
+    display: flex   ;
+}
 .experience-steeps-button {
     color: var(--color-middle);
     text-transform: uppercase;
@@ -34,10 +40,41 @@
     border: 2px solid #213C65 !important;
 }
 
+.experienceContainer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+    overflow: hidden;
+    gap: 40px;
+    padding: 10% 2%;
+
+}
+
+@media (min-width: 768px) { /* Bootstrap's medium breakpoint */
+    .experienceContainer {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0;
+    }
+}
+
+@media (min-width: 1400px) { /* Bootstrap's extra-extra-large breakpoint */
+    .experienceContainer {
+       
+    }
+}
+
 .textures-selection-column {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    gap: 1.6rem;
+    width: 35%;
+}
+
+.pallete-Colors-Selection-column {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    width: 35%;
+    margin-top: 7%;
 }
 
 @media screen and (min-width: 390px) {
@@ -68,6 +105,7 @@
 
 .header-view {
     display: flex;
+    overflow: visible!important;
 }
 
 @media screen and (min-width: 390px) and (max-width: 1366px) {
@@ -291,9 +329,17 @@
     }
 }
 
-@media screen and (min-width:1366px) and (max-width: 1600px) {
+.canvas-content
+{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    align-content: center;
+    width: 40%;
+}
+/* @media screen and (min-width:1366px) and (max-width: 1600px) {
     .canvas-content {
         grid-template-rows: 290px 1fr;
     }
-}
+} */
 

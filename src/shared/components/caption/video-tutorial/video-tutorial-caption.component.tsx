@@ -10,11 +10,14 @@ export const VideoTutorialCaption:React.FC = () => {
                 <label>
                     <small>Explora, diseña y prueba el estilo que prefieras para tus espacios.</small>
                 </label>
-            </div>
-            <button type="button" className="button-background btn btn-primary d-flex gap-2 align-items-center button-video">
+                <br></br>
+                <br></br>
+                <button type="button" className="button-background btn btn-primary d-flex gap-2 align-items-center button-video">
                 <img src={IconPlayVideo} alt="" className="icon-button-background" />
                 <label className='video-button-text' onClick={modalVideo}>Ver tutorial</label>
             </button>
+            </div>
+           
         </div>
     );
 }

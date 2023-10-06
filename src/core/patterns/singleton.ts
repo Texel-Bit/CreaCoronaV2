@@ -65,6 +65,7 @@ updateMosaicFunc: ((HTMLElement:HTMLElement[]) => void) | null = null;
 updateFormatsFunc: ((formats:IFormat[]) => void) | null = null;
 updateStructuresFunc: ((structures:IStructure[]) => void) | null = null;
 updateMosaicGroutFunc: ((IGrout:IGrout) => void) | null = null;
+updateColorFunc: (() => void) | null = null;
 updateViewStatusFunc: Array<() => void> = [];
 
   private environmentDataManager: EnvironmentDataManager = new EnvironmentDataManager();
@@ -101,6 +102,7 @@ updateViewStatusFunc: Array<() => void> = [];
   public ChangeGrout(Grout:IGrout|null)
   {
       this.currentGrout=Grout;
+    
 
       if(this.updateMosaicGroutFunc && Grout)
         this.updateMosaicGroutFunc(Grout);
@@ -108,9 +110,14 @@ updateViewStatusFunc: Array<() => void> = [];
 
   public ChangeStructure(structure:IStructure|null)
   {
-      this.currentStructure=structure;
-
-      this.TexturizeMosaic();
+    if(structure!==null)
+    {
+        console.log("Changing structure "+structure);
+        this.currentStructure=structure;
+  
+        this.TexturizeMosaic();
+    }
+   
   }
 
   public GetCurrenColorTypeID()
@@ -384,6 +391,7 @@ public ClearBundles()
 
 }
     public ChangeExperienceView(view: ExperienceViews) {
+        
         if (this.setContentFunc) {
             this.currentExperienceView=view;
             this.setContentFunc(view);
@@ -393,6 +401,7 @@ public ClearBundles()
             this.UpdateFormats();
         
         this.UpdateViewsStatus();
+        
     }
 
     public EvaluatePercentage() {
@@ -534,6 +543,10 @@ public ClearBundles()
         this.currentColorList[index]=color
 
           this.TexturizeMosaic();
+
+        if (this.updateColorFunc)
+            this.updateColorFunc();
+          
     }
   
 

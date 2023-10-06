@@ -17,9 +17,9 @@ export const EnvironmentThumbnail: React.FC<EnvironmentThumbnailProps> = (props)
     };
     
     return (
-        <Tooltip content={props.name}>
+        <Tooltip content={props.name} visible={false}>
             <div 
-                className="border rounded-3  d-inline-block cursor-pointer item-superficie"
+                className="border rounded-3  cursor-pointer item-superficie"
                 onClick={handleEvent}
             >
                 <div
@@ -28,7 +28,7 @@ export const EnvironmentThumbnail: React.FC<EnvironmentThumbnailProps> = (props)
                 >
                 </div>
 
-                <div className='p-md-3 d-flex align-items-center justify-content-center gap-5'>
+                <div style={{backgroundColor:"white"}} className='p-md-3 d-flex align-items-center justify-content-center gap-5'>
                     <img src={props.name=="Piso"?icon:icon2} alt="navbar icon" height={35} />
                     <label className="color-primary fw-bold color-middle">{props.name}</label>
                 </div>

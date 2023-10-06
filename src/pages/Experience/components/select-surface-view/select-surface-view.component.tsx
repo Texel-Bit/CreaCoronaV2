@@ -15,6 +15,11 @@ import { IState } from "../../../../core/models/State/state.model";
 import * as Icons from "react-icons/gi";
 import Tooltip from "../../../../shared/components/Tooltip/Tooltip";
 
+import IconPlayVideo from '../../../../assets/icons/play_circle.svg';
+import { relative } from "path";
+import { modalVideo } from "../../../../shared/components/caption/video-tutorial/complementos/modalVideo";
+import "../../../../shared/components/caption/video-tutorial/video-tutorial-caption.component.css"
+
 
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
@@ -134,20 +139,20 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}
         
     return(
-        <div className="h-1 d-flex flex-column flex-md-row vw-1 overflow-auto">
+        <div className="h-2 d-flex flex-column flex-md-row vw-1 overflow-auto" style={{position:"relative"}}>
             
-            <div className="video-tutorial-container  " style={{flex: 1}}>
+            {/* <div className="video-tutorial-container  " style={{flex: 1}}>
                 <VideoTutorialCaption/>
-            </div>
+            </div> */}
 
 
-            <div className="px-md-100 px-5 pt-6 " style={{flex: 2}}>
+            <div className="px-md- pl-10 pt-6 " style={{flex: 2}}>
                 <div className="d-flex align-items-center w-100 h-100">
                     <div className="w-100">
                 <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-middle fw-bold">
                 Selecciona la superficie en la que aplicarás tu diseño
     </h4>
-    <div className="d-flex gap-1 w-100 justify-content-around pb-4 pb-md-0" >
+    <div className="select-surface" >
         {
             singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
                 return <EnvironmentThumbnail
@@ -168,6 +173,11 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 </div>
 
             </div>
+
+            <button type="button" className="button-background btn btn-primary d-flex gap-2 align-items-center button-video" style={{position:"absolute",left:"2%",bottom:"5%"}}>
+                <img src={IconPlayVideo} alt="" className="icon-button-background" />
+                <label className='video-button-text'  onClick={modalVideo}  >Ver tutorial</label>
+            </button>
 
         </div>
     );

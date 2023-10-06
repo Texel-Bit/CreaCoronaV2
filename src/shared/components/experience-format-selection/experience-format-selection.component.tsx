@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './experience-format-selection.component.css';
 import { ExperienceFormatThumbnail, ExperienceFormatThumbnailProps } from './experience-format-thumbnail/experience-format-thumbnail';
 import Singleton from '../../../core/patterns/singleton';
@@ -10,6 +10,8 @@ interface ExperienceFormatSelectionProps {
 
 
 export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps> = (props) => {
+    const [selectedFormatId, setSelectedFormatId] = useState<number | null>(null);
+
     useEffect(() => {
 
         let formatSelected=null;
@@ -51,13 +53,18 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
                 <h6 className="m-0 color-white fw-normal">Formato</h6>
             </div>
 
-            <div className="d-flex p-2 justify-content-around w-100 align-items-center experience-format-container">
+            <div className="d-flex p-2 justify-content-around w-100 align-items-center experience-format-container" style={{height: "200px"}}>
                 {
                     props.formats.map(format => {
                         return <ExperienceFormatThumbnail
-                                    key={`experienceFormatThumbnail${format.format.id}`}
-                                    format={format.format}
-                                    onClick={format.onClick} />
+                            key={`experienceFormatThumbnail${format.format.id}`}
+                            format={format.format}
+                            isSelected={selectedFormatId === format.format.id}
+                            onClick={() => { 
+                                format.onClick(format.format); // Updated here to properly call onClick
+                                setSelectedFormatId(format.format.id); 
+                            }} 
+                        />
                     })
                 }
             </div>

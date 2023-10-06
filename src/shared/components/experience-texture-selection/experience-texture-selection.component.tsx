@@ -45,7 +45,7 @@ export const ExperienceTextureSelection: React.FC<ExperienceTextureSelectionProp
                             Singleton.getInstance().ChangeSelectedColor( color);
                             const elementSelected=document.getElementById(`${sessionStorage.getItem('BumbleId')}`)
                             if(elementSelected)elementSelected.style.backgroundImage=coloractual
-                        }}></div>
+                        }}><div className="color-container-name">{color.name}</div></div>
                     ))}
                 </div>
 

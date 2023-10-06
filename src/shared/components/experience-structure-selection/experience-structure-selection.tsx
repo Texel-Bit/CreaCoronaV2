@@ -13,6 +13,16 @@ interface ExperienceStructureSelectionProps {
 export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionProps> = (props) => {
     
     
+    useEffect(() => {
+        if(props.structures.length>0)
+        {
+            console.log("New structure ",props.structures);
+       
+            ChangeStructure(props.structures[0].structure);
+        }
+        
+        
+    }, [props.structures]);
 
     useEffect(() => {
 
@@ -21,11 +31,12 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
            ChangeStructure(props.structures[0].structure);
         }
         
-        console.log(Singleton.getInstance().currentFormat)
-        
     }, [Singleton.getInstance().currentFormat]);
 
     
+
+
+
     function ChangeStructure(structure: IStructure)
     {
         Singleton.getInstance().ChangeStructure(structure)

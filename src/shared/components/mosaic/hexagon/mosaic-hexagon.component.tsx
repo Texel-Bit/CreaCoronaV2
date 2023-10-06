@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./mosaic-hexagon.css"
 
 interface ExperienceMosaicHexagonProps
 {
@@ -24,44 +25,55 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
 
             <style>
                 {`
-                    .mosaic-hexagon {
-                        width: 100%;
-                        display: grid;
-                        grid-template-columns: 1fr 1fr 1fr;
-                        height: 100%;
-                        ${groutImageCss}
-                    }
-
-                    .hexagon-column {
-                        width: 100%;
-                    }
-
-                    .hexagon-column-1 .hexagon svg {
-                        position: relative;
-                        left: -100%;
-                    }
-
-                    .hexagon-column-2 {
-                        position: relative;
-                        left: -50%;
-                        margin-left: .12rem;
-                        margin-top: -.12rem;
-                        height: 83.33%;
-                    }
-
-                    .hexagon-column-2-wrapper {
-                        position: absolute;
-                        top: -29.5%;
-                    }
-
-                    .hexagon {
-                        padding: 2px;
-                        width: 100%;
-                    }
-
-                    .hexagon svg {
-                        width: 200%;
-                    }
+                 .mosaic-hexagon {
+                    width: 291px;
+                    height:336px;
+                    display: flex;
+                    ${groutImageCss}
+                }
+                
+                .hexagon-column {
+                
+                    width: 100%;
+                }
+                
+                
+                /*
+                193.5   x  168    97 
+                387  x 336 
+                1.15
+                //336  x  291 */
+                
+                /* Adjusting the position of SVGs in the first column. */
+                .hexagon-column-1 .hexagon svg {
+                    
+                    position: relative;
+                   transform: translate(-50%); 
+                }
+                
+                .hexagon-column-2 {
+                    position: relative;
+                    transform: translate(-75%,-25%);
+                }
+                
+                .hexagon-column-2-wrapper {
+                    position: relative;
+                   
+                }
+                
+                .hexagon-column-3 {
+                    position: relative;
+                    transform: translate(-100%,0%);
+                }
+                .hexagon {
+                   width: 193.5px;
+                   height:168px ;
+                }
+                
+                .hexagon svg {
+                    
+                }
+                
                 `}
             </style>
 

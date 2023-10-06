@@ -6,3 +6,22 @@
     align-items: center;
     justify-content: center;
 }
+
+.select-surface {
+    scale: 0.9;
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-around;
+    padding-bottom: 1.5rem;
+    padding-left: 5%;
+}
+
+
+
+@media (min-width: 768px) { /* Bootstrap's medium breakpoint */
+    .select-surface {
+        padding-bottom: 0;
+    }
+}

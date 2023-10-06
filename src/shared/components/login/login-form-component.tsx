@@ -34,6 +34,8 @@ export const LoginForm:React.FC = () => {
     // Inicio de sesión
     const handleLoginIn = (response:string) => {
         sessionStorage.setItem('data',response);
+
+
         setTimeout(()=>{
             navigate(ExperienceRoutes.Experience)
 
@@ -105,6 +107,8 @@ export const LoginForm:React.FC = () => {
                 <div className="col-sm-6 mb-3 text-md-end text-center">
                     <Link className="text-input" to="/forget-password"><i className="mdi mdi-lock"></i> ¿Olvidaste tu contraseña?</Link>
                 </div>
+                <Link className="text-input" to="/"><i className="mdi mdi-lock"></i> Volver a la experiencia</Link>
+
             </div>
             
             <button

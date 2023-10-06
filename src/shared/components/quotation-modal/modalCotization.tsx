@@ -11,10 +11,27 @@ import { IUserCustomer } from "../../../core/models/user/user.model";
 import { Mail } from "@material-ui/icons";
 import { convertHtmlToImage } from "../../utilities/html-to-image.utility";
 import {FaWallet} from "react-icons/fa";
+import { FormSelect } from "react-bootstrap";
+import Select from 'react-select';
+import { dataResponse } from "../../../core/models/response/model-responsedata";
+import { getCounselors } from "../../../core/services/user.service";
 
 interface QuotationModalProps {
   closeModalEvent: () => void;
 }
+
+interface ICounselor {
+  idUser: number;
+  userName: string;
+}
+
+interface OptionType {
+  label: string;
+  value: number;
+}
+
+
+
 
 export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
   const [nombre, setNombre] = useState("");
@@ -25,6 +42,8 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
   const [units, setUnits] = useState(0);
   const [aceptaCondiciones, setAceptaCondiciones] = useState(false);
  const [aceptaTratamientoDatos, setAceptaTratamientoDatos] = useState(false);
+ const [selectedCounselor, setSelectedCounselor] = useState(""); // If id is string
+ const [counselors, setCounselors] = useState<ICounselor[]>([]);
 
 
   const [calculating, setCalculate] = useState(true);
@@ -83,7 +102,56 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
     };
 
     simulate();
+
+    const GetConsuelors = async () => {
+      try {
+        let response = await getCounselors();
+        
+        // Mapping the response to ICounselor array
+        let counselors: ICounselor[] = response.data.map((element: any) => ({
+          idUser: element.idsysuser, // mapping idsysuser to idUser
+          userName: element.name, // mapping name to userName
+        }));
+        
+        setCounselors(counselors)
+    
+      } catch (error) {
+        console.error("Error fetching counselors:", error);
+      }
+    }
+
+    const d = sessionStorage.getItem('data');
+    if (d) {
+      const data: dataResponse = JSON.parse(d);   
+  
+      if(data.user.userRole_iduserRole==4)
+      {
+        GetConsuelors();
+      }
+    }
+
+    
+    console.log(sessionStorage)
+    //if(sessionStorage.getItem('infoUser'))
+
+    // const exampleCounselors: ICounselor[] = [
+    //   { idUser: 1, userName: 'JohnDoe' },
+    //   { idUser: 2, userName: 'JaneDoe' },
+    //   { idUser: 3, userName: 'SamSmith' },
+    // ];
+
+    
+    //setCounselors(exampleCounselors);
+
   }, []);
+
+  const onChangeCounselor  = (selectedOption:any) => {
+    if (selectedOption) {
+        setSelectedCounselor(selectedOption.value.toString());
+    } else {
+        setSelectedCounselor("");
+    }
+};
 
   function GetUserData() {
     let infoUser: IUserCustomer = {
@@ -125,10 +193,14 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
               <FaWallet className="titleImage" />
               <div className="titleText">
                 <h2 className="titleCotizacion">Cotización</h2>
+              
+
                 <p className="paragraphCotizacion">
                   Verifica el detalle de la cotización
                 </p>
               </div>
+             
+            
             </div>
             {/* price */}
             <div className="priceContainer">
@@ -202,6 +274,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                   />
                 </div>
                 <label className="aceptConditions">
+                  
   <input
     className="checkBoxCotization"
     type="checkbox"
@@ -224,6 +297,20 @@ Acepto <a href="https://corona.co/medias/Politica-Tratamiento-de-Datos-Personale
               </form>
             </div>
             {/* fin */}
+            {counselors.length>0&& <Select <OptionType>
+                className="mt-2 z-2"
+                name="initQuotationStates"
+                isSearchable
+                onChange={onChangeCounselor}
+                options={counselors.map(consuelor => ({ value: consuelor.idUser, label: consuelor.userName }))}
+                placeholder="Asesor"
+                styles={{ 
+                  menu: base => ({ ...base, maxHeight: '500px', overflowY: 'scroll',   marginTop: '-30px' }),
+                  control: base => ({ ...base, width: '200px' }),
+                  option: base => ({ ...base, padding: '10px 15px' }),
+                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), 
+                }} // Adjust width as per your need }}
+            />}
           </div>
 
           <div className="secondContent">

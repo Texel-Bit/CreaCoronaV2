@@ -4,14 +4,26 @@
 }
 
 .color-palette-item {
-    width: 30px;
+    width: 50px;
+    height: 40px;
+    border: solid 1px rgb(136, 136, 136);
+    cursor: pointer;
+}
+
+.color-palette-item-list {
+    width: 50px;
     height: 30px;
     border: solid 1px rgb(136, 136, 136);
 }
 
 .color-palette-row {
+    
+    justify-content: center;
+    align-items: center;
+margin-bottom: 10%;
+gap: 10px;
     display: flex;
-    gap: 11px;
+
 }
 
 @media screen and (min-width: 1366px) and (max-width: 1600px) {
@@ -43,17 +55,18 @@
 }
 
 .optionsColorsList{
-    position: absolute;
-    top: 8%;
+
     background-color: white;
     width: 100%;
-    height: 400px;
+    height: 500px;
     transition: all .5s ease-in-out;
     overflow: auto;
     -webkit-box-shadow: 1px 14px 5px 7px rgba(0,0,0,0.05);
     -moz-box-shadow: 1px 14px 5px 7px rgba(0,0,0,0.05);
     box-shadow: 1px 14px 5px 7px rgba(0,0,0,0.05);
     border: 1px var(--color-middle) solid;
+    padding-right: 10px;
+
 }
 
 @media screen and (min-width:1366px) and (max-width: 1600px) {

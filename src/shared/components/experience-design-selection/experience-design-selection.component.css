@@ -33,7 +33,7 @@
 
 .design-thumbnails-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     border-color: var(--color-middle) !important;
     overflow-y: auto;
     height: 500px !important;
