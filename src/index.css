@@ -78,6 +78,26 @@
   background-color: #333333;
 }
 
+/* Style for the Success button */
+.swal2-confirm {
+  background-color: var(--color-middle)!important;   
+  border: none!important;
+  /* Add any other desired styles for the Success button */
+}
+
+.swal2-icon
+{
+  color: var(--color-middle)!important;   
+
+  /* Add any other desired styles for the Success button */
+}
+/* Style for the Cancel button */
+.swal2-cancel {
+  background-color: var(--color-second)!important;    /* replace with your desired color */
+  border-color: var(--color-second);     /* replace with your desired border color */
+  /* Add any other desired styles for the Cancel button */
+}
+
 
 #root {
   height: 100%;

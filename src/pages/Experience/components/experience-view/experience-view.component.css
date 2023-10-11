@@ -50,6 +50,10 @@
 
 }
 
+.subtitle
+{
+    font-size: 25px;
+}
 @media (min-width: 768px) { /* Bootstrap's medium breakpoint */
     .experienceContainer {
         flex-direction: row;
@@ -73,7 +77,7 @@
 .pallete-Colors-Selection-column {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    width: 35%;
+    width: 50%;
     margin-top: 7%;
 }
 
@@ -177,7 +181,7 @@
     gap: 5px;
 }
 .timeline-step-mosaic {
-    display: flex;
+
     align-items: flex-start;  /* ensure alignment to top */
     flex-direction: row; /* ensure horizontal layout */
     margin-bottom: 20px;
@@ -231,6 +235,13 @@
     flex-wrap: wrap;  /* Enable wrapping */
 }
 
+.timeline-content-quota {
+    display: grid;
+    flex-direction: row; /* stack content vertically */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    flex-wrap: wrap;  /* Enable wrapping */
+}
 .timeline-content-quotation {
     display: flex;
     flex-direction: row; /* stack content vertically */

@@ -22,6 +22,13 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     const [designColors, setDesignColors] = useState<IDesign[]>([]);
     const [designLoaded, setDesignsLoaded] = useState(false);
 
+    const singletonInstance=Singleton.getInstance();
+    const isSelected = (designId:number) => {
+        const selectedDesigns = singletonInstance.GetSelectedDesigns();
+        const exist= Array.isArray(selectedDesigns) && selectedDesigns.some(design => design.id === designId);
+        if(exist) console.log("Exist "+designId);
+        return exist
+      };
 
     useEffect(() => {
 
@@ -191,6 +198,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
     
     useEffect(() => {
+        
         setSelectedDesignType(Singleton.getInstance().selectedDesignType!);     
     }, [designLoaded]);
 
@@ -233,17 +241,25 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
             </div>
 
             <div className='mh-100 overflow-y-hidden'>
-                <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
-                    {
-                        designColors.map(design => {
-                            return <img
-                                className='cursor-pointer cursor-pointer-hover'
-                                key={`designTypeTexture${design.id}`}
-                                onClick={()=>SelectNewDesign(design)}
-                                src={getServerImagesUrl(design.source)}/>
-                        })
-                    }
-                </div>
+            <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
+    {
+        designColors.map(design => {
+            const selected = isSelected(design.id);
+            return (
+                <img
+                    className={`cursor-pointer ${selected ? 'selected-design-class' : 'cursor-pointer-hover'}`}
+                    style={{ 
+                        border: selected ? "4px solid var(--color-middle)" : "none"
+                    }}
+                    key={`designTypeTexture${design.id}`}
+                    onClick={()=>SelectNewDesign(design)}
+                    src={getServerImagesUrl(design.source)}
+                />
+            );
+        })
+    }
+</div>
+
             </div>
 
         </div>

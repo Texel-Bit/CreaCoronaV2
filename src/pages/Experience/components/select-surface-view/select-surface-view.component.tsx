@@ -19,6 +19,7 @@ import IconPlayVideo from '../../../../assets/icons/play_circle.svg';
 import { relative } from "path";
 import { modalVideo } from "../../../../shared/components/caption/video-tutorial/complementos/modalVideo";
 import "../../../../shared/components/caption/video-tutorial/video-tutorial-caption.component.css"
+import FullscreenForeground from "./FullscreenForeground";
 
 
 interface surface{}
@@ -139,13 +140,8 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}
         
     return(
-        <div className="h-2 d-flex flex-column flex-md-row vw-1 overflow-auto" style={{position:"relative"}}>
+        <div className="h-2 d-flex flex-column flex-md-row vw-1 " style={{position:"relative"}}>
             
-            {/* <div className="video-tutorial-container  " style={{flex: 1}}>
-                <VideoTutorialCaption/>
-            </div> */}
-
-
             <div className="px-md- pl-10 pt-6 " style={{flex: 2}}>
                 <div className="d-flex align-items-center w-100 h-100">
                     <div className="w-100">
@@ -178,6 +174,7 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 <img src={IconPlayVideo} alt="" className="icon-button-background" />
                 <label className='video-button-text'  onClick={modalVideo}  >Ver tutorial</label>
             </button>
+            
 
         </div>
     );

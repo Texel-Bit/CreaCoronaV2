@@ -27,7 +27,7 @@ export const ColorIndexSelection: React.FC<ColorPaletteProps> = ({ onColorSelect
     setTimeout(() => {
       ChangeColorIndexButtonStatus(Singleton.getInstance().colorIndex);
 
-    }, 1500);
+    }, 2000);
   
   }
 
@@ -45,7 +45,12 @@ export const ColorIndexSelection: React.FC<ColorPaletteProps> = ({ onColorSelect
     if (mosaicComponent) {
      // Get all children components with class name 'img-container'
 // Get all children components with class name 'img-container'
-const imgContainers = mosaicComponent.querySelectorAll(".img-container");
+let imgContainers = mosaicComponent.querySelectorAll(".img-container");
+
+if(imgContainers.length===0)
+{
+  imgContainers = mosaicComponent.querySelectorAll(".hexagon");
+}
 
 
 imgContainers.forEach(container => {
@@ -72,6 +77,7 @@ imgContainers.forEach(container => {
 
 
   }
+  
 
     // Then, apply the desired style to the element with the specified currIndex, if it exists
     const targetElement = document.getElementById("color-option" + currIndex);

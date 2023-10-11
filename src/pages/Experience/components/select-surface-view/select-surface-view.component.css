@@ -25,3 +25,16 @@
         padding-bottom: 0;
     }
 }
+
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+  }
+  
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  

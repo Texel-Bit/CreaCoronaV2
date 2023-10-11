@@ -12,7 +12,7 @@ import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
 import {ColorIndexSelection} from "../ColorIndexSelection/colorIndexSelection.component"
 import './experience-view.component.css';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 
 import CozyIco from '../../../../assets/icons/view_cozy_ico.png'
 import PalletIco from '../../../../assets/icons/palette_ico.png'
@@ -41,7 +41,8 @@ import * as lzString from 'lz-string';
 import TooltipMudi from "../../../../shared/components/TooltipMudi/TooltipMudi";
 import FullFieldColorStyle from "../../ExperienceStyles/FullFieldColorStyle";
 import WithDesignColorStyle from "../../ExperienceStyles/WithDesignColorStyle";
-
+import { ModalCanvasPreview } from "../../../../shared/components/quotation-modal/modalCanvasPreview";
+import { Fullscreen } from "@material-ui/icons";
 
 interface currentExperienceView
 {
@@ -100,10 +101,11 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [previewModalStatus, setPreviewModalStatus] = useState(false);
     const [bricksRotated, setBricksRotated] = useState(false);
     const [colorSelectionLoaded, setColorSelectionLoaded] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);
 
     const [colorSelectionStyle, setColorSelectionStyle] = useState(new FullFieldColorStyle());
     
-    
+
     
 
     const [title, setTitle] = useState("");
@@ -117,6 +119,9 @@ useEffect(() => {
     updateCanvas();
 }, [mosaicGrout, selectedDesigns, bricksRotated]);
 
+function closeModal() {
+    setModalOpen(false);
+  }
 
 useEffect(() => {
     
@@ -161,6 +166,7 @@ function UpdateStructures(currrentStructure:IStructure[])
 {
     let structuresCollection = currrentStructure.map(structure => ({
         structure,
+        isSelected:false,
         onClick: SelectStructure
     }));
 
@@ -470,7 +476,8 @@ const defineCanvasSize = () => {
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
-                                            actions={false} />
+                                            actions={false}
+                                            width="65%" />
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
@@ -521,23 +528,25 @@ const defineCanvasSize = () => {
                         {/* <p className="text-muted small mt-1">Las fotografías de productos y ambientes son ilustrativas, algunos atributos de color y textura pueden variar de acuerdo a la resolución de tu pantalla y diferir de la realidad.</p> */}
                         </div>
 
-                        <div className="FullMosaicComponentParent" style={{marginTop:"7%"}}>
+                        <div className="FullMosaicComponentParent" style={{marginTop:"7%",width:"50%"}}>
 
 
 
                       
                             <div className="" id="FullMosaicComponent">
-                            <h3 className="color-middle fw-bold" style={{zIndex: 20,top: "-10%"}}>Tu Obra de Arte</h3>
+                            <h3 className="color-middle fw-bold subtitle" style={{margin:"auto", zIndex: 20,top: "-10%",marginBottom:"3%",textAlign:"left",width:"60%"}}>Tu Obra de Arte</h3>
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
-                                            actions={false} />
+                                            actions={false} 
+                                            width={colorType==2?"80%":"65%"}
+                                            />
 
 {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold" style={{zIndex: 20,top: "-10%"}}>Colores Seleccionados</h3>
+                        <h3 className="color-middle fw-bold subtitle" style={{marginLeft:"10%",zIndex: 20,top: "-10%"}}>Colores Seleccionados</h3>
                             </TooltipMudi>}
 
                                     {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
@@ -554,9 +563,11 @@ const defineCanvasSize = () => {
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
-                                            actions={true}/>
+                                            actions={true}
+                                            width={colorType==2?"77%":"65%"}
+                                            />
                                             {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold" style={{zIndex: 20,marginTop: "10%"}}>Colores Seleccionados</h3>
+                        <h3 className="color-middle fw-bold subtitle" style={{marginLeft:"10%",zIndex: 20,marginTop: "10%"}}>Colores Seleccionados</h3>
                             </TooltipMudi>}
                                     {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
 
@@ -574,9 +585,11 @@ const defineCanvasSize = () => {
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
-                                            actions={false}/>
+                                            actions={false}
+                                            width="69%"/>
+                                            
                                                   {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold" style={{zIndex: 20,position: "absolute",top: "-10%"}}>Colores Seleccionados</h3>
+                        <h3 className="color-middle fw-bold" style={{marginLeft:"10%", zIndex: 20,position: "absolute",top: "-10%"}}>Colores Seleccionados</h3>
                             </TooltipMudi>}                         {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
 
                                         <MosaicActionsBar 
@@ -599,10 +612,10 @@ const defineCanvasSize = () => {
                         
 
                        
-                        <div className="textures-selection-column col-1 col-md-1 col-xl-6 h-md-100 position-relative" style={{marginTop:"7%"}}>
+                        <div className="textures-selection-column col-1 col-md-1 col-xl-6 h-md-100 position-relative" style={{marginTop:"7%",marginLeft:"0%"}}>
                             
                         {<TooltipMudi content='Podras cambiar el color seleccionado' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold" style={{zIndex: 20,top: "-10%"}}>Elige tu color</h3>
+                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,top: "-10%"}}>Elige tu color</h3>
                             </TooltipMudi>}
 
                             <ExperienceTextureSelection colorArray={
@@ -612,7 +625,7 @@ const defineCanvasSize = () => {
                             } 
                         />
                          {<TooltipMudi content='No olvides escoger tu boquilla' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold" style={{zIndex: 20,marginTop: "4%"}}>Elije tu boquilla</h3>
+                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,marginTop: "9%"}}>Elige tu boquilla</h3>
                             </TooltipMudi>}
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
@@ -623,10 +636,10 @@ const defineCanvasSize = () => {
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row cotizacion-view" style={{marginTop:"7%",marginLeft:"7%",marginRight:"7%"}}>
+                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-evenly overflow-hidden flex-column flex-md-row cotizacion-view" style={{marginTop:"7%",marginLeft:"7%",marginRight:"7%"}}>
                                   
-                        <div className="col-12 col-md-5 d-flex mx-auto mx-md-0" style={{marginLeft:"10%"}}>
-                            <div className="d-flex flex-column gap-3 w-100 position-relative">
+                        <div className="col-12 col-md-5 d-flex mx-auto">
+                            <div className="d-flex flex-column  w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
                                 {
@@ -634,11 +647,10 @@ const defineCanvasSize = () => {
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
-                                            actions={false} />
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
+                                            actions={false}
+                                            width="80%"
+                                            marginTop="0%" />
+                                       
                                     </>
                                 }
                                 
@@ -647,11 +659,9 @@ const defineCanvasSize = () => {
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
-                                            actions={true}/>
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
+                                            actions={true}
+                                            marginTop="2%"/>
+                                       
                                     </>
                                 }
 
@@ -660,17 +670,14 @@ const defineCanvasSize = () => {
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
-                                            actions={false}/>
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
+                                            actions={false}
+                                            marginTop="0%"/>
+                                       
                                     </>
                                 }
                             </div>
                         </div>
-                        <div className="textures-selection-column d-flex flex-column col-12 col-md-6 mx-auto mx-md-0 h-md-100 pt-4 pt-md-0">
+                        <div className="textures-selection-column d-flex flex-column col-12 col-md-6 mx-auto h-md-100 pt-4 pt-md-0" style={{marginLeft: "5%"}}>
                             <ExperienceFormatSelection formats={formats ?? []} />
                             <InitQuotationForm states={Singleton.getInstance().currentStateList ?? []}/>
                         </div>
@@ -682,7 +689,7 @@ const defineCanvasSize = () => {
 
             </div>
 
-            <div   className="canvas-content">
+            <div className="canvas-content">
     <ExperienceCanvas 
         backgroundImage={canvasImage}
         mask={canvasMask}
@@ -696,6 +703,25 @@ const defineCanvasSize = () => {
         rotationZ={currentEnvironmentAngle?.rotatez || 0}
         size={selectedFormatSize}
     />
+
+<button 
+    style={{
+        position: "absolute", 
+        bottom: "3%", 
+
+        backgroundColor: "var(--color-middle)",  // Setting the background color
+        color: "white",  // Setting the text/icon color for the button
+        border: "none",  // Removing the default button border
+        cursor: "pointer",  // Making sure it looks clickable
+        borderRadius: "4px",  // Optional: rounding the corners for aesthetics
+        padding: "8px 12px"  // Optional: adding some padding for spacing
+    }} 
+    
+    onClick={() => setModalOpen(true)}
+>
+    <Fullscreen style={{ color: "white" }} />  {/* Making the icon white */}
+</button>
+
       < div style={{display:"none"}} className="timeline">
 
         <div className="timeline-step">
@@ -746,6 +772,9 @@ const defineCanvasSize = () => {
 
         </div>
             
+            
+        {isModalOpen && < ModalCanvasPreview closeModalEvent={closeModal} />}
+
         </div>
             
             <PreviewModal showState={previewModalStatus} closeModalEvent={closeMosaicModal}/>

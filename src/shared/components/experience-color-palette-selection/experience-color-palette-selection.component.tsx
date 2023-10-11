@@ -11,7 +11,7 @@ import TooltipMudi from '../TooltipMudi/TooltipMudi';
 
 export const ExperienceColorPaletteSelection = () => {
 
-    
+    const [activeColorRow, setActiveColorRow] = useState<number | null>(null);
     const [colorsBundle, setColorBundles] = useState<IColorBundle[] | null >();
 
   
@@ -30,32 +30,29 @@ export const ExperienceColorPaletteSelection = () => {
             }
         }
 
-        if(Singleton.getInstance().currentColorList?.length==0)
-        {
-            colorsBundle?.map((element,index)=>{
-                if(index==0){
-                    element.colorList.map((color,i)=>{
-                        const node:any = document.getElementById(`circle-option${i+1}`);
-                        if(node)node.style.backgroundImage=`url(https://corona.texelbit.com:9445/${color.source})`;
-                    })
-                };
-                
-            })
-        }
-        else
-        {
-            Singleton.getInstance().currentColorList?.map((element,index)=>{
-                const node:any = document.getElementById(`circle-option${index+1}`);
-                        if(node)node.style.backgroundImage=`url(https://corona.texelbit.com:9445/${element.source})`;
-                
-            })
-        }
-
-       
+        setTimeout(() => {
+            if(Singleton.getInstance().currentPalletSelected && Singleton.getInstance().currentPalletSelected==-1)
+            {
+                setActiveColorRow(Singleton.getInstance().currentPalletSelected);
+            }
+            else
+            {
+                Singleton.getInstance().currentPalletSelected=0;
+                setActiveColorRow(0);
+            }  
+        }, 1000);
+      
         
 
     },[colorsBundle]);
     
+
+    useEffect(() => {
+       Singleton.getInstance().currentPalletSelected=activeColorRow;
+       console.log(Singleton.getInstance().currentPalletSelected);
+    },[activeColorRow]);
+    
+
     useEffect(() => {
         const fetchColors = async () => {
 
@@ -106,10 +103,7 @@ export const ExperienceColorPaletteSelection = () => {
                         
 
                         setColorBundles(Singleton.getInstance().colorBundleList);
-                        
-                       
 
-                        
 
                     } else {
                     }
@@ -120,6 +114,7 @@ export const ExperienceColorPaletteSelection = () => {
             
         };
     
+       
         fetchColors();
     }, []);  // <-- Don't forget the dependencies array. Update it as per your requirements.
 
@@ -147,29 +142,14 @@ export const ExperienceColorPaletteSelection = () => {
    
     let objetcSelected:string ;
 
-    const selectoptionBumble = (newIndex:number) =>{
-        
-        Singleton.getInstance().colorIndex=newIndex;
 
-        for(let i =1; i<6;i++){
-
-            if(objetcSelected.includes(i.toString())){
-                const element = document.getElementById(`circle-option${i}`)
-                if(element)element.style.border=`solid #0069B4 3px`
-                sessionStorage.setItem('BumbleId',`circle-option${i}`)
-            }else{
-                const element = document.getElementById(`circle-option${i}`)
-                if(element)element.style.border=`solid #0069B4 1px`
-            }
-        }
-    }
 
     return(
         <>
            
 
            <TooltipMudi content='Corona te recomienda estas combinaciones.' visible={true} position='top'>
-           <h3 className="color-middle fw-bold m-0 mb-3" style={{zIndex: 20,top: "-10%"}}>Paleta sugerida</h3>
+           <h3 className="color-middle fw-bold m-0 mb-3 subtitle" style={{zIndex: 20,top: "-10%"}}>Paleta sugerida</h3>
            </TooltipMudi>
 
             <div className='optionsColorsList'>
@@ -177,24 +157,27 @@ export const ExperienceColorPaletteSelection = () => {
                 <br></br>
                 <>
                     {
-                        colorsBundle?.map((element)=>{
-                            return(
+                         colorsBundle?.map((element, index) => {
+                            return (
                                 <>
-                                    <div className='color-palette-rowList' onClick={()=>{
-                                        Singleton.getInstance().InitializeColors(element.colorList)
-                                            element.colorList.map((color,i)=>{
-                                                const node:any = document.getElementById(`circle-option${i+1}`);
-                                                if(node)node.style.backgroundImage=`url(${getServerImagesUrl(color.source)})`;
-                                            })
-                                            hiddenListColores()
-                                        }}>
+                                    <div
+                                        className='color-palette-rowList'
+                                        
+                                        onClick={() => {
+                                            Singleton.getInstance().InitializeColors(element.colorList)
+                                            setActiveColorRow(index); // set the clicked row index
+                                        }}
+                                        style={{
+                                            backgroundColor: activeColorRow === index ? 'rgb(190, 217, 239)' : 'white' ,
+                                            cursor: 'pointer'
+                                        }}
+                                    >
                                         <h4 className='titleListRow'>{element.bundleName}</h4>
-                                        { element.colorList.map((color)=>{
-                                            return(
+                                        {element.colorList.map((color) => {
+                                            return (
                                                 <div className='color-palette-item-list' style={{ backgroundImage: `url(${getServerImagesUrl(color.source)})` }}></div>
                                             )
-                                        })} 
-                                        
+                                        })}
                                     </div>
                                     <hr />
                                 </>

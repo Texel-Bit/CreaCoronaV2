@@ -134,7 +134,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
     SetState(e.target.value);
 }
     return(
-        <div className="mw-100 overflow-hidden">
+        <div className="mw-100 overflow-hidden" style={{marginTop: "5%"}}>
             <div className="background-color-middle px-3 py-1 w-50 rounded-top">
                 <h6 className="m-0 color-white fw-normal">Medidas</h6>
             </div>

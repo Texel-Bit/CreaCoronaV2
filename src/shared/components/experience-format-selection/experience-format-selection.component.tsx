@@ -20,6 +20,8 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
         {
             const foundFormat = props.formats?.find(format => format.format.id === Singleton.getInstance().currentFormat?.id);
 
+           
+
             if (foundFormat) 
             {
                 formatSelected=foundFormat.format;
@@ -31,7 +33,7 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
                 props.formats[0].onClick(props.formats[0].format);
             }
 
-            
+           
         }
         else
         {
@@ -39,6 +41,8 @@ export const ExperienceFormatSelection: React.FC<ExperienceFormatSelectionProps>
             props.formats[0].onClick(props.formats[0].format);
         }
         
+        setSelectedFormatId(formatSelected.id);
+
         Singleton.getInstance().currentFormat=formatSelected;
         
         console.log("Changing Format ",formatSelected)

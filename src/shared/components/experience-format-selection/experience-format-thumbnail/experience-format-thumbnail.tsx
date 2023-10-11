@@ -10,7 +10,7 @@ export interface ExperienceFormatThumbnailProps {
 export const ExperienceFormatThumbnail: React.FC<ExperienceFormatThumbnailProps> = (props) => {
     return (
         <button 
-            className={`btn button p-1 border rounded d-flex flex-column experience-format-thumbnail ${props.isSelected ? "selected" : ""}` }
+            className={`btn button p-1 border rounded d-flex flex-column experience-format-thumbnail ${props.isSelected ? "structure-selected" : "structure-Unselected"}` }
             onClick={() => props.onClick(props.format)}
             style={{scale:"1.5"}}
         >

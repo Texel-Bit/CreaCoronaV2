@@ -39,9 +39,11 @@ class Singleton {
   public currentGrout: IGrout | null = null;
   public currentFormat: IFormat | null = null;
   public currentState:IState| null = null;
+  public currentPalletSelected:number| null = -1;
   public quotationArea:number= 0;
   public quotationWidth:number= 0;
   public quotationHeight:number= 0;
+  public quotationSended:boolean= false;
 
   public mosaicImage:any;
   public simulationImage:any;
@@ -407,6 +409,12 @@ public ClearBundles()
     public EvaluatePercentage() {
         if (this.evaluatePercentageFunc) {
             
+            if(this.quotationSended) 
+            {
+                this.evaluatePercentageFunc(100);
+                return;
+            }
+
             let Percentage=0;
             const MaxPercentage=5;
 
@@ -493,18 +501,15 @@ public ClearBundles()
 
     public InitializeColors(colors:IColor[])
     {
+       
         console.log(colors)
         this.currentColorList=[]
-        this.currentColorList=colors;
+        this.currentColorList = [...colors]; 
 
         let TempColorList:IColor[]=[];
 
-        if(this.currentColorList)
-        {
-            if(this.currentColorList?.length>5)
-            {
-                this.currentColorList=this.currentColorList.slice(0,5);
-            }
+        if (this.currentColorList && this.currentColorList.length > 5) {
+            this.currentColorList = this.currentColorList.slice(0, 5);
         }
 
         this.TexturizeMosaic();
@@ -621,7 +626,7 @@ public addDesign(design: IDesign): void {
     this.designDataManager.addDesign(design);
 }
 
-public GetSelectedDesigns()
+public GetSelectedDesigns():IDesign[]
 {
    
     if(this.currentDesignList)
@@ -632,7 +637,7 @@ public GetSelectedDesigns()
     return this.GenerateDefaultDesignsSelected();
 }
 
-public GenerateDefaultDesignsSelected() {
+public GenerateDefaultDesignsSelected():IDesign[] {
     let maxDesignSelected = this.selectedDesignType?.mosaicValue ?? 1;
     const currentDesigns = this.getDesignDataManager().getAllDesigns();
 
@@ -660,7 +665,7 @@ public GenerateDefaultDesignsSelected() {
     }
     
     this.TexturizeMosaic();
-
+     return this.currentDesignList;
 }
 
 public addColor(color: IColor): void {
