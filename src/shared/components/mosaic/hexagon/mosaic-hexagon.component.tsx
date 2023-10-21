@@ -46,7 +46,7 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
                 
                 /* Adjusting the position of SVGs in the first column. */
                 .hexagon-column-1 .hexagon svg {
-                    
+                    display:flex
                     position: relative;
                    transform: translate(-50%); 
                 }

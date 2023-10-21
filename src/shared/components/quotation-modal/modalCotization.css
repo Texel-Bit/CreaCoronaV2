@@ -39,7 +39,7 @@
 
 @media screen and (min-width: 1600px) {
     .modalCotizationContent {
-        height: 70vh;
+        height: 73vh;
         width: 50%;
     }
 }
@@ -67,6 +67,7 @@
 
 .fristContent {
     flex: 1;
+    margin-top: -3%;
 }
 
 .secondContent {
@@ -268,14 +269,23 @@ background-color: var(--color-primary); /* color del pulgar al pasar el cursor s
 
 /* -------------------------------------------------- */
 
-.bottomContent{
-    margin-top: 20px;
+.bottomContent {
+
     display: flex;
+    font-size: 20px;
     width: 70%;
-    justify-content: space-between;
-    margin-inline: auto;
+    text-align: center;
+    flex-direction: row;
+    justify-content: center;        /* Vertically centers children in the flex container */
+    align-items: center;            /* Horizontally centers children */
+    margin-inline: auto;            /* Centers the container itself */
 }
 
+.bottomItem
+{
+    min-width: 200px;
+    max-height: 50%;
+}
 
 .aceptConditions{
     display: flex;
@@ -289,7 +299,7 @@ background-color: var(--color-primary); /* color del pulgar al pasar el cursor s
 }
 
 .buttonsCotizar{
+    scale: 0.8;
     max-width: 300px;
-    min-width: 200px;
     width: 100%;
 }

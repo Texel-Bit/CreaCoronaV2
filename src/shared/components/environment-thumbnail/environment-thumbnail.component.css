@@ -1,6 +1,6 @@
 .environment-thumbnail-image {
     border-radius: 8px;
-    height: 500px;
+    height: 382px;
     width: 665px;
     background-size: cover;
     background-position: center;
@@ -8,9 +8,9 @@
     cursor: pointer;
 }
 
-@media screen and (min-width:390px) and (max-width: 1366px) {
+@media screen and (min-width:390px) and (max-width: 1499px) {
     .environment-thumbnail-image {
-        height: 400px;
-        width: 665px;
+        height: 287px;
+        width: 500px;
     }
 }

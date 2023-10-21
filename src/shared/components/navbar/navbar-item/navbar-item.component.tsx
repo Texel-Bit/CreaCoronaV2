@@ -155,24 +155,22 @@ export const NavbarItem:React.FC<navbarItemsProps> = (props) => {
     }
 
     return (
-       <div onClick={ClickButton} className="p-2 border rounded navbar-item d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: currColor?.BackgroundColor}}>
+      <div onClick={ClickButton} className="p-2 border rounded navbar-item d-flex flex-column align-items-center justify-content-center cursorView" style={{backgroundColor: currColor?.BackgroundColor}}>
 
-<div  className="pb-1" style={{fill: currColor?.BackgroundColor}}>
-    {svgData && 
-    <div >
-        <div dangerouslySetInnerHTML={{ __html: svgData }} style={{fill: currColor?.IconColor, width: '1%', height: '1%'}} />
-    </div>
-    }
-</div>
-        
-            <div>
-                <label className="navbar-item-text text-center" style={{color: currColor?.FontColor}}> 
-                    {props.text}
-                </label>
+        <div  className="pb-1" style={{fill: currColor?.BackgroundColor}}>
+            {svgData && 
+            <div >
+              <div dangerouslySetInnerHTML={{ __html: svgData }} style={{fill: currColor?.IconColor, width: '1%', height: '1%'}} />
             </div>
-        
+            }
         </div>
-    
+          <div>
+            <label className="navbar-item-text text-center cursorViewText" style={{color: currColor?.FontColor}}> 
+              {props.text}
+            </label>
+          </div>
+      </div>
+  
     
     );
 }

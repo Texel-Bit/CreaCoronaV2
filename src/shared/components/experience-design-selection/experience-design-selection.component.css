@@ -36,7 +36,6 @@
     grid-template-columns: repeat(3, 1fr);
     border-color: var(--color-middle) !important;
     overflow-y: auto;
-    height: 500px !important;
 }
 
 @media screen and (min-width: 390px) and (max-width: 1180px) {

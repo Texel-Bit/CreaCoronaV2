@@ -47,3 +47,19 @@
     background-position: center;
     z-index: 2;
 }
+
+.ExperienceCanvasGeneric
+{
+    margin-bottom: 27px;
+}
+
+.ExperienceCanvasDesignSelection
+{
+    margin-bottom: 68px;
+}
+
+
+.ExperienceCanvasFormatSelection
+{
+    margin-bottom: 10px;
+}

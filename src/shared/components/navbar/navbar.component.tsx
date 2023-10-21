@@ -71,7 +71,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
     return(
 
-        <div className="steeps-navbar bg-light p-2 d-flex gap-4 gap-sm-4 justify-content-between">
+        <div className="steeps-navbar bg-light p-2 d-flex gap-4 gap-sm-4 justify-content-between ">
 
             <img
                 src={LogoCreaCorona}

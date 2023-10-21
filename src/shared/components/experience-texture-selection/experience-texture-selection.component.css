@@ -2,6 +2,7 @@
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
+    /* margin-top: -15px; */
 }
 
 .textures-containter-grid-content {
@@ -22,12 +23,6 @@
 @media screen and (min-width: 1180px) {
     .textures-containter-grid-content {
         max-height: 340px;
-    }
-}
-
-@media screen and (min-width: 1366px) and (max-width:1600px) {
-    .textures-containter-grid-content {
-        height: 200px;
     }
 }
 

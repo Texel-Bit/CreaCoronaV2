@@ -133,6 +133,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
     console.log(e.target.value); // log the selected value
     SetState(e.target.value);
 }
+
     return(
         <div className="mw-100 overflow-hidden" style={{marginTop: "5%"}}>
             <div className="background-color-middle px-3 py-1 w-50 rounded-top">
@@ -154,6 +155,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
                             min={1}
                             placeholder="Ancho"
                             className="input-measure"
+                            title="Ancho" 
                             name="initQuotationWidth"
                             onChange={onInitQuotationHeightChanged}
                             style={{ appearance: "none" }} 
@@ -165,6 +167,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
                             type="number"
                             min={1}
                             placeholder="Alto"
+                            title="Alto" 
                             className="input-measure"
                             name="initQuotationHeight"
                             onChange={onInitQuotationWidthChanged}
@@ -179,6 +182,7 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
                         placeholder="Metros cuadrados"
                         className="input-measure"
                         name="initQuotationArea"
+                        title="Area" 
                         required
                         onChange={onInitQuotationSquareMetersChanged}/>
                 </Form.Group>}
@@ -192,7 +196,9 @@ const onInitQuotationDepartmentChanged = (e: React.ChangeEvent<HTMLSelectElement
             <button type="button"
                         className="btn-corona w-100 mt-3 init-quotation-button btn-corona-add"
                         disabled={!canOpenModalStatus}
-                        onClick={onInitQuotationButtonClick}>Cotizar</button>
+                        onClick={
+                            onInitQuotationButtonClick
+                        }>Cotizar</button>
 
 
             </div>

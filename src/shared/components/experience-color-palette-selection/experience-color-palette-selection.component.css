@@ -40,6 +40,7 @@ gap: 10px;
 
 .titleListRow{
     width: 26.5%;
+    min-width: 84px;
     font-size: 15px;
     display: flex;
     align-items: center;
@@ -71,9 +72,9 @@ gap: 10px;
 
 @media screen and (min-width:1366px) and (max-width: 1600px) {
     .optionsColorsList {
-        top: 12%;
-        height: 320px;
+        height: 480px;
         overflow: auto;
+        margin-top: -5px;
     }
 }
 

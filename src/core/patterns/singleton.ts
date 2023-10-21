@@ -267,6 +267,8 @@ public RotateCurrentMosaicObject() {
         if(this.currentEnvironmentType.id!=environmentType.id)
         {
             this.environmentTypeChanged=true;
+            this.currentDesignList=[];
+            this.selectedDesignType=null;
         }
         else
         {

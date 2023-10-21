@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ReactDOM from 'react-dom'
 import "./modalCotization.css";
 import { FaWindowClose } from "react-icons/fa";
 import Singleton from "../../../core/patterns/singleton";
@@ -49,6 +50,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
 
   const [calculating, setCalculate] = useState(true);
   const [quoatiazing, setQuotazing] = useState(true);
+  const [quotationArea, setQuotationArea] = useState("");
 
   const formRef = useRef(null);
 
@@ -108,6 +110,27 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
   };
 
   useEffect(() => {
+
+    const singleton=Singleton.getInstance();
+
+    let QuotationData = singleton.GetQuotationData(
+      GetUserData(),
+      2
+    );
+
+    let currentArea="";
+
+    if(QuotationData.quatitionArea==0)
+    {
+      currentArea="L: "+QuotationData.quotationHeight+"m x A: "+QuotationData.quotationWidth+"m = Area: "+ QuotationData.quotationHeight*QuotationData.quotationWidth
+    }
+    else
+    {
+      currentArea=QuotationData.quatitionArea.toString()
+    }
+
+    setQuotationArea(currentArea);
+
     setCalculate(true);
 
     const simulate = async () => {
@@ -196,7 +219,8 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
     SendQuotation();
   };
 
-  return (
+  return ReactDOM.createPortal(
+
     <div className="modalCotizationContainer">
       <div className="modalCotizationContent">
         <div className="topContent">
@@ -233,11 +257,10 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                     )}
                 </div>
               </div>
-              <div className="priceContainer">
-              <p className="unitys">Unidades: {units}</p>
-              {/* <p className="unitys">Area: {units}</p> */}
+              <p className="unitys" style={{color:"var(--color-primary)"}}>Unidades: {units}</p>
+              <p className="unitys">Dimensiones: {quotationArea} m²</p>
               {calculating && <div className="loading-spinner"></div>}
-            </div>
+            
            
             </div>
 
@@ -286,6 +309,15 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                 <div className="timeline-content">
                   {Singleton.getInstance().currentFormat?.name}
                 </div>
+                <span className="timeline-title">Boquilla</span>
+                <div  className="color-item" style={{border:"2px solid var(--color-middle) !important"}}>
+                          <img
+                            src={getServerImagesUrl(Singleton.getInstance().currentGrout?.source||"")}
+                          />
+                           <div className="color-label" style={{fontSize:"8px"}}>
+                    {Singleton.getInstance().currentGrout?.name}
+                  </div>
+                        </div>
               </div>
 
               {Singleton.getInstance().currentStructure && (
@@ -437,40 +469,34 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
 
         <div className="bottomContent">
           
-          <div className="bottomItem">
-           
-
-            <button
-              className="buttonsCotizar btn-corona btn-corona-destructive"
-              type="button"
-              onClick={props.closeModalEvent}
-            >
-              Cancelar
-            </button>
-          </div>
-
-          <div className="bottomItem">
+        <div className="bottomItem">
 
 
-          <button
-  className="buttonsCotizar btn-corona btn-corona-add"
-  type="button"
-  onClick={handleSubmit}
-  disabled={
-    calculating||
-    !aceptaCondiciones ||
-    !aceptaTratamientoDatos ||
-    !nombre ||
-    !apellido ||
-    !telefono ||
-    !correo
-  }
+<button
+className="buttonsCotizar btn-corona btn-corona-add"
+type="button"
+onClick={handleSubmit}
+disabled={
+calculating||
+!aceptaCondiciones ||
+!aceptaTratamientoDatos ||
+!nombre ||
+!apellido ||
+!telefono ||
+!correo
+}
 >
-  Enviar{calculating && <div className="loading-spinner"></div>}
+Enviar{calculating && <div className="loading-spinner"></div>}
 </button>
-          </div>
+</div>
+
+
+
+
         </div>
       </div>
-    </div>
+    </div>,document.body
   );
+
+
 };

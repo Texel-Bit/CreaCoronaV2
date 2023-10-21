@@ -22,6 +22,7 @@ import "../../../../shared/components/caption/video-tutorial/video-tutorial-capt
 import FullscreenForeground from "./FullscreenForeground";
 
 
+
 interface surface{}
 export const SelectSurfaceView:React.FC<surface> = (props) => {
 
@@ -140,42 +141,34 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
     function handlerResponse(datos:IEnvironmentType[]){setRes(datos)}
         
     return(
-        <div className="h-2 d-flex flex-column flex-md-row vw-1 " style={{position:"relative"}}>
-            
-            <div className="px-md- pl-10 pt-6 " style={{flex: 2}}>
-                <div className="d-flex align-items-center w-100 h-100">
-                    <div className="w-100">
-                <h4 style={{fontFamily: 'Inter', fontSize: "2rem", paddingLeft: '5%', paddingRight: '5%'}} className="mb-2 pb-5 text-center color-middle fw-bold">
-                Selecciona la superficie en la que aplicarás tu diseño
-    </h4>
-    <div className="select-surface" >
-        {
-            singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
-                return <EnvironmentThumbnail
-                    key={`selectSurfaceThumbnail${i.id}`}
-                    name={i.name}
-                    image={i.source}
-                    id={i.id}
-                    onEvents={[
-                        (e) => Singleton.getInstance().SelectEnvironmentType(i),
-                        (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment)
-                    ]}/>
-        })}
+      <div className="h-2 d-flex flex-column flex-md-row vw-1 containerPrincipalSurface" style={{position:"relative"}}> 
+        <div className="px-md- pl-10 pt-6 " style={{flex: 2}}>
+          <div className="d-flex align-items-center w-100 h-100">
+            <div className="w-100">
+              <h4 style={{fontFamily: 'Inter', fontSize: "2rem"}} className="mb-2 text-center color-middle fw-bold">Selecciona la superficie en la que aplicarás tu diseño </h4>
+              <div className="select-surface" >
+                {
+                  singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray().map((i:IEnvironmentType)=>{
+                  return <EnvironmentThumbnail
+                      key={`selectSurfaceThumbnail${i.id}`}
+                      name={i.name}
+                      image={i.source}
+                      id={i.id}
+                      onEvents={[
+                          (e) => Singleton.getInstance().SelectEnvironmentType(i),
+                          (e) => Singleton.getInstance().ChangeExperienceView(ExperienceViews.Environment)
+                  ]}/>
+                })}
 
-    </div>  
-
-</div> 
-
-                </div>
-
-            </div>
-
-            <button type="button" className="button-background btn btn-primary d-flex gap-2 align-items-center button-video" style={{position:"absolute",left:"2%",bottom:"5%"}}>
-                <img src={IconPlayVideo} alt="" className="icon-button-background" />
-                <label className='video-button-text'  onClick={modalVideo}  >Ver tutorial</label>
-            </button>
-            
-
+              </div>  
+            </div> 
+          </div>
         </div>
+
+        <button type="button" className="button-background btn btn-primary d-flex gap-2 align-items-center button-video btnCustomCSS" style={{position:"absolute",left:"2%",bottom:"5%"}}>
+            <img src={IconPlayVideo} alt="" className="icon-button-background" />
+            <label className='video-button-text'  onClick={modalVideo}  >Ver tutorial</label>
+        </button>
+      </div>
     );
 }

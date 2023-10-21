@@ -102,8 +102,9 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [bricksRotated, setBricksRotated] = useState(false);
     const [colorSelectionLoaded, setColorSelectionLoaded] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [modalSize, setModalSize] = useState<"lg" | "sm" | "xl">("lg");
 
-    const [colorSelectionStyle, setColorSelectionStyle] = useState(new FullFieldColorStyle());
+    const [colorSelectionStyle, setColorSelectionStyle] = useState("FullFilledExperienceView");
     
 
     
@@ -125,7 +126,7 @@ function closeModal() {
 
 useEffect(() => {
     
-    setColorSelectionStyle(colorType==1?new FullFieldColorStyle():new WithDesignColorStyle());
+    setColorSelectionStyle(colorType==1?"FullFilledExperienceView":"WithDesignExperienceView");
 
 }, [colorType]);
 
@@ -184,8 +185,6 @@ function ChangeColorIndex(currentIndex:number)
     Singleton.getInstance().colorIndex=currentIndex;
     console.log(componentName) 
 }
-
-
 
 useEffect(() => {
     try {
@@ -345,6 +344,23 @@ const defineCanvasSize = () => {
             elementSvg = await convertHtmlToImage(element);
         }
     
+
+        switch(Singleton.getInstance().selectedDesignType?.mosaicId)
+        {
+            case 1:
+                setModalSize("lg")
+                break;
+                case 3:
+                    setModalSize("lg")
+                    break;
+                    case 4:
+                        setModalSize("lg")
+                        break;
+                        default:
+                            setModalSize("lg")
+                            break;
+        }
+
         setCanvasImage(elementSvg ?? "");
         singleton.mosaicImage = elementSvg;
     
@@ -398,8 +414,9 @@ const defineCanvasSize = () => {
       
         const descriptionKey = (() => {
           const currentColorTypeID = singleton.GetCurrenColorTypeID();
+          console.log(currentColorTypeID," ",singleton.selectedDesignType?.mosaicId)
           if (experienceView === ExperienceViews.Design) {
-            if (singleton.selectedDesignType?.mosaicId === 1 && currentColorTypeID !== 1) {
+            if (singleton.selectedDesignType?.mosaicValue === 1 && currentColorTypeID !== 1) {
               return 'descriptionSingleMosaic';
             }
             return currentColorTypeID === 1 ? 'descriptionFullColor' : 'description';
@@ -441,11 +458,11 @@ const defineCanvasSize = () => {
             <div className="experience-behavior-container">
 
                 <div className="d-flex align-items-start header-view" style={{position: "relative"}} >
-                    <div className="col-2" style={{marginLeft: "35%",marginTop: "2%", position: "absolute"}}>
+                    <div className="col-2 btnControlsCustomCSS" style={{marginLeft: "35%",marginTop: "2%", position: "absolute"}}>
                         <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
                     </div>
                     
-                    <div className="col-8" style={{left: "45%",marginTop: "2%", position: "absolute"}}>
+                    <div className="col-8 titleCustomCssSteepTitle " style={{left: "45%",marginTop: "2%", position: "absolute"}}>
                         <ExperienceSteepTitle 
                             title={title}
                             description={description ?? <></>}
@@ -454,18 +471,17 @@ const defineCanvasSize = () => {
                     </div>
 
 
-                    <div className="col-2 text-end">
-                    {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button" style={{right: "-20%",marginTop: "2%", position: "absolute"}}>Siguiente →</button>}
+                    <div className="col-2 text-end btnControlsCustomCSS">
+                        {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button nextButtonCustomCss" style={{right: "-20%",marginTop: "2%", position: "absolute"}}>Siguiente →</button>}
                     </div>
                 </div>
 
-            
                 {
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0" style={{padding:"0px 20px",marginTop:"7%"}}>
-                        <div className="h-md-100 w-100 w-md-50">
+                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0 customFirstGrid" style={{padding:"0px 20px",marginTop:"7%"}}>
+                        <div className="h-md-100 w-100 w-md-50 optionsCustomCss">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
@@ -507,7 +523,7 @@ const defineCanvasSize = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
+                                                // { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
                                             ]}/>
                                     </>
                                 }
@@ -520,21 +536,18 @@ const defineCanvasSize = () => {
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="experienceContainer" style={{justifyContent: colorSelectionStyle.experienceContainerJustifyContent}}>
+                    <div className={`experienceContainer experienceContainerSecondCase ${colorSelectionStyle}`} >
                         
-                        <div className="pallete-Colors-Selection-column  position-relative"  style={{display: colorSelectionStyle.palleteColorSelectionDisplay}} >
+                        <div className="pallete-Colors-Selection-column  position-relative"   >
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
                             
                         {/* <p className="text-muted small mt-1">Las fotografías de productos y ambientes son ilustrativas, algunos atributos de color y textura pueden variar de acuerdo a la resolución de tu pantalla y diferir de la realidad.</p> */}
                         </div>
 
                         <div className="FullMosaicComponentParent" style={{marginTop:"7%",width:"50%"}}>
-
-
-
                       
                             <div className="" id="FullMosaicComponent">
-                            <h3 className="color-middle fw-bold subtitle" style={{margin:"auto", zIndex: 20,top: "-10%",marginBottom:"3%",textAlign:"left",width:"60%"}}>Tu Obra de Arte</h3>
+                            <h3 className="color-middle fw-bold subtitle tuObraDeArte" style={{margin:"auto", zIndex: 20,top: "-10%",marginBottom:"3%",textAlign:"left",width:"60%"}}>Tu Obra de Arte</h3>
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
@@ -567,7 +580,7 @@ const defineCanvasSize = () => {
                                             width={colorType==2?"77%":"65%"}
                                             />
                                             {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold subtitle" style={{marginLeft:"10%",zIndex: 20,marginTop: "10%"}}>Colores Seleccionados</h3>
+                        <h3 className="color-middle fw-bold subtitle coloresSeleccionados" style={{marginLeft:"10%",zIndex: 20,marginTop: "10%"}}>Colores Seleccionados</h3>
                             </TooltipMudi>}
                                     {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
 
@@ -595,27 +608,19 @@ const defineCanvasSize = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
+                                                // { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
                                             ]}/>
                                     </>
                                 }
 
-
-
-
-
-
                             </div>
                         
                         </div>
-
-                        
-
                        
                         <div className="textures-selection-column col-1 col-md-1 col-xl-6 h-md-100 position-relative" style={{marginTop:"7%",marginLeft:"0%"}}>
                             
                         {<TooltipMudi content='Podras cambiar el color seleccionado' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,top: "-10%"}}>Elige tu color</h3>
+                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,top: "-11%"}}>Elige tu color</h3>
                             </TooltipMudi>}
 
                             <ExperienceTextureSelection colorArray={
@@ -624,9 +629,10 @@ const defineCanvasSize = () => {
                                 )
                             } 
                         />
-                         {<TooltipMudi content='No olvides escoger tu boquilla' visible={true} position='top'>
-                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,marginTop: "9%"}}>Elige tu boquilla</h3>
-                            </TooltipMudi>}
+                        <div style={{zIndex: 20,marginTop: "0%"}}> {<TooltipMudi content='No olvides escoger tu boquilla' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,marginTop: "3%"}}>Elige tu boquilla</h3>
+                            </TooltipMudi>}</div>
+                        
                         <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
                         </div>
 
@@ -636,7 +642,8 @@ const defineCanvasSize = () => {
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-evenly overflow-hidden flex-column flex-md-row cotizacion-view" style={{marginTop:"7%",marginLeft:"7%",marginRight:"7%"}}>
+                    // TERCER CASO DE LA EXPERIENCIA
+                    <div className="d-flex   justify-content-md-evenly overflow-hidden flex-column flex-md-row cotizacion-view containerCotizationPreview" style={{marginTop:"15%",marginLeft:"7%",marginRight:"7%",paddingTop:"9.25rem !important"}}>
                                   
                         <div className="col-12 col-md-5 d-flex mx-auto">
                             <div className="d-flex flex-column  w-100 position-relative">
@@ -691,6 +698,7 @@ const defineCanvasSize = () => {
 
             <div className="canvas-content">
     <ExperienceCanvas 
+        onOpenModal={()=>setModalOpen(true)}
         backgroundImage={canvasImage}
         mask={canvasMask}
         perspective={selectedPerspective}
@@ -704,23 +712,7 @@ const defineCanvasSize = () => {
         size={selectedFormatSize}
     />
 
-<button 
-    style={{
-        position: "absolute", 
-        bottom: "3%", 
 
-        backgroundColor: "var(--color-middle)",  // Setting the background color
-        color: "white",  // Setting the text/icon color for the button
-        border: "none",  // Removing the default button border
-        cursor: "pointer",  // Making sure it looks clickable
-        borderRadius: "4px",  // Optional: rounding the corners for aesthetics
-        padding: "8px 12px"  // Optional: adding some padding for spacing
-    }} 
-    
-    onClick={() => setModalOpen(true)}
->
-    <Fullscreen style={{ color: "white" }} />  {/* Making the icon white */}
-</button>
 
       < div style={{display:"none"}} className="timeline">
 
@@ -777,7 +769,7 @@ const defineCanvasSize = () => {
 
         </div>
             
-            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMosaicModal}/>
+            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMosaicModal} size={modalSize}/>
 
         </div>
 

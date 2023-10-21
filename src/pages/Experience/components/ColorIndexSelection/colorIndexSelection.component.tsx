@@ -10,24 +10,24 @@ export const ColorIndexSelection: React.FC<ColorPaletteProps> = ({ onColorSelect
 
   useEffect(() => {
     
-    ChangeColorIndexButtonStatus(Singleton.getInstance().colorIndex);
+    //ChangeColorIndexButtonStatus(Singleton.getInstance().colorIndex);
    console.log("Changing color list");
   }, [Singleton.getInstance().currentColorList]);
 
 
   useEffect(() => {
-    const instance = Singleton.getInstance();
-    instance.updateColorFunc=updateColorStatus;
+    // const instance = Singleton.getInstance();
+    // instance.updateColorFunc=updateColorStatus;
 
   }, []);
 
   function updateColorStatus()
   {
- 
-    setTimeout(() => {
-      ChangeColorIndexButtonStatus(Singleton.getInstance().colorIndex);
+    
+    // setTimeout(() => {
+    //   ChangeColorIndexButtonStatus(Singleton.getInstance().colorIndex);
 
-    }, 2000);
+    // }, 2000);
   
   }
 

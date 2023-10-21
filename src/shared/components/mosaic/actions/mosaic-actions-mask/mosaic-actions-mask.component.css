@@ -10,7 +10,6 @@
 .mosaic-actions-mask-item {
     display: flex;
     justify-content: space-around;
-    padding: 1rem;
     align-items: end;
 }
 

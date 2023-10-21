@@ -61,9 +61,9 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
   height: '100vh', // or another value that suits your design
 }}>
 
-<div className="d-flex flex-column align-items-center" style={{gap: '20px'}}>
+<div className="d-flex flex-column align-items-center" style={{marginTop:"4%", gap: '20px'}}>
 
-    <h4 style={{fontFamily: 'Inter', fontSize: "2rem", color: 'var(--color-middle)'}} className="mb-2 pt-5 pb-1 text-center fw-bold">
+    <h4 style={{fontFamily: 'Inter', fontSize: "2rem", color: 'var(--color-middle)'}} className="text-center fw-bold titleAmbientSelect">
         Selecciona el ambiente en el que aplicarás tu diseño
     </h4>
 
