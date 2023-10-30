@@ -33,37 +33,37 @@ export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
                 }
                 
                 .hexagon-column {
-                
+                    display:flex;
+                    flex-direction:column;
                     width: 100%;
                 }
                 
                 
-                /*
-                193.5   x  168    97 
-                387  x 336 
-                1.15
-                //336  x  291 */
-                
-                /* Adjusting the position of SVGs in the first column. */
+              
                 .hexagon-column-1 .hexagon svg {
                     display:flex
                     position: relative;
-                   transform: translate(-50%); 
+                   transform: translate(-52%); 
+                   scale:0.97
                 }
                 
                 .hexagon-column-2 {
                     position: relative;
-                    transform: translate(-75%,-25%);
+                    transform: translate(-73%,-26%);
+                    gap:0.20rem;
                 }
                 
                 .hexagon-column-2-wrapper {
                     position: relative;
-                   
+                    display:flex;
+                    gap:0.26rem;
+                    flex-direction:column;
                 }
                 
-                .hexagon-column-3 {
+                .hexagon-column-3 .hexagon svg {
                     position: relative;
-                    transform: translate(-100%,0%);
+                    transform: translate(-98%);
+                    scale:0.97
                 }
                 .hexagon {
                    width: 193.5px;

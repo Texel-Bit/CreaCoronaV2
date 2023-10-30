@@ -120,14 +120,15 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
 
     let currentArea="";
 
-    if(QuotationData.quatitionArea==0)
-    {
-      currentArea="L: "+QuotationData.quotationHeight+"m x A: "+QuotationData.quotationWidth+"m = Area: "+ QuotationData.quotationHeight*QuotationData.quotationWidth
+    if(QuotationData.quatitionArea == 0) {
+      let calculatedArea = QuotationData.quotationHeight * QuotationData.quotationWidth;
+      let roundedArea = calculatedArea.toFixed(2); // This will round the area calculation to two decimal places
+    
+      currentArea = "L: " + QuotationData.quotationHeight + "m x A: " + QuotationData.quotationWidth + "m = Area: " + roundedArea;
+    } else {
+      currentArea = QuotationData.quatitionArea.toFixed(2); // This converts the number to a string with 2 decimal places
     }
-    else
-    {
-      currentArea=QuotationData.quatitionArea.toString()
-    }
+    
 
     setQuotationArea(currentArea);
 
@@ -257,9 +258,14 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                     )}
                 </div>
               </div>
-              <p className="unitys" style={{color:"var(--color-primary)"}}>Unidades: {units}</p>
-              <p className="unitys">Dimensiones: {quotationArea} m²</p>
+              <div style={{gap:"1rem"}}>              
+                <p className="units" style={{color:"var(--color-primary)"}}>Unidades: {units}</p>
               {calculating && <div className="loading-spinner"></div>}
+              <p className="units" style={{color:"var(--color-primary)"}}>Dimensiones:</p>
+              <p className="units" style={{color:"var(--color-primary)"}}> {quotationArea} m²</p>
+</div>
+            
+              
             
            
             </div>
@@ -310,7 +316,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                   {Singleton.getInstance().currentFormat?.name}
                 </div>
                 <span className="timeline-title">Boquilla</span>
-                <div  className="color-item" style={{border:"2px solid var(--color-middle) !important"}}>
+                <div  className="color-item" style={{border:"1px solid var(--color-middle) !important"}}>
                           <img
                             src={getServerImagesUrl(Singleton.getInstance().currentGrout?.source||"")}
                           />

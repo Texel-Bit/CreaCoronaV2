@@ -479,10 +479,10 @@ const defineCanvasSize = () => {
                 {
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
-                    
+                   
                     <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0 customFirstGrid" style={{padding:"0px 20px",marginTop:"7%"}}>
                         <div className="h-md-100 w-100 w-md-50 optionsCustomCss">
-                            
+                        
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-start mx-auto mx-md-0">
@@ -502,17 +502,36 @@ const defineCanvasSize = () => {
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
-                                    <>
-                                        <MosaicComponent
-                                            mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
-                                            actions={true}/>
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
-                                    </>
-                                }
+    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
+    <>
+        {
+            colorType===2   &&
+            <TooltipMudi content='Selecciona un cuadro para cambiar el diseño' visible={true} position='top'>
+                <MosaicComponent
+                    mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
+                    actions={true}/>
+                <MosaicActionsBar 
+                    buttons={[
+                        { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                    ]}/>
+            </TooltipMudi>
+        }
+
+        {
+           colorType !== 2 &&
+            <>
+                <MosaicComponent
+                    mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
+                    actions={true}/>
+                <MosaicActionsBar 
+                    buttons={[
+                        { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
+                    ]}/>
+            </>
+        }
+    </>
+}
+
 
                                 {
                                     Singleton.getInstance().selectedDesignType?.mosaicId == 1 && selectedDesigns&&
