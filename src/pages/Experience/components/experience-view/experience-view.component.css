@@ -62,7 +62,11 @@
     }
 
     .cotizacion-view > div:last-of-type {
-        height: 560px !important;
+        height: 590px !important;
+    }
+
+    .estructura {
+        min-height: 160px;
     }
 }
 
@@ -120,6 +124,7 @@
     .timeline {
         grid-template-columns: repeat(4, 1fr);
         overflow: hidden;
+        height: auto;
     }
 }
 
@@ -274,7 +279,7 @@
 
 @media screen and (min-width:1366px) and (max-width: 1600px) {
     .canvas-content {
-        grid-template-rows: 290px 1fr;
+        grid-template-rows: 390px 1fr;
     }
 }
 
