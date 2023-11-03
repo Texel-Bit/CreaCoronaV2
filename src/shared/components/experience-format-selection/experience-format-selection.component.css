@@ -7,3 +7,16 @@
         padding-bottom: 10px !important;
     }
 }
+
+@media  screen and (width: 1366px) {
+    .thumbnails-container {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+
+    .thumbnails-container > button {
+        height: 100%;
+        align-items: center;
+    }
+}

@@ -45,7 +45,7 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
     }
     
     return(
-        <div className='mw-100 overflow-hidden'>
+        <div className='mw-100 overflow-hidden estructura'>
 
             <div className="background-color-middle px-3 py-1 w-50 rounded-top">
                 <h6 className="m-0 color-white fw-normal">Estructura</h6>           

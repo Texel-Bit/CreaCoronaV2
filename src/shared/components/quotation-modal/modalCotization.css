@@ -55,6 +55,14 @@
     row-gap: 0;
 }
 
+@media screen and (min-width: 1366px) {
+    .modalCotizationContent .timeline-content-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+}
+
 .modalCotizationContent .timeline-content-quotation img {
     width: 20px;
 }
@@ -75,6 +83,15 @@
     display:flex;
     gap: 2rem;
     
+}
+
+@media screen and (min-width: 1366px) {
+    .fristContent,
+    .secondContent {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 
 .closeModal {
