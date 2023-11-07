@@ -258,16 +258,13 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
                     )}
                 </div>
               </div>
-              <div style={{gap:"1rem"}}>              
-                <p className="units" style={{color:"var(--color-primary)"}}>Unidades: {units}</p>
+              <div >              
+                <p className="units" style={{fontSize:"10", color:"var(--color-primary)"}}>Unidades: {units}</p>
               {calculating && <div className="loading-spinner"></div>}
-              <p className="units" style={{color:"var(--color-primary)"}}>Dimensiones:</p>
-              <p className="units" style={{color:"var(--color-primary)"}}> {quotationArea} m²</p>
+              <p className="units" style={{fontSize:"20px",color:"var(--color-primary)"}}>Dimensiones:</p>
+              <p className="units" style={{fontSize:"15px",color:"var(--color-primary)"}}> {quotationArea} m²</p>
 </div>
-            
-              
-            
-           
+
             </div>
 
          

@@ -12,7 +12,7 @@ export const CoronaCarousel: React.FC<CoronaCarouselProps> = (props) => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const carouselInnerRef = useRef(null);
 
-    const itemWidth = 667;
+    const itemWidth =320;
     const totalThumbnails = props.thumbnails.length;
 
     const adjustedThumbnails = [

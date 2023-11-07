@@ -646,6 +646,7 @@
 
     .color-item img{
         width: 100%;
+        max-width: 80px;
     }
 
     .priceCotization{
@@ -656,11 +657,11 @@
     }
 
     .businessTitle{
-        margin: 5px 0 !important;
+        margin: 0px 0 !important;
     }
 
     .aceptConditions{
-        margin: 5px auto;
+        margin: 0px auto;
     }
 
     .botomCancelquotation{
