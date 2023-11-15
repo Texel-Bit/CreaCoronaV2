@@ -1,114 +1,92 @@
-import { useEffect, useState } from "react";
-import "./mosaic-hexagon.css"
+import React, { useEffect, useState } from "react";
+import "./mosaic-hexagon.css";
 
-interface ExperienceMosaicHexagonProps
-{
-    hexagon:HTMLElement;
-    grout: string;
+interface ExperienceMosaicHexagonProps {
+  hexagon: HTMLElement; // Assuming this contains your SVG hexagon markup
+  grout: string;
 }
 
+export const MosaicHexagon: React.FC<ExperienceMosaicHexagonProps> = (props) => {
+  const [groutImageCss, setGroutImageCss] = useState("");
 
-export const MosaicHexagon:React.FC<ExperienceMosaicHexagonProps> = (props) => {
+  useEffect(() => {
+    setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
+  }, [props.grout]);
+
+  return (
+    <div id="mosaic-element" className="mosaic-hexagon">
+      <style>
+        {`
+          .mosaic-hexagon {
+            width: 300px; 
+            height: 378px !important;
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-direction: row;
+            ${groutImageCss}
+          }
+
+          .hexagon-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+          }
 
 
-    const [groutImageCss, setGroutImageCss] = useState("");
 
+          .hexagon {
+            width: 219px; 
+            height: 189px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: -26px; 
+          }
 
-    useEffect(() => {
-        if (props.grout)
-            setGroutImageCss(props.grout ? `background-image: url(${props.grout})` : "");
-    }, [props]);
+          .hexagon svg {
+            width: 100%;
+            height: auto;
+            display: block;
+          }
 
+          // Adjustments for first and last hexagon in column 1 and 3 for vertical centering
+          .hexagon-column-1 .hexagon:first-child,
+          .hexagon-column-3 .hexagon:first-child {
+            margin-top: 84px; 
+          }
 
-    return(
-        <div id="mosaic-element" className='mosaic-hexagon'>
+          .hexagon-column-1 .hexagon:last-child,
+          .hexagon-column-3 .hexagon:last-child {
+            margin-bottom: 84px; 
+          }
 
-            <style>
-                {`
-                 .mosaic-hexagon {
-                    width: 291px;
-                    height:336px;
-                    display: flex;
-                    ${groutImageCss}
-                }
-                
-                .hexagon-column {
-                    display:flex;
-                    flex-direction:column;
-                    width: 100%;
-                }
-                
-                
-              
-                .hexagon-column-1 .hexagon svg {
-                    display:flex
-                    position: relative;
-                   transform: translate(-52%); 
-                   scale:0.97
-                }
-                
-                .hexagon-column-2 {
-                    position: relative;
-                    transform: translate(-73%,-26%);
-                    gap:0.20rem;
-                }
-                
-                .hexagon-column-2-wrapper {
-                    position: relative;
-                    display:flex;
-                    gap:0.26rem;
-                    flex-direction:column;
-                }
-                
-                .hexagon-column-3 .hexagon svg {
-                    position: relative;
-                    transform: translate(-98%);
-                    scale:0.97
-                }
-                .hexagon {
-                   width: 193.5px;
-                   height:168px ;
-                }
-                
-                .hexagon svg {
-                    
-                }
-                
-                `}
-            </style>
+          // Specific adjustments to the middle column to align properly with the sides
+          .hexagon-column-2 {
+            transform: translateY(94.5px);
+          }
+        `}
+      </style>
 
-            <div className="hexagon-column hexagon-column-1">
-                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                </div>
-                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                </div>
-            </div>
+      <div className="hexagon-column hexagon-column-1">
+        {/* Column 1 - Two hexagons */}
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+      </div>
 
-            <div className="hexagon-column hexagon-column-2">
-                <div className="hexagon-column-2-wrapper">
-                    <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                        {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                    </div>
-                    <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                        {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                    </div>
-                    <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                        {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                    </div>
-                </div>
-            </div>
+      <div className="hexagon-column hexagon-column-2">
+        {/* Column 2 - Three hexagons */}
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+      </div>
 
-            <div className="hexagon-column hexagon-column-3">
-                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                </div>
-                <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}>
-                    {/* <div dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }}></div> */}
-                </div>
-            </div>
-
-        </div>
-    );
-}
+      <div className="hexagon-column hexagon-column-3">
+        {/* Column 3 - Two hexagons */}
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+        <div className="hexagon" dangerouslySetInnerHTML={{ __html: props.hexagon.outerHTML }} />
+      </div>
+    </div>
+  );
+};
