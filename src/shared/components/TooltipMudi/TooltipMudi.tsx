@@ -22,7 +22,6 @@ const TooltipMudi: React.FC<TooltipProps> = ({ content, children,visible=false, 
         return {
           top: `-46px`,
           width: "110%",
-          maxWidth:"300px",
           paddingRight:"5px"
         };
       case "right":

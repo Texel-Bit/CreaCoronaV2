@@ -117,7 +117,7 @@
     }
 
     .estructura {
-        min-height: 160px;
+        min-height: 180px;
     }
 }
 
@@ -280,7 +280,8 @@
     justify-content: flex-start;
     gap: 10px;
     font-size: 10px;
-
+    border: 1px solid var(--color-middle);
+    width: fit-content;
   }
 .color-label {
     position: absolute;
@@ -292,7 +293,11 @@
     padding: 0px;
     width: 100%;
     text-align: center;
-  }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .color-item-Quotation {
     display: flex;
     margin-top: 10px;
@@ -445,6 +450,7 @@
         justify-content: space-evenly !important ;
         width: 105%;
         scale: .8;
+        padding-top: 50px !important;
     }
 
     .optionsCustomCss{

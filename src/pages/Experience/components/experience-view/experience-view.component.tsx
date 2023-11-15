@@ -665,7 +665,7 @@ const defineCanvasSize = () => {
                     <div className="d-flex   justify-content-md-evenly overflow-hidden flex-column flex-md-row cotizacion-view containerCotizationPreview" style={{marginTop:"15%",marginLeft:"7%",marginRight:"7%",paddingTop:"9.25rem !important"}}>
                                   
                         <div className="col-12 col-md-5 d-flex mx-auto">
-                            <div className="d-flex flex-column  w-100 position-relative">
+                            <div className="d-flex flex-column  w-100 position-relative gap-2">
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
                                 {
