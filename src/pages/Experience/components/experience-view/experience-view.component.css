@@ -119,6 +119,10 @@
     .estructura {
         min-height: 180px;
     }
+
+    .estructura + div {
+        max-width: 280px;
+    }
 }
 
 .header-view {
