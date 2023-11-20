@@ -1,84 +1,80 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Singleton from "../../../../core/patterns/singleton";
 
-
-interface ExperienceMosaicBricksProps
-{
-    brick:HTMLElement;
-    grout: string,
-    rotated: boolean
+interface ExperienceMosaicBricksProps {
+  brick: HTMLElement;
+  grout: string;
+  rotated: boolean;
 }
 
+export const MosaicBrick: React.FC<ExperienceMosaicBricksProps> = ({ brick, grout, rotated }) => {
+  // State to keep track of bonding pattern and number of rows
+  const [isBondPattern, setIsBondPattern] = useState(true);
+  const [numberOfRows, setNumberOfRows] = useState(0);
+  // State to hold the brick style
+  const [brickStyle, setBrickStyle] = useState("");
 
-export const MosaicBrick: React.FC<ExperienceMosaicBricksProps> = (props) => {
+  useEffect(() => {
+    // Create style based on grout and rotation
+    let newBrickStyle = grout ? `background-image: url(${grout});` : "";
+    if (rotated) newBrickStyle += "transform: rotate(90deg)";
 
-    const [bondPattern, setBondPattern] = useState(true);
-    const [rowsAmount, setRowsAmount] = useState(0);
-    const [bricksStyle, setBricksStyle] = useState("");
+    setBrickStyle(newBrickStyle);
 
+    // Fetch the selected format from the singleton
+    const selectedFormat = Singleton.getInstance().currentFormat;
 
-    useEffect(() => {
-        let newBricksStyle = props.grout ? `background-image: url(${props.grout});` : "";
+    // Check if the bonding pattern should be used
+    const useBondPattern = !selectedFormat || selectedFormat.id === 1;
 
-        if (props.rotated)
-            newBricksStyle += "transform: rotateZ(90deg)";
-        else
-            newBricksStyle += "";
+    // Update state
+    setIsBondPattern(useBondPattern);
+    setNumberOfRows(useBondPattern ? 6 : 4);
+  }, [brick, grout, rotated]);
 
-        setBricksStyle(newBricksStyle);
+  // Helper function to render individual rows
+  const renderRow = (isOffset: boolean, key: string) => (
+    <div key={key} className={isOffset ? "brick-row-offset" : "brick-row"}>
+      <div dangerouslySetInnerHTML={{ __html: brick.outerHTML }}></div>
+      <div dangerouslySetInnerHTML={{ __html: brick.outerHTML }}></div>
+      {isOffset && <div dangerouslySetInnerHTML={{ __html: brick.outerHTML }}></div>}
+    </div>
+  );
 
-        let selectedFormat = Singleton.getInstance().currentFormat;
-        let hasBoundPattern = selectedFormat == undefined || selectedFormat.id == 1;
+  return (
+    <div id="mosaic-element" className="mosaic-brick w-100">
+      <style>
+        {`
+          .mosaic-brick {
+            display: flex;
+            flex-direction: column;
+            gap: .3rem;
+            padding: .1rem;
+            overflow: hidden;
+            ${brickStyle}
+          }
+          
+          .brick-row, .brick-row-offset {
+            display: grid;
+            gap: .3rem;
+          }
 
-        setRowsAmount(hasBoundPattern ? 6 : 4);
-        setBondPattern(hasBoundPattern);
-    }, [props]);
+          .brick-row {
+            grid-template-columns: repeat(2, 1fr);
+          }
 
+          .brick-row-offset {
+            width: 150%;
+            grid-template-columns: repeat(3, 1fr);
+            margin-left: -25%;
+          }
+        `}
+      </style>
 
-    return(
-        <div id="mosaic-element" className="mosaic-brick">
-
-            <style>
-                {`
-                    .mosaic-brick {
-                        width: 100%;
-                        overflow: hidden;
-                        display: flex;
-                        flex-direction: column;
-                        gap: .2rem;
-                        padding: .1rem;
-                        transition: transform 0.3s ease;
-                        ${bricksStyle}
-                    }
-                
-                    .brick-row {
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: .2rem;
-                    }
-
-                    .brick-row-offset {
-                        width: 150%;
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: .2rem;
-                        margin-left: -25%;
-                    }
-                `}
-            </style>
-            {
-                Array.from({ length: rowsAmount }).map((_, index) => {
-
-                    let rowOffset = index % 2 != 0 && bondPattern;
-
-                    return <div key={`mosaicBrickRow${index}`} className={rowOffset ? "brick-row-offset" : "brick-row"}>
-                        <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                        <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>
-                        {rowOffset && <div dangerouslySetInnerHTML={{ __html: props.brick.outerHTML }}></div>}
-                    </div>
-                })
-            }
-            
-        </div>
-    );
-}
+      {Array.from({ length: numberOfRows }).map((_, index) => {
+        const isOffset = index % 2 !== 0 && isBondPattern;
+        return renderRow(isOffset, `mosaicBrickRow${index}`);
+      })}
+    </div>
+  );
+};

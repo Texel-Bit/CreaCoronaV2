@@ -1,89 +1,72 @@
+import React, { useEffect, useState, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { EnvironmentThumbnail, EnvironmentThumbnailProps } from "../environment-thumbnail/environment-thumbnail.component";
-import "./carousel.component.css"
-import { useEffect, useState } from "react";
-
+import "./carousel.component.css";
 
 interface CoronaCarouselProps {
-    thumbnails: EnvironmentThumbnailProps[]
+    thumbnails: EnvironmentThumbnailProps[];
 }
 
-
 export const CoronaCarousel: React.FC<CoronaCarouselProps> = (props) => {
-
-    const [carouselMovementDistance, setCarouselMovementDistance] = useState(0);
     const [carouselPosition, setCarouselPosition] = useState(0);
-    const [carouselWidth, setCarouselWidth] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const carouselInnerRef = useRef(null);
 
-    const [nextButtonVisible, setNextButtonVisible] = useState(true);
-    const [prevButtonVisible, setPrevButtonVisible] = useState(false);
+    const itemWidth = 667;
+    const totalThumbnails = props.thumbnails.length;
 
-
-    useEffect(() => {
-
-        let carouselInnerRef = document.getElementById("carouselInner");
-
-        if (!carouselInnerRef)
-            return;
-
-        const elementStyle = window.getComputedStyle(carouselInnerRef);
-        const width = parseInt(elementStyle.getPropertyValue('width'));
-        let itemWidth = width / props.thumbnails.length;
-
-        setCarouselWidth(width ? width - itemWidth * 2 : 0);
-        setCarouselMovementDistance(itemWidth);
-        setNextButtonVisible(true);
-        
-    }, [props]);
-
+    const adjustedThumbnails = [
+        ...props.thumbnails.slice(-3),
+        ...props.thumbnails,
+        ...props.thumbnails.slice(0, 3)
+    ];
 
     useEffect(() => {
-        
-        setPrevButtonVisible(carouselPosition < 0);
-        setNextButtonVisible(carouselPosition > -carouselWidth)
-
-    }, [carouselPosition]);
-    
+        if (!carouselInnerRef.current) return;
+        setCarouselPosition(-itemWidth*3);
+    }, []);
 
     const onPrevButtonClick = () => {
-
-        if (carouselPosition == 0)
-            return;
-
-        setCarouselPosition(carouselPosition + carouselMovementDistance);
-    }
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        setCarouselPosition((prev) => prev + itemWidth);
+    };
 
     const onNextButtonClick = () => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        setCarouselPosition((prev) => prev - itemWidth);
+    };
 
-        if (carouselPosition < -carouselWidth)
-            return;
+    const onTransitionEnd = () => {
+        setIsTransitioning(false);
+        if (carouselPosition >= 0) {
+            setCarouselPosition(-itemWidth * totalThumbnails);
+        } else if (carouselPosition <= -itemWidth * (totalThumbnails + 3)) {
+            setCarouselPosition(-itemWidth*3);
+        }
+    };
 
-        setCarouselPosition(carouselPosition - carouselMovementDistance);
-    }
-
-
-    return(
+    return (
         <div className="carousel-content">
-            <button className={`corona-carousel-btn ${prevButtonVisible ? "" : "invisible"}`} onClick={onPrevButtonClick}>
-                <FaChevronLeft/>
+            <button className="corona-carousel-btn-left" onClick={onPrevButtonClick}>
+                <FaChevronLeft />
             </button>
             <div className="corona-carousel-slide rounded">
-                <div id="carouselInner" className="corona-carousel-inner" style={{ transform: `translateX(${carouselPosition}px)` }}>
-                    {
-                        props.thumbnails.map(thumbnail => {
-                            return <EnvironmentThumbnail
-                                        key={thumbnail.id}
-                                        name={thumbnail.name}
-                                        image={thumbnail.image}
-                                        id={thumbnail.id}
-                                        onEvents={thumbnail.onEvents}/>
-                        })
-                    }
+                <div ref={carouselInnerRef} id="carouselInner" className="corona-carousel-inner" style={{ transform: `translateX(${carouselPosition}px)`, transition: isTransitioning ? 'transform 0.5s' : 'none' }} onTransitionEnd={onTransitionEnd}>
+                    {adjustedThumbnails.map((thumbnail, index) => (
+                        <EnvironmentThumbnail
+                            key={index}
+                            name={thumbnail.name}
+                            image={thumbnail.image}
+                            id={thumbnail.id}
+                            onEvents={thumbnail.onEvents} />
+                    ))}
                 </div>
             </div>
-            <button className={`corona-carousel-btn right ${nextButtonVisible ? "" : "invisible"}`} onClick={onNextButtonClick}>
-                <FaChevronRight/>
+            <button className="corona-carousel-btn-rigth" onClick={onNextButtonClick}>
+                <FaChevronRight />
             </button>
         </div>
     );
-}
+};

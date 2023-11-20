@@ -3,4 +3,5 @@ export interface IDesignType{
     source:string
     name:string
     mosaicValue:number
+    mosaicId:number
 }

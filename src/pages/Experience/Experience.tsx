@@ -6,6 +6,8 @@ import { SelectSurfaceView } from "./components/select-surface-view/select-surfa
 import "./Experience.css";
 import { ExperienceViews } from "../../shared/enums/routes.enum";
 import Singleton from "../../core/patterns/singleton";
+import ForegroundWithMessage from "./components/select-surface-view/FullscreenForeground";
+import { isVisible } from "@testing-library/user-event/dist/utils";
 
 
 
@@ -13,7 +15,18 @@ import Singleton from "../../core/patterns/singleton";
 export const Experience = () => {
 
     const [ porcent, setProcent ] = useState<number>(0);
+    const [ visible, setIsVisible ] = useState(false);
     const [ content, setContent ] = useState<ExperienceViews>(ExperienceViews.EnvironmentType);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(true);
+        }, 2000); // This will set 'visible' to true after 4 seconds
+
+        // Cleanup the timer when the component unmounts
+        return () => clearTimeout(timer);
+    }, []); // Empty dependency array ensures this runs once when the component mounts
+
 
     // Passing `setContent` function to singleton
     Singleton.getInstance().setContentFunc = setContent;
@@ -21,16 +34,21 @@ export const Experience = () => {
 
     return(
         <div className="experience-content">
-            <BrandNavbar
-                number={porcent}
-                sendDataParent={setProcent}
-            />
-            {content ==ExperienceViews.EnvironmentType? <SelectSurfaceView
-               
-            />:content ==ExperienceViews.Environment? <SelectEnvironmentView
-               
-            />:<ExperienceView currentView={Singleton.getInstance().currentExperienceView} />}
-           
+            {visible && <>
+                <BrandNavbar
+                    number={porcent}
+                    sendDataParent={setProcent}
+                />
+
+                {content === ExperienceViews.EnvironmentType ? 
+                    <SelectSurfaceView /> 
+                    : content === ExperienceViews.Environment ? 
+                    <SelectEnvironmentView /> 
+                    : 
+                    <ExperienceView currentView={Singleton.getInstance().currentExperienceView} />
+                }
+            </>}
+            <ForegroundWithMessage />
         </div> 
     );
 }

@@ -8,7 +8,7 @@ interface MosaicActionsBarProps {
 export const MosaicActionsBar: React.FC<MosaicActionsBarProps> = (props) => {
     return(
 
-        <div className="action__buttons">
+        <div className="action__buttons" id="action__buttons">
             <>
             {
                 props.buttons.map((actionButton, index) => {

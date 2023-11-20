@@ -7,6 +7,6 @@ export interface IFormat{
     name:string
     width:number
     height:number
-    scale:number
+    scale:number|1,
     formats:IStructure[],
 }

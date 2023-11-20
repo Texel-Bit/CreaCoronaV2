@@ -1,7 +1,7 @@
 
 export enum ExperienceRoutes {
-    Login = '/',
-    Experience = '/experience'
+    Login = '/Login',
+    Experience = '/'
 }
 
 export enum ExperienceViews {

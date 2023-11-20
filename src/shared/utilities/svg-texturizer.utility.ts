@@ -7,6 +7,31 @@ export interface TexturizeSvgOptions {
     tile: number;
 }
 
+// Cache repeated attribute settings or common queries.
+const filterAttrs: { [key: string]: string } = {
+    'id': 'multiply-filter',
+    'x': '0',
+    'y': '0',
+    'width': '100%',
+    'height': '100%'
+  };
+  
+  const feImageAttrs: { [key: string]: string } = {
+    'result': 'texture',
+    'x': '0',
+    'y': '0',
+    'preserveAspectRatio': 'xMidYMid slice',
+    'min-width': '100%',
+    'min-height': '100%'
+  };
+  
+  const feBlendAttrs: { [key: string]: string } = {
+    'mode': 'multiply',
+    'in': 'SourceGraphic',
+    'in2': 'texture'
+  };
+  
+
 interface LinealGradientConfig {
     id: string;
     x1: string;
@@ -96,29 +121,23 @@ public rotateSvg = (svgElement: HTMLElement, rotation: number): SVGSVGElement =>
 
     
 
+public addFilter = (svgElement: HTMLElement, filterUrl: string) => {
+  const filterId = this._addSvgFilter(svgElement, filterUrl);
 
-    public addFilter = (svgElement: HTMLElement, filterUrl: string) => {
-        let filterId = this._addSvgFilter(svgElement, filterUrl);
+  // Combine all the selectors into a single querySelectorAll call
+  const elements = svgElement.querySelectorAll('defs pattern image, path, rect');
 
-        const imageTagsList = svgElement.querySelectorAll('defs pattern image');
-        const imagePathList = svgElement.querySelectorAll('path');
-        const imageRectList = svgElement.querySelectorAll('rect');
-
-        Array.from(imageTagsList).map((image, index) => {
-            image.setAttribute('filter', `url(#${filterId})`);
-        });
-
-        Array.from(imagePathList).map((image, index) => {
-            let fillAttribute = String(image.getAttribute('fill'));
-
-            if (!fillAttribute.includes('url')&& image.id.includes("layer"))
-                image.setAttribute('filter', `url(#${filterId})`);
-        });
-
-        Array.from(imageRectList).map((image, index) => {
-            image.setAttribute('filter', `url(#${filterId})`);
-        });
+  elements.forEach((element) => {
+    if (element.tagName === 'image' || element.tagName === 'rect') {
+      element.setAttribute('filter', `url(#${filterId})`);
+    } else if (element.tagName === 'path') {
+      const fillAttribute = element.getAttribute('fill') || '';
+      if (!fillAttribute.includes('url') && element.id.includes("layer")) {
+        element.setAttribute('filter', `url(#${filterId})`);
+      }
     }
+  });
+};
 
 
     public rotateImage = (svgElement: HTMLElement, degrees: number) => {
@@ -291,37 +310,45 @@ public rotateSvg = (svgElement: HTMLElement, rotation: number): SVGSVGElement =>
     }
 
 
+    
     private _addSvgFilter = (svgElement: HTMLElement, filterUrl: string): string => {
-        let filterId = 'multiply-filter';
-        let filter = document.createElementNS(this.SVG_NAMESPACE, 'filter');
-        filter.setAttribute('id', filterId);
-        filter.setAttribute('x', '0');
-        filter.setAttribute('y', '0');
-        filter.setAttribute('width', '200%');
-        filter.setAttribute('height', '200%');
-
-        let feImage = document.createElementNS(this.SVG_NAMESPACE, 'feImage');
+        const filter = document.createElementNS(this.SVG_NAMESPACE, 'filter');
+        const feImage = document.createElementNS(this.SVG_NAMESPACE, 'feImage');
+        const feBlend = document.createElementNS(this.SVG_NAMESPACE, 'feBlend');
+      
+        // Set attributes in a loop to reduce repeated calls
+        Object.keys(filterAttrs).forEach(key => filter.setAttribute(key, filterAttrs[key]));
+        Object.keys(feImageAttrs).forEach(key => feImage.setAttribute(key, feImageAttrs[key]));
+        Object.keys(feBlendAttrs).forEach(key => feBlend.setAttribute(key, feBlendAttrs[key]));
+      
         feImage.setAttributeNS(this.LINK_NAMESPACE, 'href', filterUrl);
-        feImage.setAttribute('result', 'texture');
-        feImage.setAttribute('x', '0');
-        feImage.setAttribute('y', '0');
-        feImage.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-        feImage.setAttribute('min-width', '100%');
-        feImage.setAttribute('min-height', '100%');
+      
+        const feComponentTransfer = document.createElementNS(this.SVG_NAMESPACE, 'feComponentTransfer');
+  
+  const createFeFunc = (type: string, slope: string) => {
+    const feFunc = document.createElementNS(this.SVG_NAMESPACE, `feFunc${type}`);
+    feFunc.setAttribute('type', 'linear');
+    feFunc.setAttribute('slope', slope);
+    return feFunc;
+  };
 
-        let feBlend = document.createElementNS(this.SVG_NAMESPACE, 'feBlend');
-        feBlend.setAttribute('mode', 'multiply');
-        feBlend.setAttribute('in', 'SourceGraphic');
-        feBlend.setAttribute('in2', 'texture');
+  // You can change the 'slope' attribute to set the brightness.
+  // Slope > 1 will increase brightness, slope < 1 will decrease it.
+  feComponentTransfer.appendChild(createFeFunc('R', '4'));
+  feComponentTransfer.appendChild(createFeFunc('G', '4'));
+  feComponentTransfer.appendChild(createFeFunc('B', '4'));
 
+
+        
         filter.appendChild(feImage);
+        filter.appendChild(feComponentTransfer); // Add the component transfer after existing elements
         filter.appendChild(feBlend);
-
-        let defsElement = this._getElementDefs(svgElement);
+      
+        const defsElement = this._getElementDefs(svgElement);
         defsElement.appendChild(filter);
-
-        return filterId;
-    }
+      
+        return filterAttrs.id;
+      };
 
 
     private _addSvgPattern = (svgElement: HTMLElement, patternSettings: TexturizeSvgOptions,id:number): string => {

@@ -1,7 +1,7 @@
 import { StructureThumbnail, StructureThumbnailProps } from "./structure-thumbnail/structure-thumbnail.component";
 import "./experience-structure-selection.css";
 import { IStructure } from "../../../core/models/structure/structure.model";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Singleton from "../../../core/patterns/singleton";
 
 
@@ -12,11 +12,35 @@ interface ExperienceStructureSelectionProps {
 
 export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionProps> = (props) => {
     
-   
+    const [selectedStructureId, setSelectedStructureId] = useState<number | null>(null);
+
+    useEffect(() => {
+        if(props.structures.length>0)
+        {
+            console.log("New structure ",props.structures);
+       
+            ChangeStructure(props.structures[0].structure);
+        }
+        
+        
+    }, [props.structures]);
+
+    useEffect(() => {
+
+        if(props.structures[0])
+        {
+           ChangeStructure(props.structures[0].structure);
+        }
+        
+    }, [Singleton.getInstance().currentFormat]);
 
     
+
+
+
     function ChangeStructure(structure: IStructure)
     {
+        setSelectedStructureId(structure.id);
         Singleton.getInstance().ChangeStructure(structure)
     }
     
@@ -33,6 +57,7 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
                     props.structures.map(struct => {
                         return <StructureThumbnail 
                                 key={`structureThumbnail${struct.structure.id}`}
+                                isSelected={selectedStructureId === struct.structure.id}
                                 structure={struct.structure}
                                 onClick={ChangeStructure}/>
                     })
