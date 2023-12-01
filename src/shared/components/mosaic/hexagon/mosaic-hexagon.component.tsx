@@ -18,7 +18,7 @@ export const MosaicHexagon: React.FC<ExperienceMosaicHexagonProps> = (props) => 
       <style>
         {`
           .mosaic-hexagon {
-            width: 300px; 
+            width: 329px; 
             height: 378px !important;
             display: flex;
             justify-content: center;
@@ -41,8 +41,8 @@ export const MosaicHexagon: React.FC<ExperienceMosaicHexagonProps> = (props) => 
             height: 189px; 
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin-bottom: -26px; 
+            align-items: center; 
+            scale:97%
           }
 
           .hexagon svg {
@@ -54,17 +54,22 @@ export const MosaicHexagon: React.FC<ExperienceMosaicHexagonProps> = (props) => 
           // Adjustments for first and last hexagon in column 1 and 3 for vertical centering
           .hexagon-column-1 .hexagon:first-child,
           .hexagon-column-3 .hexagon:first-child {
-            margin-top: 84px; 
+
           }
 
           .hexagon-column-1 .hexagon:last-child,
           .hexagon-column-3 .hexagon:last-child {
-            margin-bottom: 84px; 
+
           }
 
-          // Specific adjustments to the middle column to align properly with the sides
+          .hexagon-column-1 {
+            transform: translateX(54.75px);
+          }
           .hexagon-column-2 {
-            transform: translateY(94.5px);
+            transform: translateY(-94.5px);
+          }
+          .hexagon-column-3 {
+            transform: translateX(-54.75px);
           }
         `}
       </style>

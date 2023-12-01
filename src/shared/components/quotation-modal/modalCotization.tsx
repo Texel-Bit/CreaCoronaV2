@@ -150,7 +150,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
         let response = await simulateQuotation(QuotationData);
         console.log(QuotationData);
         setCalculate(false);
-        setUnits(response.data.cantidadValdosas);
+        setUnits(response.data.tileAmmount);
 
         const formattedValue = formatter.format(response.data.quotationPrice);
         setPrice(formattedValue);

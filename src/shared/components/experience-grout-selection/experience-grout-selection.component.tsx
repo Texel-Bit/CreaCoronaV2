@@ -13,6 +13,7 @@ export const ExperienceGroutSelection:React.FC<ExperienceGroutSelectionProps> = 
 
     const groutImage = "https://corona.texelbit.com:9445/uploads/Brecha/1c4806ac-7bc6-43c2-b4ce-3f74156f7499.png";
 
+    console.log(props.grouts)
     
     return(
         <div className='mw-100 overflow-hidden' >

@@ -2,11 +2,11 @@ import { getRequest, postRequest } from "./base.service";
 
 
 export const getAllDesignType = () => 
-    getRequest("desingType/getAllDesignType");
+    getRequest("designType/getAllDesignType");
 
 
 export const getAllDesignByTypeId = (desingTypeId: number,idEnvironmentTypeId:number) =>
-    postRequest("desingType/getAllDesignTypeTest", { idDesignType: desingTypeId,idEnvironmentType:idEnvironmentTypeId });
+    postRequest("design/getDesignsByEnvironmentType", { DesignType_idDesignType: desingTypeId,EnvironmentType_idEnvironmentType:idEnvironmentTypeId });
 
 
 export const getDesignColorsByType = (designTypeId: number, environmentTypeId: number) => {
@@ -21,17 +21,24 @@ export const getDesignColorsByType = (designTypeId: number, environmentTypeId: n
 
 export const getAllDesignColorsBundle = (designTypeId: number, designColorTypeId:number, environmentTypeId: number) => {
     
-    console.log("Getting bundle  ");
+    
     let params = {
-        idDesignType: designTypeId,
-        idDesignColorType: designColorTypeId,
-        idEnvironmentType: environmentTypeId,
+        DesignType_idDesignType: designTypeId,
+        DesignColorType_idDesignColorType: designColorTypeId,
+        EnvironmentType_idEnvironmentType: environmentTypeId,
     }
     
-    console.log(params,"Paraaaaaaaaaaams  ");
+
     return postRequest("designColorBundle/getAllDesignColorBundleByFilters", params);
 }
 
 
 export const getAllGrouts = () =>
-    getRequest("brecha/getAllBrecha");
+    getRequest("grout/getAllGroutes");
+
+
+export const getAllDesignColorsByDesignTypeId = (designTypeId: number) =>
+    getRequest("designColors/getAllDesignColorsByDesignTypeId/"+designTypeId);
+
+
+    

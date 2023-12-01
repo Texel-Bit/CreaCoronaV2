@@ -4,11 +4,13 @@ import './experience-design-selection.component.css';
 import { IDesign } from '../../../core/models/design/design.model';
 import DesignDataManager from '../../../core/managers/desig-data.manager';
 import { getServerImagesUrl } from '../../utilities/format-server-endpoints.utility';
-import { getAllDesignByTypeId } from '../../../core/services/design.service';
+import { getAllDesignByTypeId, getAllDesignColorsByDesignTypeId } from '../../../core/services/design.service';
 import Singleton from '../../../core/patterns/singleton';
 import { IColor } from '../../../core/models/color/color.model';
 import { IFormat } from '../../../core/models/format/format.model';
 import { IStructure } from '../../../core/models/structure/structure.model';
+import { getAllFormatSizeByEnvironmentType } from '../../../core/services/formatSize.service';
+import { getDesignTypeFormatSizByEnvironmentTypeId } from '../../../core/services/environment.service';
 
 interface ExperienceDesingSelectionProps {
     designTypes: IDesignType[],
@@ -70,13 +72,17 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     
                 Singleton.getInstance().selectedDesignType = selectedDesignType;
     
-                console.log("Fetching colors by design type ID...");
-                const ColorList = await getAllDesignByTypeId(selectedDesignType.id,Singleton.getInstance().currentEnvironmentType?.id||0);
-                console.log("Fetched ColorList:", ColorList);
+
+                const DesignList = await getAllDesignByTypeId(selectedDesignType.id,Singleton.getInstance().currentEnvironmentType?.id||0);
+                const DesignTypesFormatSize = await getDesignTypeFormatSizByEnvironmentTypeId(Singleton.getInstance().currentEnvironmentType?.id||0);
+
     
                 let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1,mosaicId:1 };
     
-                let currenDesignColors:IDesign[] = ColorList.data.Design.map((element: any) => {
+                
+
+                let currenDesignColors:IDesign[] = DesignList.data.map((element: any) => {
+                   
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     let currDesign: IDesign = {
                         id: element.idDesign,
@@ -90,14 +96,20 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 });
                 
     
-                ColorList.data.DesignTypeFormatSize.map((element: any) => {
-                    console.log("Current design Element:", element);
+                const FormatsType = await getAllFormatSizeByEnvironmentType(Singleton.getInstance().currentEnvironmentType?.id||0);
+               
+
+                FormatsType.data.map((element: any) => {
+
+                    
                    
                     let FormatSizetexture = element.FormatSizeTexture.map((structure: any) => {
+                       
                         let colorTypes = structure.DesignColorType_has_FormatSizeTexture.map((colorType: any) => {
                             return colorType.DesignColorType_idDesignColorType;
                         });
                         
+
                         let currStructure: IStructure = {
                             id: structure.idFormatSizeTexture,
                             name: structure.FormatSizeTextureName,
@@ -107,6 +119,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         return currStructure;
                     });
     
+
                     let currFormat: IFormat = {
                         id:element.idDesignTypeFormatSize,
                         name:element.DesignTypeFormatSizeName,
@@ -116,8 +129,10 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         scale:element.DesignTypeFormatSizeMosaicScale,
                         formats:FormatSizetexture
                     };
-    
-                    if(element.DesignTypeFormatSize_has_EnvironmentType.length>0)
+                    
+                    
+
+                    if(DesignTypesFormatSize.data.length>0)
                     {
                         if(!defaultFormatSize) {
                             defaultFormatSize=currFormat;
@@ -127,11 +142,17 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         Singleton.getInstance().addFormat(currFormat);
                     }
 
+
+                   
                    
                     return currFormat;
                 });
-    
-                let currentColors = ColorList.data.DesignColors.map((element: any) => {
+
+                const ColorList = await getAllDesignColorsByDesignTypeId(selectedDesignType.id);
+
+
+                let currentColors = ColorList.data.map((element: any) => {
+                    
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
                     
                     let currDesign: IColor = {

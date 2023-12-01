@@ -29,6 +29,7 @@ import calculaOn from '../../../assets/icons/CalcularOn.svg';
 
 import Singleton from "../../../core/patterns/singleton";
 import { Height } from "@material-ui/icons";
+import { closeSession, openSession } from "../../../core/services/session.service";
 
 
 interface propValue {number:number; sendDataParent:(data:number)=>void }
@@ -50,14 +51,39 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
     const [ value , setValue ] = useState(props.number)
 
     Singleton.getInstance().evaluatePercentageFunc = setValue;
-
+    
     useEffect(() => {
         const d = sessionStorage.getItem('data');
+
+        const initializeSession = async () => {
+            if(!Singleton.getInstance().sessionInitialized) {
+                Singleton.getInstance().sessionInitialized = true;
+                const sessionData = await openSession();
+                console.log(sessionData)
+                sessionStorage.setItem('idsession',sessionData.idsession)
+            }
+        };
+        
         if (d) {
           const data: dataResponse = JSON.parse(d);   
           sessionStorage.setItem('infoUser',data.token)  
           setUserData(data.user)   
         }
+
+        initializeSession(); // Call the async function
+
+      // Set up an interval to close the session every 10 seconds
+      const intervalId = setInterval(async () => {
+        if (Singleton.getInstance().sessionInitialized) {
+            await closeSession(sessionStorage.getItem('idsession'));
+        }
+    }, 10000); // 10000 milliseconds = 10 seconds
+
+    // Clear the interval when the component unmounts
+    return () => {
+        clearInterval(intervalId);
+    };
+
     },[]);
 
     useEffect(()=>{props.sendDataParent(value)},[value])

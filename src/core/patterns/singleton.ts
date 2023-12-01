@@ -44,6 +44,7 @@ class Singleton {
   public quotationWidth:number= 0;
   public quotationHeight:number= 0;
   public quotationSended:boolean= false;
+  public sessionInitialized:boolean= false;
 
   public mosaicImage:any;
   public simulationImage:any;

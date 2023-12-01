@@ -40,8 +40,9 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                if(Singleton.getInstance().getDesignTypeDataManager().getAllDesignTypes().length==0)
                {
                     const designTypes=await getAllDesignType();
+                    
                     designTypes.data.forEach((element2: any) => {
-                    console.log(element2)
+                    
                     let currentDesignType: IDesignType = {
                         name:element2.DesignTypeName,
                         id:element2.idDesignType,
@@ -59,7 +60,8 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                {
                 let response = await getAllEnvironmentType();
 
-                console.log(response);
+               
+
                 response.data.forEach((element: any) => {
                     
                     let designTypeList:number[]; 
@@ -87,14 +89,16 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 });
                }
 
-                handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
-            
               
+
+                handlerResponse(singleton.getEnvironmentTypeDataManager().getAllEnvironmentTypeArray());
+
                 if(Singleton.getInstance().currentStateList!.length==0)
                 {
                     const states=await getAllState();
 
-                            
+                    console.log(states);
+    
 
                     states.data.forEach((element2: any) => {
                     let currentState: IState = {
@@ -115,11 +119,12 @@ export const SelectSurfaceView:React.FC<surface> = (props) => {
                 {
                     const grouts=await getAllGrouts();
 
+                    console.log(grouts.data)
                     grouts.data.forEach((grout: any) => {
                      let currentDesignType: IGrout = {
-                         name:grout.brechaName,                     
-                         id:grout.idbrecha,                     
-                         source:grout.brechaColorPath                     
+                         name:grout.groutName,                     
+                         id:grout.idgrout,                     
+                         source:grout.groutColorPath                     
                        };
      
                        singleton.addGrout(currentDesignType);

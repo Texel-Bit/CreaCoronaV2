@@ -73,6 +73,7 @@ export const ExperienceColorPaletteSelection = () => {
                         );
                         
 
+                       
 
                         CurrColorsSelected.data.forEach((element: {idDesignColorBundle:any,DesignColorBundleName:any, DesignColorInBundle: any[]; }) => {
 
@@ -81,16 +82,17 @@ export const ExperienceColorPaletteSelection = () => {
                             element.DesignColorInBundle.forEach(color => {
 
                                 let currentColor:IColor = {
-                                    id:color.idDesignColors,
-                                    source:color.DesignColorPath,
-                                    name:color.DesignColorName,
+                                    id:color.DesignColors.idDesignColors,
+                                    source:color.DesignColors.DesignColorPath,
+                                    name:color.DesignColors.DesignColorName,
                                     design: Singleton.getInstance().selectedDesignType ,
-                                    isFullField: color.DesignColorType_idDesignColorType == 1 ? true : false,
+                                    isFullField: color.DesignColors.DesignColorType_idDesignColorType == 1 ? true : false,
                                 };
                                 
                                 if(currentColor) colorArray.push(currentColor);
                             })
-                                                    
+                                 
+                            
                             let currBundle:IColorBundle = {  // use '=' instead of '{'
                                 id: element.idDesignColorBundle,
                                 bundleName: element.DesignColorBundleName,
@@ -101,6 +103,7 @@ export const ExperienceColorPaletteSelection = () => {
                                              
                         }); 
                         
+                        console.log("New ",CurrColorsSelected)
 
                         setColorBundles(Singleton.getInstance().colorBundleList);
 
