@@ -76,7 +76,7 @@ export const QuotationModal: React.FC<QuotationModalProps> = (props) => {
     let response = await createQuotation(QuotationData);
     setQuotazing(false);
     setCalculate(false);
-    if (response.status == true) {
+    if (response.status == "success") {
         NotificationManager.showAlert({
           icon: 'success',
           title: 'Cotizacion Enviada',

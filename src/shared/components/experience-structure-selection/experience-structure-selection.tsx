@@ -22,7 +22,7 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
             ChangeStructure(props.structures[0].structure);
         }
         
-        
+        console.log("Structures 2 ",props.structures)
     }, [props.structures]);
 
     useEffect(() => {
@@ -31,11 +31,9 @@ export const ExperienceStructureSelection:React.FC<ExperienceStructureSelectionP
         {
            ChangeStructure(props.structures[0].structure);
         }
-        
+        console.log("Structures ",props.structures)
+
     }, [Singleton.getInstance().currentFormat]);
-
-    
-
 
 
     function ChangeStructure(structure: IStructure)

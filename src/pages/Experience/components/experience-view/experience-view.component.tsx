@@ -151,20 +151,29 @@ function SelectStructure (newStructure: IStructure)
 }
 
 
-function UpdateFormats(currrentFormats:IFormat[])
-{
-    let formatsCollection = currrentFormats.map(format => ({
-        format,
-        onClick: SelectFormat,
-        isSelected:false
-    }));
+function UpdateFormats(currrentFormats: IFormat[]) {
+
+    let formatsCollection = currrentFormats
+        .filter((format: IFormat) => 
+            format.DesignType_idDesignType === Singleton.getInstance().selectedDesignType?.id &&
+            format.formats.some(f => f.designColorType.includes(Singleton.getInstance().GetCurrenColorTypeID()))
+        )
+        .map(format => ({
+            format,
+            onClick: SelectFormat,
+            isSelected: false
+        }));
+
+    console.log("Formats New ", formatsCollection);
 
     setFormats(formatsCollection);
 }
 
 
+
 function UpdateStructures(currrentStructure:IStructure[])
 {
+
     let structuresCollection = currrentStructure.map(structure => ({
         structure,
         isSelected:false,

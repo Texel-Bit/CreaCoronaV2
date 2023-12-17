@@ -98,7 +98,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     
                 const FormatsType = await getAllFormatSizeByEnvironmentType(Singleton.getInstance().currentEnvironmentType?.id||0);
                
-
+                console.log(FormatsType);
+                
                 FormatsType.data.map((element: any) => {
 
                     
@@ -119,7 +120,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         return currStructure;
                     });
     
-
+                    console.log("Element format ",element)
                     let currFormat: IFormat = {
                         id:element.idDesignTypeFormatSize,
                         name:element.DesignTypeFormatSizeName,
@@ -127,7 +128,8 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         width:element.DesignTypeFormatSizeWidht,
                         height:element.DesignTypeFormatSizeHeight,
                         scale:element.DesignTypeFormatSizeMosaicScale,
-                        formats:FormatSizetexture
+                        formats:FormatSizetexture,
+                        DesignType_idDesignType:element.DesignType_idDesignType
                     };
                     
                     

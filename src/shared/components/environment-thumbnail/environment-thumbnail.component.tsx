@@ -3,6 +3,7 @@ import icon from "../../../assets/icons/background_grid_small.png";
 import icon2 from "../../../assets/icons/background_replace.png";
 import './environment-thumbnail.component.css';
 import Tooltip from "../Tooltip/Tooltip";
+import { getServerImagesUrl } from "../../utilities/format-server-endpoints.utility";
 
 export interface EnvironmentThumbnailProps{
     name: string;
@@ -24,8 +25,8 @@ export const EnvironmentThumbnail: React.FC<EnvironmentThumbnailProps> = (props)
             >
                 <div
                     className='environment-thumbnail-image'
-                    style={{ backgroundImage: `url("https://corona.texelbit.com:9445/${props.image}")` }}
-                >
+                    style={{ backgroundImage: `url(${getServerImagesUrl(props.image)})` }}
+                    >
                 </div>
 
                 <div style={{backgroundColor:"white"}} className='p-md-3 d-flex align-items-center justify-content-center gap-5'>

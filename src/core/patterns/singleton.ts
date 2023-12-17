@@ -170,6 +170,7 @@ updateViewStatusFunc: Array<() => void> = [];
 
 public SelectStructure(structure:IStructure)
 {
+    console.log(structure)
     this.currentStructure=structure;
     this.TexturizeMosaic();
 }
@@ -229,7 +230,8 @@ public GetQuotationData(infoUser:IUserCustomer,demo:number=1)
         customerEmail: infoUser.email,
         customerPhoneNumber: infoUser.phone,
         desingPatternImage: MosaicImage,
-        simulationImage: SimulationImage
+        simulationImage: SimulationImage,
+        Environment_idEnvironment:this.currentEnvironment?.id||0
        }
 
     return quotationParams;

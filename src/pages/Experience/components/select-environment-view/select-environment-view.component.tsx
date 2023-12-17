@@ -71,7 +71,7 @@ export const SelectEnvironmentView:React.FC<enviroment> = (props) => {
         <CoronaCarousel thumbnails={
             Singleton.getInstance().getEnvironmentDataManager().GetAllEnvironment().map((environment: IEnvironment)=>{
                 return {
-                    id: parseInt(environment.id),
+                    id: environment.id,
                     image: environment.source,
                     name: environment.name,
                     onEvents: [

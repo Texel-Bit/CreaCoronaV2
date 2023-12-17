@@ -8,5 +8,6 @@ export interface IFormat{
     width:number
     height:number
     scale:number|1,
+    DesignType_idDesignType:number,
     formats:IStructure[],
 }

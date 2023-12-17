@@ -21,6 +21,7 @@ export interface IQuotationParams {
     quotationWidth: number,
     customerName: string,
     idbrecha: number,
+    Environment_idEnvironment:number,
     customerLastname: string,
     customerEmail: string,
     customerPhoneNumber: string,

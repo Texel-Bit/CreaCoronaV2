@@ -5,7 +5,7 @@ class EnvironmentDataManager
 {
     private environmentList: IEnvironment[] = [];
 
-    public getEnvironmentById(id:string)
+    public getEnvironmentById(id:number)
     {
         return this.environmentList.find(env => env.id === id);
     }
