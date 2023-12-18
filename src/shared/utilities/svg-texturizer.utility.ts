@@ -59,6 +59,9 @@ class SvgTexturizer {
 
 
     public loadSvgByPath = async (path: string): Promise<HTMLElement> => {
+        
+        console.log("Path ",path);
+
         return await axios
             .get(path)
             .then(response => {
@@ -274,6 +277,8 @@ public addFilter = (svgElement: HTMLElement, filterUrl: string) => {
 
 
     private _buildSvgElement = async (svgUrl: string): Promise<HTMLElement> => {
+        
+        console.log("Svg before ",svgUrl)
         const svgElement = await this.loadSvgByPath(svgUrl);
 
         var xlinkNamespace = svgElement.getAttributeNS(this.XML_NAMESPACE, 'xmlns:xlink');
