@@ -40,7 +40,11 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
     const navigate = useNavigate();
     
     if( sessionStorage.getItem('data')==null )
-        navigate(ExperienceRoutes.Login);
+    {
+        console.log("Evaluate stored user data ")
+        // navigate(ExperienceRoutes.Login)
+    }
+       ;
 
     const [ userdata , setUserData ] = useState(Object);
     const [ value , setValue ] = useState(props.number)
@@ -67,7 +71,7 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
     return(
 
-        <div className="steeps-navbar bg-light p-2 d-flex gap-4 gap-sm-4 justify-content-between">
+        <div className="steeps-navbar bg-light p-2 d-flex gap-4 gap-sm-4 justify-content-between ">
 
             <img
                 src={LogoCreaCorona}
@@ -121,23 +125,24 @@ export const BrandNavbar:React.FC<propValue> = (props) => {
 
                 <div className="d-flex gap-3 align-items-center">
 
-                    <img
+                    {!sessionStorage.getItem("data")&&<img
                         style={{height: "24px"}}
                         src={ImageAvatar}
                         className="d-inline-block align-top h-1"
-                        alt="Usuario conectado"/>
-
+                        alt="Usuario conectado" 
+                        onClick={ outExperience }/>
+                    }
                         <div>
                             <h5 style={{color:"#213C65",fontFamily: 'Roboto'}} className='m-0 h5'>{userdata.userName}</h5>
                             <p style={{color:"#213C65",fontFamily: 'Roboto'}} className='m-0'>{userdata.email}</p>
                         </div>
 
-                    <img
+                    {sessionStorage.getItem("data")&&<img
                         src={ImageLogout}
                         className="d-inline-block align-top logout"
                         alt="Salir"
                         height={30}
-                        onClick={ outExperience }/>                    
+                        onClick={ outExperience }/>  }                  
 
                 </div>
 

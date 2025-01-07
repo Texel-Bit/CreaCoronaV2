@@ -14,6 +14,18 @@
 }
 
 .init-quotation-button:disabled {
-    border-color: var(--color-confirm-alert-border);
-    background-color: var(--color-confirm-alert-border);
+    border-color: var(--color-second);
+    background-color: var(--color-second);
+}
+
+/* For Chrome, Safari, and newer versions of Opera */
+.input-measure::-webkit-inner-spin-button,
+.input-measure::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+.input-measure {
+  -moz-appearance: textfield;
 }

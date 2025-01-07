@@ -2,6 +2,52 @@
     background-image: url(../../../../assets/image/home_corona.png);
     background-size: cover;
     display: flex;
+    flex: 2;
     align-items: center;
     justify-content: center;
 }
+
+.select-surface {
+    scale: 0.8;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    justify-content:center;
+    padding-bottom: 1.5rem;
+    gap: 30px;
+}
+
+@media screen and (min-width:1200px) and (max-width:1499px) {
+  .btnCustomCSS{
+    transform: scale(.8) !important;
+    bottom: 5% !important;
+    left: 0% !important;
+  }
+
+  .titleAmbientSelect{
+    margin-top: 20px;
+  }
+  .carousel-content{
+    height: 387px;
+  }
+}
+
+
+@media (min-width: 768px) { /* Bootstrap's medium breakpoint */
+    .select-surface {
+        padding-bottom: 0;
+    }
+}
+
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+  }
+  
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  

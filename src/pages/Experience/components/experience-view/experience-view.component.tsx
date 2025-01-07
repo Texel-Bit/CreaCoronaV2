@@ -10,8 +10,9 @@ import { MosaicHexagon } from "../../../../shared/components/mosaic/hexagon/mosa
 import { MosaicComponent } from "../../../../shared/components/mosaic/mosaic.component";
 import { MosaicSquare } from "../../../../shared/components/mosaic/square/mosaic-square.component";
 import { ExperienceViews } from "../../../../shared/enums/routes.enum";
+import {ColorIndexSelection} from "../ColorIndexSelection/colorIndexSelection.component"
 import './experience-view.component.css';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 
 import CozyIco from '../../../../assets/icons/view_cozy_ico.png'
 import PalletIco from '../../../../assets/icons/palette_ico.png'
@@ -36,7 +37,12 @@ import { ExperienceFormatThumbnailProps } from "../../../../shared/components/ex
 import { StructureThumbnailProps } from "../../../../shared/components/experience-structure-selection/structure-thumbnail/structure-thumbnail.component";
 import { getDesgignWithStructure } from "../../../../core/services/structure.services";
 import { PreviewModal, PreviewModalProps } from "../../../../shared/components/preview-modal/preview-modal.component";
-
+import * as lzString from 'lz-string';
+import TooltipMudi from "../../../../shared/components/TooltipMudi/TooltipMudi";
+import FullFieldColorStyle from "../../ExperienceStyles/FullFieldColorStyle";
+import WithDesignColorStyle from "../../ExperienceStyles/WithDesignColorStyle";
+import { ModalCanvasPreview } from "../../../../shared/components/quotation-modal/modalCanvasPreview";
+import { Fullscreen } from "@material-ui/icons";
 
 interface currentExperienceView
 {
@@ -55,6 +61,7 @@ interface contentData
 export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     
     let dict = new Map<ExperienceViews, contentData>();
+    const currentEnvironmentAngle = Singleton.getInstance().currentEnvironment?.environmentAngle;
 
     dict.set(ExperienceViews.Design, {
         title: "Diseña el revestimiento",
@@ -93,8 +100,15 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
     const [structures, setStructures] = useState<StructureThumbnailProps[]>();
     const [previewModalStatus, setPreviewModalStatus] = useState(false);
     const [bricksRotated, setBricksRotated] = useState(false);
+    const [colorSelectionLoaded, setColorSelectionLoaded] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [modalSize, setModalSize] = useState<"lg" | "sm" | "xl">("lg");
+
+    const [colorSelectionStyle, setColorSelectionStyle] = useState("FullFilledExperienceView");
     
+
     
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState<ReactElement>();
     
@@ -105,6 +119,16 @@ export const ExperienceView:React.FC<currentExperienceView>=(props) => {
 useEffect(() => {
     updateCanvas();
 }, [mosaicGrout, selectedDesigns, bricksRotated]);
+
+function closeModal() {
+    setModalOpen(false);
+  }
+
+useEffect(() => {
+    
+    setColorSelectionStyle(colorType==1?"FullFilledExperienceView":"WithDesignExperienceView");
+
+}, [colorType]);
 
 
 function ChangeChessMode()
@@ -131,7 +155,8 @@ function UpdateFormats(currrentFormats:IFormat[])
 {
     let formatsCollection = currrentFormats.map(format => ({
         format,
-        onClick: SelectFormat
+        onClick: SelectFormat,
+        isSelected:false
     }));
 
     setFormats(formatsCollection);
@@ -142,6 +167,7 @@ function UpdateStructures(currrentStructure:IStructure[])
 {
     let structuresCollection = currrentStructure.map(structure => ({
         structure,
+        isSelected:false,
         onClick: SelectStructure
     }));
 
@@ -153,89 +179,194 @@ function MosaicGroutChanged(currrentGrout:IGrout)
     setMosaicGrout(getServerImagesUrl(currrentGrout.source))
 }
 
+function ChangeColorIndex(currentIndex:number)
+{
+    const componentName="color-option"+currentIndex;
+    Singleton.getInstance().colorIndex=currentIndex;
+    console.log(componentName) 
+}
 
 useEffect(() => {
+    try {
+        // Get Singleton instance for easier access
+        const instance = Singleton.getInstance();
 
-    if(Singleton.getInstance().currentGrout)
-    {
-        Singleton.getInstance().ChangeGrout(Singleton.getInstance().currentGrout);
+        // Update grout if it exists
+        if (instance.currentGrout) {
+            instance.ChangeGrout(instance.currentGrout);
+        }
+
+        // Update design types
+        const currentDesignTypes = instance.currentEnvironmentType?.designTypes ?? [];
+        setDesignTypes(currentDesignTypes);
+
+        // Assign update functions
+        instance.updateMosaicGroutFunc = MosaicGroutChanged;
+        instance.updateMosaicFunc = updateMosaic;
+        instance.updateFormatsFunc = UpdateFormats;
+        instance.updateStructuresFunc = UpdateStructures;
+
+        // Update canvas mask if environment exists
+        if (instance.currentEnvironment) {
+            const maskImage = getServerImagesUrl(instance.currentEnvironment?.maskImage ?? "");
+            setCanvasMask(maskImage);
+        }
+    } catch (error) {
+        // Log any errors that occur during execution
+        console.error("Error in useEffect:", error);
     }
 
-    let currentDesignTypes = Singleton.getInstance().currentEnvironmentType?.designTypes ?? [];
-    
-    setDesignTypes(currentDesignTypes);
+ 
 
-    Singleton.getInstance().updateMosaicGroutFunc=MosaicGroutChanged;
-    Singleton.getInstance().updateMosaicFunc = updateMosaic;
-    Singleton.getInstance().updateFormatsFunc = UpdateFormats;
-    Singleton.getInstance().updateStructuresFunc = UpdateStructures;
-
-    if (Singleton.getInstance().currentEnvironment != null)
-    {
-        let maskImage = getServerImagesUrl(Singleton.getInstance().currentEnvironment?.maskImage ?? "");
-        setCanvasMask(maskImage);
-    }
 }, []);
 
 
-    const defineCanvasSize = () => {
-        let formatWidth = Singleton.getInstance().currentFormat?.width ?? 1;
-        let formatHeight = Singleton.getInstance().currentFormat?.height ?? 1;
-        let imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
+useEffect(()=>{
+    console.log("Color selelction changed")
+    if(colorSelectionLoaded)
+    {
+        var contenedor = document.getElementById("FullMosaicComponent");
 
-        let newSize = (Singleton.getInstance().currentEnvironment?.environmentAngle.size + Singleton.getInstance().currentFormat?.scale) * imageSize;
-        setSelectedFormatSize(newSize);
+        var div2 = document.getElementById("action__buttons");
+        
+        var nuevoDiv = document.getElementById("ColorIndexSelection");
+        
+        if(contenedor && nuevoDiv)
+        {
+            contenedor.insertBefore(nuevoDiv, div2);
+        
+        }  
+        console.log("Loaded colors finish")
     }
+
+
+},[colorSelectionLoaded])
+
+const defineCanvasSize = () => {
+    try {
+      // Destructure for easier access
+      const { currentFormat, currentEnvironment } = Singleton.getInstance();
+  
+      // Use nullish coalescing to provide default values
+      const formatWidth = currentFormat?.width ?? 1;
+      const formatHeight = currentFormat?.height ?? 1;
+      const formatScale = parseFloat(currentFormat?.scale?.toString() ?? "1");
+  
+      // Calculate image size using Pythagorean theorem
+      const imageSize = Math.sqrt(formatWidth ** 2 + formatHeight ** 2);
+  
+      // Log current format and image size for debugging
+      console.log(currentFormat, " img size ", imageSize, currentFormat?.scale);
+  
+      // Calculate new size
+      const environmentSize = currentEnvironment?.environmentAngle.size ?? 0;
+      const newSize = (environmentSize + formatScale) * imageSize;
+  
+      // Log new size for debugging
+      console.log("New Size ", newSize);
+  
+      // Set the new size
+      setSelectedFormatSize(newSize);
+    } catch (error) {
+      // Log any errors
+      console.error("Error defining canvas size:", error);
+    }
+  };
+  
 
     const defineCanvasPerspective = () => {
         let newPerspective = Singleton.getInstance().currentEnvironment?.environmentAngle.perspective;
         setSelectedPerspective(newPerspective);
     }
 
-    const getDesignByServer = async (element: HTMLElement) => {
+    const getDesignByServer = async (element: HTMLElement): Promise<string> => {
+        try {
 
-        let requestBody = {
-            svgsContent: btoa(element?.outerHTML ?? ""),
+            const compressedSvg = lzString.compressToBase64(element.outerHTML);
+          // Prepare the request body
+          const requestBody = {
+            svgsContent: compressedSvg, // No need for nullish coalescing since 'element' is defined
             width: element.clientWidth,
-            height: element.clientHeight
-        };
-
-        let response = await getDesgignWithStructure(requestBody);
-
-        if (response.status)
-            return response.data as string;
-
-        return "";
-    }
-
+            height: element.clientHeight,
+          };
+      
+          // Make the API call
+          const response = await getDesgignWithStructure(requestBody);
+      
+          // Destructure the response object
+          const { status, data } = response;
+      
+          // Log the complete response for debugging
+          console.log(response);
+      
+          // Return the data if the request was successful
+          if (status) {
+            return data as string;
+          }
+      
+          // Return an empty string if the request was not successful
+          return '';
+        } catch (error) {
+          // Log any errors
+          console.error('Error fetching design:', error);
+      
+          // Return an empty string in case of an error
+          return '';
+        }
+      };
+      
 
     const updateCanvas = async () => {
 
+        const singleton = Singleton.getInstance();
         let element = document.getElementById("mosaic-element") as HTMLElement;
-
-        if (!element)
-            return;
-
+    
+        if (!element) return;
+    
+        if (singleton.currentExperienceView !== ExperienceViews.Format) {
+            singleton.currentStructure = null;
+        }
+    
         await new Promise(resolve => setTimeout(resolve, 500));
-
-        if (Singleton.getInstance().currentExperienceView !== ExperienceViews.Format)
-            Singleton.getInstance().currentStructure = null;
-
+    
+        // Checking once and storing to avoid multiple calls to getInstance
+        const currentExperienceView = singleton.currentExperienceView;
+        const selectedDesignTypeId = singleton.selectedDesignType?.id;
+    
         defineCanvasSize();
         defineCanvasPerspective();
-
+    
         let elementSvg: string = "";
-
-        if (Singleton.getInstance().currentExperienceView == ExperienceViews.Format && Singleton.getInstance().selectedDesignType?.id != 3 /*SOLO HEXAGONOS NO PASAN POR SERVER*/)
+    
+        if (currentExperienceView === ExperienceViews.Format && selectedDesignTypeId !== 3) {
             elementSvg = await getDesignByServer(element);
-        else
+        } else {
             elementSvg = await convertHtmlToImage(element);
+        }
+    
+
+        switch(Singleton.getInstance().selectedDesignType?.mosaicId)
+        {
+            case 1:
+                setModalSize("lg")
+                break;
+                case 3:
+                    setModalSize("lg")
+                    break;
+                    case 4:
+                        setModalSize("lg")
+                        break;
+                        default:
+                            setModalSize("lg")
+                            break;
+        }
 
         setCanvasImage(elementSvg ?? "");
-        Singleton.getInstance().mosaicImage = elementSvg;
-
+        singleton.mosaicImage = elementSvg;
+    
         SetupsTitles();
     }
+    
 
     function updateMosaic(mosaicElements:HTMLElement[]) {
         let colorTypeId = Singleton.getInstance().GetCurrenColorTypeID();
@@ -244,91 +375,94 @@ useEffect(() => {
     }
 
     
-    function ChangeView(experieceView: ExperienceViews | null, value:number)
-    {
-        if(experieceView)
-        {
-            let numericalValue: number = experieceView;
-            let view: ExperienceViews = numericalValue + value;
-            Singleton.getInstance().ChangeExperienceView(view);
-            if (view != ExperienceViews.Format)
-            {
-                Singleton.getInstance().currentStructure=null;
+    function ChangeView(experienceView: ExperienceViews | null, value: number) {
+        // Early return if experienceView is null
+        if (!experienceView) return;
+    
+        const singleton = Singleton.getInstance();
+    
+        // Calculate the new view based on the current one and the passed value
+        const newView: ExperienceViews = experienceView + value;
+    
+        // Update the experience view in the Singleton instance
+        singleton.ChangeExperienceView(newView);
+    
+        // Clear the current structure if the new view is not "Format"
+        if (newView !== ExperienceViews.Format) {
+            singleton.currentStructure = null;
+        }
+    
+        // Update the views status in the Singleton instance
+        singleton.UpdateViewsStatus();
+    
+        // Special handling for the "Format" view
+        if (experienceView === ExperienceViews.Format) {
+            singleton.UpdateFormats();
+        }
+    
+        // Update the titles (assuming this function sets up titles based on the new view)
+        SetupsTitles();
+    }
+    
+
+    function SetupsTitles() {
+        const singleton = Singleton.getInstance();
+        const experienceView = singleton.currentExperienceView ?? ExperienceViews.Environment;
+        const dictEntry = dict.get(experienceView);
+      
+        setTitle(dictEntry?.title ?? "");
+      
+        const descriptionKey = (() => {
+          const currentColorTypeID = singleton.GetCurrenColorTypeID();
+          console.log(currentColorTypeID," ",singleton.selectedDesignType?.mosaicId)
+          if (experienceView === ExperienceViews.Design) {
+            if (singleton.selectedDesignType?.mosaicValue === 1 && currentColorTypeID !== 1) {
+              return 'descriptionSingleMosaic';
             }
-            Singleton.getInstance().UpdateViewsStatus();
-
-            if (experieceView == ExperienceViews.Format)
-            {
-                Singleton.getInstance().UpdateFormats();
-            }
-           
-            SetupsTitles();
-        }
-    }
-
-function SetupsTitles()
-{
-   const experieceView=Singleton.getInstance().currentExperienceView??ExperienceViews.Environment;
-
-    setTitle(dict.get(experieceView)?.title??"")
-
-    if(experieceView==ExperienceViews.Design)
-    {
-        if(Singleton.getInstance().selectedDesignType?.mosaicValue==1 && Singleton.getInstance().GetCurrenColorTypeID()!=1)
+            return currentColorTypeID === 1 ? 'descriptionFullColor' : 'description';
+          }
+      
+          if (experienceView === ExperienceViews.Color) {
+            return currentColorTypeID === 1 ? 'descriptionFullColor' : 'description';
+          }
+      
+          if (experienceView === ExperienceViews.Format) {
+            return 'description';
+          }
+      
+          return null;
+        })();
+      
+        if(descriptionKey)
         {
-            setDescription(dict.get(experieceView)?.descriptionSingleMosaic??<></>)
-        }
-        else if(Singleton.getInstance().GetCurrenColorTypeID()==1)
-        {
-            setDescription(dict.get(experieceView)?.descriptionFullColor??<></>)
-        }
-        else{
-            setDescription(dict.get(experieceView)?.description??<></>)
-        }
-    }
-    else if(experieceView==ExperienceViews.Color)
-    {
-        if(Singleton.getInstance().GetCurrenColorTypeID()==1)
-        {
-            setDescription(dict.get(experieceView)?.descriptionFullColor??<></>)
-        }
-        else{
-            setDescription(dict.get(experieceView)?.description??<></>)
-        }
-    }
-    else if(experieceView==ExperienceViews.Format)
-    {
-        setDescription(dict.get(experieceView)?.description??<></>)
-        
-    }
-}
+            setDescription(dictEntry?.[descriptionKey] ?? <></>);
 
+        }
+      }
+      
+     
 
-const PreviewMosaic = () => {
-    setPreviewModalStatus(true);
-}
+      const PreviewMosaic = () => setPreviewModalStatus(true);
+      
+      const closeMosaicModal = () => setPreviewModalStatus(false);
+      
+      const RotateMosaic = () => setBricksRotated(prev => !prev);
+      
 
-const closeMoasicModal = () => {
-    setPreviewModalStatus(false);
-}
-
-const RotateMosaic = () => {
-    setBricksRotated(!bricksRotated);
-}
 
 
     return(
 
-        <div className="d-flex mh-100 flex-column flex-md-row pt-4 pt-md-0 px-2 px-md-0">
+        <div className="ExperienceParentContent">
 
-            <div className="w-100 w-md-50 p-md-3 px-xl-5 h-100 experience-behavior-container pb-4 pb-md-0 pt-xl-1">
+            <div className="experience-behavior-container">
 
-                <div className="d-flex align-items-start header-view">
-                    <div className="col-2">
+                <div className="d-flex align-items-start header-view" style={{position: "relative"}} >
+                    <div className="col-2 btnControlsCustomCSS" style={{marginLeft: "35%",marginTop: "2%", position: "absolute"}}>
                         <button type="button" onClick={()=>ChangeView((props.currentView || null), -1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">← Volver</button>
                     </div>
                     
-                    <div className="col-8">
+                    <div className="col-8 titleCustomCssSteepTitle " style={{left: "45%",marginTop: "2%", position: "absolute"}}>
                         <ExperienceSteepTitle 
                             title={title}
                             description={description ?? <></>}
@@ -337,29 +471,29 @@ const RotateMosaic = () => {
                     </div>
 
 
-                    <div className="col-2 text-end">
-                    {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button">Siguiente →</button>}
+                    <div className="col-2 text-end btnControlsCustomCSS">
+                        {props.currentView!==ExperienceViews.Format&& <button type="button" onClick={()=>ChangeView((props.currentView || null), 1)} className="btn btn-sm rounded-3 btn-outline-primary experience-steeps-button nextButtonCustomCss" style={{right: "-20%",marginTop: "2%", position: "absolute"}}>Siguiente →</button>}
                     </div>
                 </div>
 
-            
                 {
                     props.currentView==ExperienceViews.Design&&
                     // PRIMER CASO DE LA EXPERIENCIA
                     
-                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0">
-                        <div className="h-md-100 w-100 w-md-50">
+                    <div className="d-flex flex-column flex-md-row pt-xxl-5 pt-2 h-100 justify-content-xl-between align-items-start overflow-hidden gap-3 gap-xl-3 pb-4 pb-md-0 customFirstGrid" style={{padding:"0px 20px",marginTop:"7%"}}>
+                        <div className="h-md-100 w-100 w-md-50 optionsCustomCss">
                             
                             <ExperienceDesignSelection designTypes={designTypes} designs={Singleton.getInstance().getDesignDataManager().getAllDesigns()??[]}/>
                         </div>
                         <div className="col-5 d-flex align-items-start mx-auto mx-md-0">
                             <div className="d-flex flex-column gap-3 w-100 position-relative">
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && selectedDesigns &&
+                                    Singleton.getInstance().selectedDesignType?.mosaicId === 4 && selectedDesigns &&
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
-                                            actions={false} />
+                                            actions={false}
+                                            width="65%" />
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
@@ -368,7 +502,7 @@ const RotateMosaic = () => {
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
@@ -381,7 +515,7 @@ const RotateMosaic = () => {
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && selectedDesigns&&
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 1 && selectedDesigns&&
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/> }
@@ -389,7 +523,7 @@ const RotateMosaic = () => {
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
+                                                // { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
                                             ]}/>
                                     </>
                                 }
@@ -402,25 +536,34 @@ const RotateMosaic = () => {
                     props.currentView==ExperienceViews.Color&&
                     // SEGUNDO CASO DE LA EXPERIENCIA
 
-                    <div className="d-flex flex-column flex-md-row pt-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden gap-4 gap-md-0">
-                        <div className="textures-selection-column col-12 col-md-7 col-xl-6 h-md-100 position-relative">
+                    <div className={`experienceContainer experienceContainerSecondCase ${colorSelectionStyle}`} >
+                        
+                        <div className="pallete-Colors-Selection-column  position-relative"   >
                             {colorType==2 &&<ExperienceColorPaletteSelection />}
-                            <ExperienceTextureSelection colorArray={
-                                Singleton.getInstance().getColorDataManager().GetAllColors(
-                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
-                                )
-                            } 
-                        />
-                        <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
+                            
+                        {/* <p className="text-muted small mt-1">Las fotografías de productos y ambientes son ilustrativas, algunos atributos de color y textura pueden variar de acuerdo a la resolución de tu pantalla y diferir de la realidad.</p> */}
                         </div>
-                        <div className="col-5 col-md-4 col-xl-5 d-flex align-items-start mx-auto mx-md-0">
-                            <div className="d-flex flex-column gap-3 w-100 position-relative">
+
+                        <div className="FullMosaicComponentParent" style={{marginTop:"7%",width:"50%"}}>
+                      
+                            <div className="" id="FullMosaicComponent">
+                            <h3 className="color-middle fw-bold subtitle tuObraDeArte" style={{margin:"auto", zIndex: 20,top: "-10%",marginBottom:"3%",textAlign:"left",width:"60%"}}>Tu Obra de Arte</h3>
+
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
-                                            actions={false} />
+                                            actions={false} 
+                                            width={colorType==2?"80%":"65%"}
+                                            />
+
+{colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold subtitle" style={{marginLeft:"10%",zIndex: 20,top: "-10%"}}>Colores Seleccionados</h3>
+                            </TooltipMudi>}
+
+                                    {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
+
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
@@ -429,11 +572,18 @@ const RotateMosaic = () => {
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
-                                            actions={true}/>
+                                            actions={true}
+                                            width={colorType==2?"77%":"65%"}
+                                            />
+                                            {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold subtitle coloresSeleccionados" style={{marginLeft:"10%",zIndex: 20,marginTop: "10%"}}>Colores Seleccionados</h3>
+                            </TooltipMudi>}
+                                    {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
+
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
@@ -444,72 +594,97 @@ const RotateMosaic = () => {
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 1 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
-                                            actions={false}/>
+                                            actions={false}
+                                            width="69%"/>
+                                            
+                                                  {colorType==2&& <TooltipMudi content='Esta es tu seleccion de colores' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold" style={{marginLeft:"10%", zIndex: 20,position: "absolute",top: "-10%"}}>Colores Seleccionados</h3>
+                            </TooltipMudi>}                         {colorType==2 &&<ColorIndexSelection onColorSelected={ChangeColorIndex} />}
+
                                         <MosaicActionsBar 
                                             buttons={[
                                                 { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
+                                                // { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
                                             ]}/>
                                     </>
                                 }
+
                             </div>
+                        
                         </div>
+                       
+                        <div className="textures-selection-column col-1 col-md-1 col-xl-6 h-md-100 position-relative" style={{marginTop:"7%",marginLeft:"0%"}}>
+                            
+                        {<TooltipMudi content='Podras cambiar el color seleccionado' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,top: "-11%"}}>Elige tu color</h3>
+                            </TooltipMudi>}
+
+                            <ExperienceTextureSelection colorArray={
+                                Singleton.getInstance().getColorDataManager().GetAllColors(
+                                    Singleton.getInstance().currentDesignList?.[0]?.fullField ?? true
+                                )
+                            } 
+                        />
+                        <div style={{zIndex: 20,marginTop: "0%"}}> {<TooltipMudi content='No olvides escoger tu boquilla' visible={true} position='top'>
+                        <h3 className="color-middle fw-bold subtitle" style={{zIndex: 20,marginTop: "3%"}}>Elige tu boquilla</h3>
+                            </TooltipMudi>}</div>
+                        
+                        <ExperienceGroutSelection grouts={Singleton.getInstance().getgroutDataManager().getAllGrouts()} />
+                        </div>
+
+
                     </div> 
                 }
 
                 {
                     props.currentView==ExperienceViews.Format&&
-                    <div className="d-flex pt-4 pt-md-2 pt-xxl-5 h-100 justify-content-md-between overflow-hidden flex-column flex-md-row cotizacion-view">
-                        <div className="col-12 col-md-5 d-flex mx-auto mx-md-0">
-                            <div className="d-flex flex-column gap-3 w-100 position-relative">
+                    // TERCER CASO DE LA EXPERIENCIA
+                    <div className="d-flex   justify-content-md-evenly overflow-hidden flex-column flex-md-row cotizacion-view containerCotizationPreview" style={{marginTop:"15%",marginLeft:"7%",marginRight:"7%",paddingTop:"9.25rem !important"}}>
+                                  
+                        <div className="col-12 col-md-5 d-flex mx-auto">
+                            <div className="d-flex flex-column  w-100 position-relative">
                                 <ExperienceStructureSelection structures={structures ?? []}
                                 />
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id === 3 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId === 4 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicHexagon hexagon={selectedDesigns![0] ?? null} grout={mosaicGrout}/>} 
-                                            actions={false} />
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
+                                            actions={false}
+                                            width="80%"
+                                            marginTop="0%" />
+                                       
                                     </>
                                 }
                                 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 2 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 3 && 
                                     <>
                                         <MosaicComponent
                                             mosaic={<MosaicSquare squares={selectedDesigns ?? []} grout={mosaicGrout}/>}
-                                            actions={true}/>
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
+                                            actions={true}
+                                            marginTop="2%"/>
+                                       
                                     </>
                                 }
 
                                 {
-                                    Singleton.getInstance().selectedDesignType?.id == 1 && 
+                                    Singleton.getInstance().selectedDesignType?.mosaicId == 1 && 
                                     <>
                                         <MosaicComponent 
                                             mosaic={<MosaicBrick brick={selectedDesigns![0] ?? null} grout={mosaicGrout} rotated={bricksRotated}/>}
-                                            actions={false}/>
-                                        <MosaicActionsBar 
-                                            buttons={[
-                                                { buttonClick: PreviewMosaic, icon: FaSearchPlus, text: "Vista Previa", styleColor: "", classButton: "btn-corona-primary" },
-                                                { buttonClick: RotateMosaic, icon: RxRotateCounterClockwise, text: "Rotar", styleColor: "", classButton: "btn-corona-primary" }
-                                            ]}/>
+                                            actions={false}
+                                            marginTop="0%"/>
+                                       
                                     </>
                                 }
                             </div>
                         </div>
-                        <div className="textures-selection-column d-flex flex-column col-12 col-md-6 mx-auto mx-md-0 h-md-100 pt-4 pt-md-0">
+                        <div className="textures-selection-column d-flex flex-column col-12 col-md-6 mx-auto h-md-100 pt-4 pt-md-0" style={{marginLeft: "5%"}}>
                             <ExperienceFormatSelection formats={formats ?? []} />
                             <InitQuotationForm states={Singleton.getInstance().currentStateList ?? []}/>
                         </div>
@@ -521,21 +696,25 @@ const RotateMosaic = () => {
 
             </div>
 
-            <div className="w-100 w-md-50 h-md-100 d-grid canvas-content">
+            <div className="canvas-content">
     <ExperienceCanvas 
+        onOpenModal={()=>setModalOpen(true)}
         backgroundImage={canvasImage}
         mask={canvasMask}
         perspective={selectedPerspective}
         perspectiveOrigin={{
-            X: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.x,
-            Y: Singleton.getInstance().currentEnvironment?.environmentAngle.origin.y
+            X: currentEnvironmentAngle?.origin.x || 0,  // Provide fallback values
+            Y: currentEnvironmentAngle?.origin.y || 0
         }}
-        rotationX={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatex}
-        rotationY={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatey}
-        rotationZ={Singleton.getInstance().currentEnvironment?.environmentAngle.rotatez}
+        rotationX={currentEnvironmentAngle?.rotatex || 0}
+        rotationY={currentEnvironmentAngle?.rotatey || 0}
+        rotationZ={currentEnvironmentAngle?.rotatez || 0}
         size={selectedFormatSize}
     />
-      <div className="timeline">
+
+
+
+      < div style={{display:"none"}} className="timeline">
 
         <div className="timeline-step">
             {Singleton.getInstance().currentDesignList!?.length>0&&<span className="timeline-title">Diseño: {Singleton.getInstance().selectedDesignType?.name}</span>}
@@ -554,12 +733,15 @@ const RotateMosaic = () => {
 
         {Singleton.getInstance().currentColorList!?.length>0&& <div className="timeline-step">
             <span className="timeline-title">Colores: </span>
-            <div className="timeline-content timeline-content-grid">
+            <div className="timeline-content-colors">
                 {Singleton.getInstance().currentColorList!.map((color, index) => (
-                    <div key={index} className="color-item">
-                        <img src={getServerImagesUrl(color.source)} alt={color.name}/>
-                        {color.name}
-                    </div>
+                  <div key={index} className="color-item">
+                  <img src={getServerImagesUrl(color.source)} alt={color.name}/>
+                  <div className="color-label">
+                    {color.name}
+                  </div>
+                </div>
+                  
                 ))}
             </div>
         </div>}
@@ -582,9 +764,12 @@ const RotateMosaic = () => {
 
         </div>
             
+            
+        {isModalOpen && < ModalCanvasPreview closeModalEvent={closeModal} />}
+
         </div>
             
-            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMoasicModal}/>
+            <PreviewModal showState={previewModalStatus} closeModalEvent={closeMosaicModal} size={modalSize}/>
 
         </div>
 

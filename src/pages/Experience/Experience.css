@@ -3,11 +3,12 @@
     grid-gap: 0;
     grid-template-rows: auto 1fr;
     height: 100%;
+    
 }
 
-@media screen and (min-width: 390px) and (max-width: 1366px) {
+/* @media screen and (min-width: 390px) and (max-width: 1366px) {
     .experience-content {
-        overflow: auto;
+        overflow: ;
     }
-}
+} */
 

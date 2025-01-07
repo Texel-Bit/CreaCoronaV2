@@ -5,55 +5,191 @@
     --color-trailVar: #F5F5F5;  /* background color */
 }
 
-
-.steeps-navbar {
-    width: 100%;
-    height: 130px;
-    overflow-x: auto;
-    align-items: center;
-}
-
-
-.circular-progress-bar-continer {
-    min-width: 94px;
-    max-width: 94px;
-    height: 94px;
-    align-items: center;
-    display: flex;
-}
-
-.CircularProgressbar .CircularProgressbar-path {
-    stroke: var(--color-progressVar);
-}
-
-.CircularProgressbar .CircularProgressbar-text {
-    stroke: var(--color-textVar);
-}
-
-.CircularProgressbar .CircularProgressbar-trail {
-    stroke: var(--color-trailVar);
-}
-.navbar-item {
-    width: 150px;
-}
-
-@media screen and (max-width: 1366px) {
+@media screen and (min-width:1500px) {
+    .steeps-navbar {
+        width: 100%;
+        height: 130px;
+        overflow-x: auto;
+        align-items: center;
+        padding: 10px 30px !important;
+    }
+    
+    
+    .circular-progress-bar-continer {
+        min-width: 94px;
+        max-width: 94px;
+        height: 94px;
+        align-items: center;
+        display: flex;
+    }
+    
+    .CircularProgressbar .CircularProgressbar-path {
+        stroke: var(--color-progressVar);
+    }
+    
+    .CircularProgressbar .CircularProgressbar-text {
+        stroke: var(--color-textVar);
+    }
+    
+    .CircularProgressbar .CircularProgressbar-trail {
+        stroke: var(--color-trailVar);
+    }
     .navbar-item {
-        width: 120px;
+        width: 150px;
+    }  
+    
+    .navbar-item svg {
+        height: 34px;
+        width: 34px;
+    }
+    
+    .navbar-item-text {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1;
+    }
+    
+    .iconNavBarOptions{
+        margin-left: 50px;
+    }
+
+    .cursorView{
+        cursor: pointer;
+        transition: transform .2s ease-in-out;
+    }
+
+    .cursorViewText{
+        cursor: pointer;
+    }
+
+    .cursorView:hover{
+        transform: scale(1.1);
     }
 }
 
-.navbar-item svg {
-    height: 34px;
-    width: 34px;
+@media screen and (min-width:1300px) and (max-width:1499px) {
+    .steeps-navbar {
+        width: 100% ;
+        height: 130px ;
+        align-items: center ;
+        padding: 0 15px !important;
+    }
+    
+    
+    .circular-progress-bar-continer {
+        min-width: 94px ;
+        max-width: 94px;
+        height: 94px;
+        align-items: center;
+        display: flex;
+    }
+    
+    .CircularProgressbar .CircularProgressbar-path {
+        stroke: var(--color-progressVar);
+    }
+    
+    .CircularProgressbar .CircularProgressbar-text {
+        stroke: var(--color-textVar);
+    }
+    
+    .CircularProgressbar .CircularProgressbar-trail {
+        stroke: var(--color-trailVar);
+    }
+    .navbar-item {
+        width: 150px;
+    }  
+    
+    .navbar-item svg {
+        height: 34px;
+        width: 34px;
+    }
+    
+    .navbar-item-text {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1;
+    }
+    
+    .iconNavBarOptions{
+        margin-left: 50px;
+    }
+    .corona-logo {
+        height: 90px !important;
+    }
+    .cursorView{
+        cursor: pointer;
+        transition: transform .2s ease-in-out;
+    }
+
+    .cursorViewText{
+        cursor: pointer;
+    }
+
+    .cursorView:hover{
+        transform: scale(1.1);
+    }
 }
 
-.navbar-item-text {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1;
-}
+@media screen and (min-width:1240px) and (max-width:1299px) {
+    .steeps-navbar {
+        width: 100% ;
+        height: 130px ;
+        align-items: center ;
+        padding: 0 15px !important;
+    }
+    
+    
+    .circular-progress-bar-continer {
+        min-width: 94px ;
+        max-width: 94px;
+        height: 94px;
+        align-items: center;
+        display: flex;
+    }
+    
+    .CircularProgressbar .CircularProgressbar-path {
+        stroke: var(--color-progressVar);
+    }
+    
+    .CircularProgressbar .CircularProgressbar-text {
+        stroke: var(--color-textVar);
+    }
+    
+    .CircularProgressbar .CircularProgressbar-trail {
+        stroke: var(--color-trailVar);
+    }
+    .navbar-item {
+        width: 150px;
+    }  
+    
+    .navbar-item svg {
+        height: 34px;
+        width: 34px;
+    }
+    
+    .navbar-item-text {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1;
+    }
+    
+    .iconNavBarOptions{
+        margin-left: 50px;
+    }
+    .corona-logo {
+        height: 90px !important;
+    }
 
-.iconNavBarOptions{
-    margin-left: 50px;
+    .cursorView{
+        cursor: pointer;
+        transition: transform .2s ease-in-out;
+    }
+
+    .cursorViewText{
+        cursor: pointer;
+    }
+
+    .cursorView:hover{
+        transform: scale(1.1);
+    }
 }

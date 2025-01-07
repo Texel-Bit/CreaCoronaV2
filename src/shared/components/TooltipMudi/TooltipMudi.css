@@ -1,0 +1,28 @@
+.tooltip-content-Mudi {
+    position: absolute;
+    background-color: var(--color-third);
+    color:  var(--color-white);
+    /* font-weight: 700; */
+    padding: 10px 15px; /* Increase padding for better appearance */
+    border-radius: 10px; /* Increase border-radius for a more rounded look */
+    z-index: 1000;
+    border-color: var(--color-middle) ;
+    white-space: nowrap;
+    font-size: 14px; /* Adjust as needed */
+    line-height: 1.4; /* Adjust as needed */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+}
+
+.tooltip-content-Mudi::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-color: var(--color-third) ;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--color-third); /* This will create the upward pointing triangle */
+    position: absolute;
+    bottom: -10px; /* Adjust position of triangle */
+    left: 50%;
+    transform: translateX(-50%); /* Center the triangle */
+}

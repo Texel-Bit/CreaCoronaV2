@@ -1,8 +1,9 @@
 
 .aspect-ratio-16-9 {
+    background-size: 10%;
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 500px;
 }
 
 @media screen and (min-width: 1366px) and (max-width: 1600px) {
@@ -45,4 +46,20 @@
     background-repeat: no-repeat;
     background-position: center;
     z-index: 2;
+}
+
+.ExperienceCanvasGeneric
+{
+    margin-bottom: 27px;
+}
+
+.ExperienceCanvasDesignSelection
+{
+    margin-bottom: 68px;
+}
+
+
+.ExperienceCanvasFormatSelection
+{
+    margin-bottom: 10px;
 }

@@ -78,6 +78,26 @@
   background-color: #333333;
 }
 
+/* Style for the Success button */
+.swal2-confirm {
+  background-color: var(--color-middle)!important;   
+  border: none!important;
+  /* Add any other desired styles for the Success button */
+}
+
+.swal2-icon
+{
+  color: var(--color-middle)!important;   
+
+  /* Add any other desired styles for the Success button */
+}
+/* Style for the Cancel button */
+.swal2-cancel {
+  background-color: var(--color-second)!important;    /* replace with your desired color */
+  border-color: var(--color-second);     /* replace with your desired border color */
+  /* Add any other desired styles for the Cancel button */
+}
+
 
 #root {
   height: 100%;
@@ -127,8 +147,11 @@ code {
 }
 
 .item-superficie {
-  transition: .2s ease all;
-  outline: 2px solid transparent;
+  
+  width: 100%; /* Reduce the width to 80% of the parent container */
+  height: auto; /* Ensure the height adjusts based on the content and aspect ratio */
+  margin: 1rem auto; /* Add some margins for spacing and center the items */
+  padding: 0.5rem; /* Add some padding to give inner content more space */
 }
 
 .item-superficie:hover {
@@ -200,6 +223,13 @@ code {
   color: var(--bs-progress-bg) !important;
 }
 
+.btn-corona-add:disabled {
+  background-color: var(--color-second) !important;
+  border: 2px solid var(--color-second) !important;
+  color: var(--bs-progress-bg) !important;
+}
+
+
 .btn-corona-icon{
   height: 48px;
   width: 48px;
@@ -225,9 +255,4 @@ code {
   box-shadow: none !important;
 }
 
-@media screen and (max-width: 1366px) {
-  .corona-logo {
-    object-fit: contain;
-    width: 150px;
-  }
-}
+

@@ -22,6 +22,13 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
     const [designColors, setDesignColors] = useState<IDesign[]>([]);
     const [designLoaded, setDesignsLoaded] = useState(false);
 
+    const singletonInstance=Singleton.getInstance();
+    const isSelected = (designId:number) => {
+        const selectedDesigns = singletonInstance.GetSelectedDesigns();
+        const exist= Array.isArray(selectedDesigns) && selectedDesigns.some(design => design.id === designId);
+        if(exist) console.log("Exist "+designId);
+        return exist
+      };
 
     useEffect(() => {
 
@@ -67,7 +74,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                 const ColorList = await getAllDesignByTypeId(selectedDesignType.id,Singleton.getInstance().currentEnvironmentType?.id||0);
                 console.log("Fetched ColorList:", ColorList);
     
-                let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1 };
+                let defaultDesignType: IDesignType = {id:1,name:"Temp",source: "",mosaicValue:1,mosaicId:1 };
     
                 let currenDesignColors:IDesign[] = ColorList.data.Design.map((element: any) => {
                     let designType = Singleton.getInstance().getDesignTypeDataManager().getDesignTypeById(element.DesignType_idDesignType);
@@ -81,9 +88,11 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                     Singleton.getInstance().addDesign(currDesign);
                     return currDesign;
                 });
-                console.log("Current design colors:", currenDesignColors);
+                
     
                 ColorList.data.DesignTypeFormatSize.map((element: any) => {
+                    console.log("Current design Element:", element);
+                   
                     let FormatSizetexture = element.FormatSizeTexture.map((structure: any) => {
                         let colorTypes = structure.DesignColorType_has_FormatSizeTexture.map((colorType: any) => {
                             return colorType.DesignColorType_idDesignColorType;
@@ -108,12 +117,17 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
                         formats:FormatSizetexture
                     };
     
-                    if(!defaultFormatSize) {
-                        defaultFormatSize=currFormat;
-                        Singleton.getInstance().SelectFormat(defaultFormatSize);
+                    if(element.DesignTypeFormatSize_has_EnvironmentType.length>0)
+                    {
+                        if(!defaultFormatSize) {
+                            defaultFormatSize=currFormat;
+                            Singleton.getInstance().SelectFormat(defaultFormatSize);
+                        }
+                       
+                        Singleton.getInstance().addFormat(currFormat);
                     }
+
                    
-                    Singleton.getInstance().addFormat(currFormat);
                     return currFormat;
                 });
     
@@ -184,6 +198,7 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
 
     
     useEffect(() => {
+        
         setSelectedDesignType(Singleton.getInstance().selectedDesignType!);     
     }, [designLoaded]);
 
@@ -226,17 +241,25 @@ export const ExperienceDesignSelection:React.FC<ExperienceDesingSelectionProps> 
             </div>
 
             <div className='mh-100 overflow-y-hidden'>
-                <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
-                    {
-                        designColors.map(design => {
-                            return <img
-                                className='cursor-pointer cursor-pointer-hover'
-                                key={`designTypeTexture${design.id}`}
-                                onClick={()=>SelectNewDesign(design)}
-                                src={getServerImagesUrl(design.source)}/>
-                        })
-                    }
-                </div>
+            <div className="border border-1 border-color-middle gap-2 p-3 h-100 design-thumbnails-grid">
+    {
+        designColors.map(design => {
+            const selected = isSelected(design.id);
+            return (
+                <img
+                    className={`cursor-pointer ${selected ? 'selected-design-class' : 'cursor-pointer-hover'}`}
+                    style={{ 
+                        border: selected ? "4px solid var(--color-middle)" : "none"
+                    }}
+                    key={`designTypeTexture${design.id}`}
+                    onClick={()=>SelectNewDesign(design)}
+                    src={getServerImagesUrl(design.source)}
+                />
+            );
+        })
+    }
+</div>
+
             </div>
 
         </div>

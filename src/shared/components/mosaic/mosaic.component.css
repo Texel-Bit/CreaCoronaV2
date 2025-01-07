@@ -5,12 +5,14 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    margin-top: 5%;
 }
 
 .action__buttons {
+    margin-top: 2%;
     display: flex;
     justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
 }
 
 .action__buttons p {

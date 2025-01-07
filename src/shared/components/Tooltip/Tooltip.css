@@ -1,0 +1,40 @@
+/* styles.css or tooltip.css */
+/* .tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-content {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);  
+} */
+
+
+.tooltipMudi{
+    position: absolute;
+    width: 360px;
+    text-align: center;
+    font-size: 12px;
+    background-color: rgb(241, 241, 241);
+    opacity: 0;
+    animation-name: showElements ;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+    padding: 7px 15px;
+    transition: width 1s ease-in-out;
+    -webkit-box-shadow: 10px 8px 5px -2px rgba(0,0,0,0.12);
+    -moz-box-shadow: 10px 8px 5px -2px rgba(0,0,0,0.12);
+    box-shadow: 10px 8px 5px -2px rgba(0,0,0,0.12);
+    z-index: 1;
+    bottom: -170% !important;
+}
+
+/* div:hover > .tooltip-content {  
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);  
+} */
+
+
